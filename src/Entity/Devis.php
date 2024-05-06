@@ -101,7 +101,7 @@ class Devis
     public function removeMessage(Message $message): static
     {
         if ($this->messages->removeElement($message)) {
-            // set the owning side to null (unless already schansgedk)
+            // set the owning side to null (unless already sschansgedk)
             if ($message->getIdDevis() === $this) {
                 $message->setIdDevis(null);
             }
