@@ -1,0 +1,35 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+page_accueil:
+    path: /   # Il faut laisser le slash pour que la page qui souvre en premier et la page accueil
+    controller: 'App\Controller\BlogController::accueil'
+
+
+# config/routes.yaml
+
+app_login:
+    path: /login
+    controller: App\Controller\SecurityController::login
+
+
+
+app_logout:
+    path: /logout
+    controller: App\Controller\SecurityController::logout
+
+supprimer_produit_panier:
+    path: '/supprimer-produit-panier/{id}'
+    controller: App\Controller\NomDeVotreController::Supprimerproduitdupanier
+    methods: ['POST']
+
+
+
+
+
+
+
+

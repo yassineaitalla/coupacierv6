@@ -1,0 +1,69 @@
+{% include 'navbar.html.twig' %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma liste d'envies</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h1 class="text-center mb-4">Ma liste d'envies</h1>
+                {% if isEmpty %}
+                    <p>Votre liste d'envies est vide.</p>
+                {% else %}
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Produit</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Prix de la bare</th>
+                                <th scope="col">Quantite</th>
+
+                                <th scope="col">Prix final</th> 
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for listedEnvie in listedEnvies %}
+                                <tr>
+                                    <td>{{ listedEnvie.getIdproduit().getNom() }}</td>
+                                    <td>{{ listedEnvie.getIdproduit().getDescription() }}</td>
+                                    <td>{{ listedEnvie.getIdproduit().getPrix() }}</td>
+                                    <td>{{ listedEnvie.getQuantite() }}</td>
+                                    <td>
+                                        {% if listedEnvie.quantite == 1 %}
+                                            {{ listedEnvie.getIdProduit().getprix() }} €
+                                        {% else %}
+                                            {{ listedEnvie.getIdProduit().getprix()* listedEnvie.quantite }} €
+                                        {% endif %}
+                                    </td>
+
+                           
+                                    <td>
+                                        <form action="{{ path('ajouter', {'id': listedEnvie.getIdproduit().getId()}) }}" method="post"> 
+                                            <button type="submit" class="btn btn-primary">Ajouter au panier</button>
+                                        </form>
+                                        <form action="{{ path('supprimer_produit_liste_envies', {'id': listedEnvie.getIdproduit().getId()}) }}" method="post"> 
+                                            <button type="submit" class="btn btn-danger">Supprimer le produit </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-right"><strong>Total TTC:</strong></td>
+                                <td class="text-right">{{ sommeTotal }} €</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,174 @@
+{% block body %}
+    {% include 'navbar.html.twig' %} 
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Produits</title>
+        <link rel="stylesheet" href="{{ asset('styles/app.css') }}"> 
+    </head>
+
+    <body class="bg-dark">
+
+        <div class="container">
+
+            <div>
+            <div class="row">
+                {% for produit in produits %}
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src="{{ asset('images/acier.jpg') }}" class="card-img-top" alt="{{ produit.nom }}">
+                            <div class="card-body">
+                                <h5 class="card-title"> Nom du produit : {{ produit.nom }} 6 M</h5>
+                                <h5 class="card-title"> Masse lineaire : {{ produit.masseLineaireKgMetre}}</h5>
+                                
+                                <h5 class="card-title">Remise de {{ produit.remise }} %</h5>
+                              
+                                <p id="prixProduit{{ produit.id }}" class="card-text">Prix du produit <span id="prixInitial{{ produit.id }}">{{ produit.prix }} €</span> € ttc</p>
+                                
+                                {% if app.session.get('client_id') %}
+                                    <form action="{{ path('ajouter_au_panier', {'id': produit.id}) }}" method="post"> 
+                                        <input type="number" name="quantite" id="quantite{{ produit.id }}" value="1" min="1" class="form-control">
+                                        <h6> Quantité
+                                            <div class="container mt-5">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="longueur">Choisissez votre longueur:</label>
+                                                        <select name="inp" id="surMesureSelect" class="form-control" onchange="toggleCustomMeasurementInput()">
+                                                            <option value="1">1 mètre</option>
+                                                            <option value="2">2 mètres</option>
+                                                            <option value="3">3 mètres</option>
+                                                            <option value="4">4 mètres</option>
+                                                            <option value="5">5 mètres</option>
+                                                            <option value="6">6 mètres</option>
+                                                            <option value="surMesure">Mesure</option> <!-- Ajoutez cette option -->
+                                                        </select>
+                                                        
+                                                        <!-- Champ de saisie pour les centimètres (initialement caché) -->
+                                                        <input type="number" name="customMeasurement" id="customMeasurementInput" style="display: none;" placeholder="Entrez la mesure en cm">
+                                                        
+                                                       
+                                                    </div>
+                                                </div>
+
+                                                
+                                                
+                                                <div class="row" id="customLengthInput" style="display: none;">
+                                                    <div class="col">
+                                                        <label for="longueur">Longueur (en cm) :</label>
+                                                        <input type="number" id="longueur" name="longueur" class="form-control" min="50" max="600" step="1">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </h6>
+                                        <button type="submit" class="btn btn-primary">Ajouter au panier</button>
+                                    </form>
+                                    <br>
+                                    <br>
+                                    <label>Selectionner la quantite de produit a ajouter dans la liste d'envies</label>
+                                    <form action="{{ path('ajouter_a_la_listedenvie', {'id': produit.id}) }}" method="post"> 
+                                        <input type="number" name="quantite" id="quantite{{ produit.id }}" class="form-control" value="1" min="1">
+                                        <button type="submit" class="btn btn-primary">Ajouter à la liste d'envies</button>
+                                    </form>
+                                    
+                                {% else %}
+                                <p style="font-family: Arial, sans-serif; font-weight: bold;">Pour ajouter des produits à votre panier et à la liste d'envies, veuillez vous connecter.</p>
+
+
+                                    <a href="{{ path('verification') }}" class="btn btn-primary">
+                                        <i ></i> Connexion
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            {% for flashMessage in app.flashes('error') %}
+                <div>{{ flashMessag }}</div>
+            {% endfor %}
+        </div>
+
+        <footer>
+            {% include 'footer.html.twig' %} 
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-eEZUnKUVEMrZqDfFZzSQxlJvK1E21PJoQx9CK2qxBn3x4I5QVbFqCr7GJ3DdP3Z" crossorigin="anonymous"></script>
+        <script>
+            // Définir un objet pour stocker le prix initial de chaque produit
+            var prixInitials = {};
+        
+            // Mettre à jour l'interface en fonction de la sélection de mesure
+            function updateMeasurementType(produitId, measurementType) {
+                if (measurementType === 'surMesure') {
+                    // Afficher le champ de saisie pour la mesure sur mesure
+                    document.getElementById('inpPredefini' + produitId).style.display = 'none';
+                    document.getElementById('inpSurMesure' + produitId).style.display = 'block';
+                } else {
+                    // Afficher le menu déroulant pour les mesures prédéfinies
+                    document.getElementById('inpSurMesure' + produitId).style.display = 'none';
+                    document.getElementById('inpPredefini' + produitId).style.display = 'block';
+                }
+            }
+        
+            // Mettre à jour le prix du produit en fonction de la longueur choisie et de l'ID du produit
+            function updatePrice(longueur, produitId) {
+                // Récupérer la quantité saisie par l'utilisateur
+                var quantite = parseInt(document.getElementById('quantite' + produitId).value);
+        
+                // Calculer le prix total en fonction de la longueur
+                var prixTotal;
+                if (longueur === 'surMesure') {
+                    // Récupérer la valeur saisie dans le champ de mesure sur mesure
+                    var mesureSurMesure = parseFloat(document.getElementById('inpSurMesure' + produitId).value);
+                    prixTotal = prixInitials[produitId] * mesureSurMesure * quantite;
+                } else {
+                    // Récupérer la longueur prédéfinie sélectionnée
+                    var longueurPredefinie = parseFloat(longueur);
+                    prixTotal = prixInitials[produitId] * longueurPredefinie * quantite;
+                }
+        
+                // Mettre à jour l'élément d'affichage du prix correspondant
+                document.getElementById('prixProduit' + produitId).innerHTML = "Prix du produit <span id='prixInitial" + produitId + "'>" + prixTotal + "</span> € ttc";
+            }
+
+            // Fonction pour afficher ou masquer le champ de saisie pour les centimètres
+    function toggleCustomMeasurementInput() {
+        var surMesureSelect = document.getElementById('surMesureSelect');
+        var customMeasurementInput = document.getElementById('customMeasurementInput');
+
+        if (surMesureSelect.value === 'surMesure') {
+            customMeasurementInput.style.display = 'block'; // Afficher le champ de saisie pour les centimètres
+        } else {
+            customMeasurementInput.style.display = 'none'; // Masquer le champ de saisie pour les centimètres
+        }
+    }
+        </script>
+        
+
+       
+        
+        
+        
+        
+    </body>
+    </html>
+{% endblock %}
