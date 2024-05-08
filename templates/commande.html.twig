@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une adresse de livraison{% endblock %}
+
+{% block body %}
+    {% include 'navbar.html.twig' %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">Ajouter une adresse de livraison</div>
+                    <div class="card-body">
+                        <ul class="nav nav-pills mb-4" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="infos-personnelles-tab" data-bs-toggle="pill" data-bs-target="#infos-personnelles" type="button" role="tab" aria-controls="infos-personnelles" aria-selected="true">1. Informations personnelles</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="adresse-livraison-tab" data-bs-toggle="pill" data-bs-target="#adresse-livraison" type="button" role="tab" aria-controls="adresse-livraison" aria-selected="false" disabled>2. Adresse de livraison</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="paiement-tab" data-bs-toggle="pill" data-bs-target="#paiement" type="button" role="tab" aria-controls="paiement" aria-selected="false" disabled>3. Paiement</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="infos-personnelles" role="tabpanel" aria-labelledby="infos-personnelles-tab">
+                                <!-- Formulaire pour les informations personnelles -->
+                                <form method="post" action="">
+                                    <div class="mb-3">
+                                        <label for="nom" class="form-label">Nom</label>
+                                        <input type="text" class="form-control" id="nom" name="nom">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="prenom" class="form-label">Prénom</label>
+                                        <input type="text" class="form-control" id="prenom" name="prenom">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email">
+                                    </div>
+                                    <button class="btn btn-primary" type="button" onclick="nextStep('adresse-livraison')">Continuer</button>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="adresse-livraison" role="tabpanel" aria-labelledby="adresse-livraison-tab">
+                                <!-- Formulaire pour l'adresse de livraison -->
+                                <form method="post" action="">
+                                    <div class="mb-3">
+                                        <label for="adresse" class="form-label">Adresse</label>
+                                        <input type="text" class="form-control" id="adresse" name="adresse">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="ville" class="form-label">Ville</label>
+                                        <input type="text" class="form-control" id="ville" name="ville">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="code_postal" class="form-label">Code postal</label>
+                                        <input type="text" class="form-control" id="code_postal" name="code_postal">
+                                    </div>
+                                    <button class="btn btn-primary" type="button" onclick="nextStep('paiement')">Continuer</button>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="paiement" role="tabpanel" aria-labelledby="paiement-tab">
+                                <!-- Formulaire pour le paiement -->
+                                <p>Formulaire de paiement...</p>
+                                <button class="btn btn-success">Payer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function nextStep(tabId) {
+            const tabs = document.querySelectorAll('.nav-link');
+            tabs.forEach(tab => {
+                if (tab.getAttribute('data-bs-target') === '#' + tabId) {
+                    tab.classList.add('active');
+                    tab.removeAttribute('disabled');
+                } else {
+                    tab.classList.remove('active');
+                    tab.setAttribute('disabled', true);
+                }
+            });
+
+            const tabContent = document.querySelectorAll('.tab-pane');
+            tabContent.forEach(tab => {
+                if (tab.getAttribute('id') === tabId) {
+                    tab.classList.add('show', 'active');
+                } else {
+                    tab.classList.remove('show', 'active');
+                }
+            });
+        }
+    </script>
+{% endblock %}

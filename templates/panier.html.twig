@@ -95,7 +95,7 @@
 
                   
                     {% if afficherPasserCommande %}
-                        <a href="#" class="btn btn-primary">Passer commande</a>
+                        <a href="{{ path('app_commande') }}" class="btn btn-primary">Passer commande</a>
                         <a href="#" class="btn btn-primary">Vider le panier</a>
                         {% if afficherDevis %}
                             <a href="{{ path('demanderdevis') }}" class="btn btn-primary" style="margin-left: 250px;">Demander un devis</a>

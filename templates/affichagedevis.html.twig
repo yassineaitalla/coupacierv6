@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Devis{% endblock %}
+
+{% block body %}
+    <h1>Devis</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Numéro de devis</th>
+                <th>Statut</th>
+                <th>Message client</th>
+                <th>Message vendeur</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ devis.id }}</td>
+                <td>{{ devis.statut }}</td>
+                <td>
+                    {% for message in devis.messages %}
+                        {{ message.messageClient }}<br>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for message in devis.messages %}
+                        {{ message.messageVendeur }}<br>
+                    {% endfor %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
