@@ -1,33 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Devis{% endblock %}
+{% block title %}Liste des devis{% endblock %}
 
 {% block body %}
-    <h1>Devis</h1>
-    <table>
+   
+
+    <header>
+        {% include 'navbar.html.twig' %} 
+        
+    </header>
+    <h1>Liste des devis</h1>
+
+    <table class="table">
         <thead>
             <tr>
-                <th>Numéro de devis</th>
-                <th>Statut</th>
-                <th>Message client</th>
-                <th>Message vendeur</th>
+                <th scope="col">#</th>
+                <th scope="col">Client</th>
+                <th scope="col">Statut</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>{{ devis.id }}</td>
-                <td>{{ devis.statut }}</td>
-                <td>
-                    {% for message in devis.messages %}
-                        {{ message.messageClient }}<br>
-                    {% endfor %}
-                </td>
-                <td>
-                    {% for message in devis.messages %}
-                        {{ message.messageVendeur }}<br>
-                    {% endfor %}
-                </td>
-            </tr>
+            {% for devis in devis %}
+                <tr>
+                    <th scope="row">{{ devis.id }}</th>
+                    <td>{{ devis.idclient.nom }}</td>
+                    <td>{{ devis.statut }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 {% endblock %}
