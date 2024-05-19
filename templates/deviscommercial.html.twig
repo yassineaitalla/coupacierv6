@@ -1,0 +1,199 @@
+{# templates/deviscommercial.html.twig #}
+{% include 'navbar.html.twig' %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Affichage Devis Commercial</title>
+    <link rel="stylesheet" href="/path/to/your/css/file.css"> {# Lien vers votre fichier CSS #}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #f4f4f4;
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .btn {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .btn:hover {
+            background-color: #45a049; /* Darker Green */
+        }
+
+        /* Styles pour la fenêtre modale */
+        .modal {
+            display: none; /* Masquer la fenêtre modale par défaut */
+            position: fixed; /* Positionnement fixe */
+            z-index: 1; /* Mettre la fenêtre modale au-dessus du reste du contenu */
+            left: 0;
+            top: 0;
+            width: 100%; /* Largeur de la fenêtre modale */
+            height: 100%; /* Hauteur de la fenêtre modale */
+            overflow: auto; /* Ajouter un défilement si nécessaire */
+            background-color: rgb(0,0,0); /* Fallback couleur de fond */
+            background-color: rgba(0,0,0,0.4); /* Fond avec opacité */
+            padding-top: 60px; /* Espacement par rapport au haut */
+        }
+
+        /* Contenu de la fenêtre modale */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% de marge par rapport au haut et en bas */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Largeur de la fenêtre modale */
+        }
+
+        /* Fermer le bouton de la fenêtre modale */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ controller_name }}</h1>
+
+        <h2>Liste des Devis</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Client</th>
+                    <th>Statut</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for devis in devis %}
+                    <tr>
+                        <td>{{ devis.id }}</td>
+                        <td>{{ devis.idclient.nom }}</td> {# Assurez-vous que "nom" est une propriété de l'entité Client #}
+                        <td>{{ devis.statut }}</td>
+                        <td><button class="btn" onclick="openModal('{{ devis.id }}')">Modifier</button></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">Aucun devis trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Liste des Messages</h2>
+        <ul>
+            {% for message in messages %}
+                <li>
+                    <strong>Client:</strong> {{ message.idClient.nom }} {# Assurez-vous que "nom" est une propriété de l'entité Client #}
+                    <br>
+                    <strong>Devis ID:</strong> {{ message.idDevis.id }}
+                    <br>
+                    <strong>Message Client:</strong> {{ message.messageClient }}
+                    <br>
+                    <strong>Message Vendeur:</strong> {{ message.messageVendeur }}
+                </li>
+            {% else %}
+                <li>Aucun message trouvé.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Fenêtre modale pour modifier le statut -->
+    <div id="myModal" class="modal">
+        <!-- Contenu de la fenêtre modale -->
+        <div class="modal-content">
+            <!-- Bouton de fermeture -->
+            <span class="close" onclick="closeModal()">&times;</span>
+            <!-- Formulaire pour modifier le statut -->
+            <form id="statusForm" action="/update_status" method="post">
+                <p>Sélectionnez le nouveau statut :</p>
+                <select name="newStatus" id="newStatus">
+                    <option value="En cours de traitement">En cours de traitement</option>
+                    <option value="Traité">Traité</option>
+                </select>
+                <br><br>
+                <button class="btn" type="submit">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour ouvrir la fenêtre modale et afficher le formulaire de modification du statut
+        function openModal(devisId) {
+            // Afficher la fenêtre modale
+            document.getElementById("myModal").style.display = "block";
+            // Vous pouvez utiliser l'ID du devis pour effectuer des actions spécifiques, comme charger les détails du devis ou préparer le formulaire de modification du statut
+            // Ajoutez ici le code pour charger les détails du devis ou préparer le formulaire de modification du statut en fonction de l'ID du devis
+            // Par exemple, vous pouvez définir l'URL du formulaire de soumission du statut en fonction de l'ID du devis
+            document.getElementById("statusForm").action = "/update_status/" + devisId;
+        }
+
+        // Fonction pour fermer la fenêtre modale
+        function closeModal() {
+            // Masquer la fenêtre modale
+            document.getElementById("myModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>

@@ -1,32 +1,44 @@
-{% extends 'base.html.twig' %}
+
 
 {% block title %}Liste des devis{% endblock %}
 
 {% block body %}
-   
-
     <header>
-        {% include 'navbar.html.twig' %} 
-        
+        {% include 'navbar.html.twig' %}
     </header>
-    <h1>Liste des devis</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Client</th>
-                <th scope="col">Statut</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for devis in devis %}
-                <tr>
-                    <th scope="row">{{ devis.id }}</th>
-                    <td>{{ devis.idclient.nom }}</td>
-                    <td>{{ devis.statut }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container mt-5">
+        <h1 class="text-center mb-5">Mes Devis</h1>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Client</th>
+                        <th scope="col">Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for devis in devis %}
+                        <tr>
+                            <td>{{ devis.id }}</td>
+                            <td>{{ devis.idclient.nom }}</td>
+                            <td>{{ devis.statut }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <footer>
+        {% include 'footer.html.twig' %}
+    </footer>
 {% endblock %}

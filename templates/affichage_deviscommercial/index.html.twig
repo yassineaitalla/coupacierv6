@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Devis et Messages{% endblock %}
+
+{% block body %}
+<h1>Devis et Messages</h1>
+
+<h2>Devis</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Date</th>
+            <th>Montant</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for devis in devis %}
+            <tr>
+                <td>{{ devis.id }}</td>
+                <td>{{ devis.nom }}</td>
+                <td>{{ devis.date|date('Y-m-d') }}</td>
+                <td>{{ devis.montant }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucun devis trouvé.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Messages</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Contenu</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for message in messages %}
+            <tr>
+                <td>{{ message.id }}</td>
+                <td>{{ message.contenu }}</td>
+                <td>{{ message.date|date('Y-m-d H:i') }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">Aucun message trouvé.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

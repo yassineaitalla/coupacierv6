@@ -1,47 +1,44 @@
-{% include 'navbar.html.twig' %} 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon panier</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .table-container {
+            margin-top: 50px;
+        }
+
+        .btn-primary {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        {% include 'navbar.html.twig' %} 
+    </header>
+
     <div class="container">
-        <div class="row justify-content-center align-items-center" style="height: 30vh;">
+        <div class="row justify-content-center align-items-center">
             <div class="col-md-8">
                 <div class="table-container">
                     <h1 class="text-center mb-4">Panier</h1>
                     <table class="table table-striped">
                         <thead class="thead-dark">
                             <tr>
-                                {% if message is not empty %}
-                                <p>{{ message }}</p>
-                            {% endif %}
-                            {% if panier is not empty %}
-                            <th scope="col">Produit</th>
-                            <th scope="col">Quantite</th>
-                            <th scope="col">Prix de la barre</th>
-                            <th scope="col">Prix final</th>
-                            <th scope="col">Longueur Mettre</th>
-                            <th scope="col">Prix découpe (A revoir)</th>
-                            <th scope="col">Poids</th>
-                            <th scope="col">Prix Livraison</th>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="3" class="text-right"><strong>Total TTC:</strong></td>
-                                    <td class="text-right">{{ sommeTotal }} €</td>
-                                </tr>
-                            </tfoot>
-
-                            
-                        {% endif %}
-                                
-                               
+                                <th scope="col">Produit</th>
+                                <th scope="col">Quantité</th>
+                                <th scope="col">Prix de la barre</th>
+                                <th scope="col">Prix final</th>
+                                <th scope="col">Longueur Mètre</th>
+                                <th scope="col">Prix découpe</th>
+                                <th scope="col">Poids</th>
+                                <th scope="col">Prix Livraison</th>
+                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
-
-                        
                         <tbody>
                             {% for panier in panier %}
                             <tr>
@@ -52,13 +49,13 @@
                                     {% if panier.quantite == 1 %}
                                         {{ panier.getIdProduit().getprix() }} €
                                     {% else %}
-                                        {{ panier.getIdProduit().getprix()* panier.quantite }} 
+                                        {{ panier.getIdProduit().getprix()* panier.quantite }} €
                                     {% endif %}
                                 </td>
                                 <td>{{ panier.LongueurMetre }} Mètre</td>
-                                <td>{{ panier.prixDecoupe }} €  </td>
-                                <td>{{ panier.Poids}} Kg </td>
-                                <td>{{ panier.prixLivraison}} € </td>
+                                <td>{{ panier.prixDecoupe }} €</td>
+                                <td>{{ panier.Poids }} Kg</td>
+                                <td>{{ panier.prixLivraison }} €</td>
                                 <td>
                                     <form action="{{ path('supprimerproduitpanier', {'id': panier.getIdProduit().getId()}) }}" method="post"> 
                                         <button type="submit" class="btn btn-danger">Supprimer le produit</button>
@@ -67,43 +64,41 @@
                             </tr>
                             {% endfor %}
                         </tbody>
-
                         <tfoot>
                             <tr>
-                                <td colspan="3" class="text-right"><strong>Poids Total:</strong></td>
-                                <td class="text-right" style="margin-right: -20px;">{{ poidsTotal }} Kg</td>
+                                <td colspan="3" class="text-right"><strong>Total TTC:</strong></td>
+                                <td class="text-right">{{ sommeTotal }} €</td>
                             </tr>
-                        </tfoot>
-
-                        {% set prixLivraison = 0 %}
-                        {% for panier in panier %}
+                            <tr>
+                                <td colspan="3" class="text-right"><strong>Poids Total:</strong></td>
+                                <td class="text-right">{{ poidsTotal }} Kg</td>
+                            </tr>
+                            {% for panier in panier %}
                             {% if loop.first %}
-                                {% set prixLivraison = panier.prixLivraison %}
-                                <tbody>
-                                    <td colspan="3" class="text-right"><strong>Prix Livraison:</strong></td>
-                                    <td class="text-right" style="margin-right: -20px;">{{ panier.prixLivraison }} €</td>
-                                </tbody>
+                            <tr>
+                                <td colspan="3" class="text-right"><strong>Prix Livraison:</strong></td>
+                                <td class="text-right">{{ panier.prixLivraison }} €</td>
+                            </tr>
                             {% endif %}
-                        {% endfor %}
-                        
-                        
-
-                   
-                            
-                       
+                            {% endfor %}
+                        </tfoot>
                     </table>
-
-                  
                     {% if afficherPasserCommande %}
                         <a href="{{ path('app_commande') }}" class="btn btn-primary">Passer commande</a>
                         <a href="#" class="btn btn-primary">Vider le panier</a>
                         {% if afficherDevis %}
-                            <a href="{{ path('demanderdevis') }}" class="btn btn-primary" style="margin-left: 250px;">Demander un devis</a>
+                            <a href="{{ path('demanderdevis') }}" class="btn btn-primary">Demander un devis</a>
                         {% endif %}
                     {% endif %}
                 </div>
             </div>
         </div>
     </div>
+    <br>
+
+    <footer>
+        {% include 'footer.html.twig' %} 
+    </footer>
+
 </body>
 </html>
