@@ -454,6 +454,8 @@ public function getClientInfo($id, EntityManagerInterface $entityManager): Respo
     $motdepasse = $client->getMotdepasse();
     $motdepasse = $client->getMotdepasse();
 
+    $afficherDevis = $client && $client->gettypeclient() === 'ClientProfessionnel';
+
     // Transmettre les informations du client au template Twig
     return $this->render('informations.html.twig', [
         'nom' => $nom,
@@ -461,6 +463,7 @@ public function getClientInfo($id, EntityManagerInterface $entityManager): Respo
         'email' => $email,
         'telephone' => $telephone,
         'motdepasse' => $motdepasse,
+        'afficherDevis' => $afficherDevis,
     ]);
 }
 

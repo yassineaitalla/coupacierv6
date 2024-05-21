@@ -101,7 +101,11 @@
                             <li class="list-group-item"><a href="#" class="text-decoration-none">Mes Listes d'Envies</a></li>
                             <li class="list-group-item"><a href="#" class="text-decoration-none">Mes Commandes</a></li>
                             <li class="list-group-item"><a href="#" class="text-decoration-none">Mes Factures</a></li>
+                            {% if afficherDevis %}
                             <li class="list-group-item"><a href="{{ path('app_afficher_devis') }}" class="text-decoration-none">Mes Devis</a></li>
+                            {% endif %}
+
+                           
                         </ul>
                     </div>
                 </div>

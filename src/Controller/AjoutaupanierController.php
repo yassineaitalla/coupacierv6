@@ -77,6 +77,7 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
     // Calculer le total en fonction de la longueur sélectionnée et du prix initial
     $masseLineaire = $produit->getMasseLineaireKgMetre();
     $coef = $produit->getCoef();
+  
     $prixDecoupe = $masseLineaire * $coef * $inp * $quantite;
     $total = $inp * $prixInitial * $quantite + $prixDecoupe;
     $poidsKg= $masseLineaire * $inp * $quantite;
@@ -147,7 +148,7 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
     
     // Définir la distance dans le panier
     $panier->setDistance($minDistance . ' ' . $distanceUnit);
-    $panier->setPrixLivraison(round($prixLivraison, 2)); // arondir 
+    $panier->setPrixLivraison(round($prixLivraison, 2)); // iruxlivraison * 20 % de TVA
 
     // Persister le panier
     $entityManager->persist($panier);
@@ -161,15 +162,19 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
 
 private function calculerPrixLivraison($distance, $poids)
 {
-    // Vos calculs pour le prix de livraison en fonction de la distance et du poids
-    // Vous pouvez utiliser la formule que vous avez fournie dans votre question
-    // Par exemple :
     $base = 40;
     $prix = $base + (0.3 * $distance);
+
+    // Calcul de la majoration pour les tranches de 200 kg supplémentaires
     if ($poids > 200) {
-        $prix += ceil($poids / 200) * 20;
+        $tranchesSupplementaires = ceil(($poids - 200) / 200);
+        $prix += $tranchesSupplementaires * 20;
     }
-    return $prix;
+
+    // Calcul de la TVA à 20%
+    $prixTTC = $prix * 1.20;
+
+    return $prixTTC;
 }
 
    
