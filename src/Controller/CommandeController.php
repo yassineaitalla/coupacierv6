@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CommandeController extends AbstractController
 {
-    #[Route('/commande', name: 'app_commande')]
+    #[Route('/commande', name: 'commande')]
     public function index(Request $request): Response
     {
         // Votre logique de gestion du formulaire ici, si nécessaire

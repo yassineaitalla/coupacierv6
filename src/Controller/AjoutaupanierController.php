@@ -77,8 +77,10 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
     // Calculer le total en fonction de la longueur sélectionnée et du prix initial
     $masseLineaire = $produit->getMasseLineaireKgMetre();
     $coef = $produit->getCoef();
+
+    $metre = 1;
   
-    $prixDecoupe = $masseLineaire * $coef * $inp * $quantite;
+    $prixDecoupe = $masseLineaire * $coef * $metre * $quantite;
     $total = $inp * $prixInitial * $quantite + $prixDecoupe;
     $poidsKg= $masseLineaire * $inp * $quantite;
 

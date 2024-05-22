@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demander devis</title>
-    <link rel="stylesheet" href="">
+    <title>Demande de devis</title>
+    <link rel="stylesheet" href="style.css"> <!-- Ajoutez le lien vers votre feuille de style CSS -->
 </head>
 <body>
     <header>
@@ -17,94 +17,70 @@
             <thead class="thead-dark">
                 <tr>
                     {% if message is not empty %}
-                    <th scope="col" colspan="7">
+                    <th colspan="7">
                         <p>{{ message }}</p>
                     </th>
                     {% endif %}
                 </tr>
-                {% if panier is not empty %}
                 <tr>
-                    <th scope="col">Produit</th>
-                    <th scope="col">Quantite</th>
-                    <th scope="col">Prix de la barre</th>
-                    <th scope="col">Prix final</th>
-                    <th scope="col">Longueur Mettre</th>
-                    <th scope="col">Prix découpe (A revoir)</th>
-                    <th scope="col">Poids</th>
-                    <th scope="col">Prix Livraison</th>
+                    <th>Produit</th>
+                    <th>Quantité</th>
+                    <th>Prix de la barre</th>
+                    <th>Prix final</th>
+                    <th>Longueur Metre</th>
+                    <th>Prix découpe</th>
+                    <th>Poids</th>
                 </tr>
-               
-            
-                <tr>
-                    <tfoot>
-                        <td colspan="3" class="text-right"><strong>Total TTC:</strong></td>
-                        <td class="text-right">{{ sommeTotal }} €</td>
-                    </tfoot>
-
-                    
-                </tr>
-                {% endif %}
             </thead>
-           
             <tbody>
-                {% for panier in panier %}
+                {% for item in panier %}
                 <tr>
-                    <td>{{ panier.getIdProduit().getNom() }}</td>
-                    <td>{{ panier.quantite }}</td>
-                    <td>{{ panier.getIdProduit().getprix() }} €</td>
+                    <td>{{ item.getIdProduit().getNom() }}</td>
+                    <td>{{ item.quantite }}</td>
+                    <td>{{ item.getIdProduit().getprix() }} €</td>
                     <td>
-                        {% if panier.quantite == 1 %}
-                        {{ panier.getIdProduit().getprix() }} €
+                        {% if item.quantite == 1 %}
+                        {{ item.getIdProduit().getprix() }} €
                         {% else %}
-                        {{ panier.getIdProduit().getprix() * panier.quantite }} 
+                        {{ item.getIdProduit().getprix() * item.quantite }} €
                         {% endif %}
                     </td>
-                    <td>{{ panier.LongueurMetre }} Mètre</td>
-                    <td>{{ panier.prixDecoupe }} €</td>
-                    <td>{{ panier.Poids() }} Kg</td>
-                    <td>{{ panier.prixLivraison}} € </td>
-
-                   
-
-                    
-
-                    <td>
-                       
-                    </td>
+                    <td>{{ item.LongueurMetre }} Mètre</td>
+                    <td>{{ item.prixDecoupe }} €</td>
+                    <td>{{ item.Poids() }} Kg</td>
                 </tr>
                 {% endfor %}
             </tbody>
-
-            <br>
-            <br>
-            <br>
-
             <tfoot>
+                {% if panier is not empty %}
+                <tr>
+                    <td colspan="3" class="text-right"><strong>Total TTC:</strong></td>
+                    <td class="text-right">{{ sommeTotal }} €</td>
+                    <td colspan="3"></td> <!-- Colonne vide pour aligner le total -->
+                </tr>
+                {% endif %}
                 <tr>
                     <td colspan="3" class="text-right"><strong>Poids Total:</strong></td>
-                    <td class="text-right" style="margin-right: -20px;">{{ poidsTotal }} Kg</td>
+                    <td class="text-right">{{ poidsTotal }} Kg</td>
+                    <td colspan="3"></td> <!-- Colonne vide pour aligner le total -->
                 </tr>
             </tfoot>
         </table>
 
-        {# templates/soumettre_devis.html.twig #}
-
-<form method="POST" action="{{ path('app_soumettre_devis') }}">
-    <div class="mb-3">
-        <label for="message" class="form-label">Ecrire votre Message</label>
-        <textarea class="form-control" id="message" name="messageClient" rows="5"></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Soumettre</button>
-</form>
-
-        
+        <!-- Formulaire de soumission -->
+        <form method="POST" action="{{ path('app_soumettre_devis') }}">
+            <div class="mb-3">
+                <label for="message" class="form-label">Votre message</label>
+                <textarea class="form-control" id="message" name="messageClient" rows="5"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Soumettre</button>
+        </form>
     </main>
-
 
     <!-- Footer -->
     <footer>
         {% include 'footer.html.twig' %} 
     </footer>
-    <!-- Footer -->
+    <!-- Fin du Footer -->
 </body>
 </html>

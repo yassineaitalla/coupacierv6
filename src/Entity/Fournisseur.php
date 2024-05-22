@@ -15,8 +15,7 @@ class Fournisseur
 
     #[ORM\Column(length: 255)]
     private ?string $nomFournisseur = null;
-    #[ORM\Column(length: 255)]
-    private ?string $nomproduit= null;
+   
 
     public function getId(): ?int
     {
@@ -35,15 +34,5 @@ class Fournisseur
         return $this;
     }
 
-    public function getNomproduit(): ?string
-    {
-        return $this->nomproduit;
-    }
-
-    public function setNomproduit(string $nomproduit): static
-    {
-        $this->nomproduit = $nomproduit;
-
-        return $this;
-    }
+   
 }

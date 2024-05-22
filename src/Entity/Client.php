@@ -53,7 +53,7 @@ class Client implements UserInterface
     {
         $this->societes = new ArrayCollection();
         $this->messages = new ArrayCollection();
-        $this->livraisons = new ArrayCollection();
+        
         $this->idclient = new ArrayCollection();
     }
 
@@ -175,8 +175,7 @@ class Client implements UserInterface
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'idClient', orphanRemoval: true)]
     private Collection $messages;
 
-    #[ORM\OneToMany(targetEntity: Livraison::class, mappedBy: 'idclient', orphanRemoval: true)]
-    private Collection $livraisons;
+   
 
     #[ORM\OneToMany(targetEntity: Commande::class, mappedBy: 'idclient', orphanRemoval: true)]
     private Collection $idclient;
@@ -299,35 +298,7 @@ class Client implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Livraison>
-     */
-    public function getLivraisons(): Collection
-    {
-        return $this->livraisons;
-    }
-
-    public function addLivraison(Livraison $livraison): static
-    {
-        if (!$this->livraisons->contains($livraison)) {
-            $this->livraisons->add($livraison);
-            $livraison->setIdclient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLivraison(Livraison $livraison): static
-    {
-        if ($this->livraisons->removeElement($livraison)) {
-            // set the owning side to null (unless already changed)
-            if ($livraison->getIdclient() === $this) {
-                $livraison->setIdclient(null);
-            }
-        }
-
-        return $this;
-    }
+ 
 
     /**
      * @return Collection<int, Commande>

@@ -25,9 +25,6 @@ class Entrepot
     #[ORM\Column(length: 255)]
     private ?string $CodePostal = null;
 
-    #[ORM\OneToOne(mappedBy: 'identrepot', cascade: ['persist', 'remove'])]
-    private ?Livraison $identrepot = null;  
-
     public function getId(): ?int
     {
         return $this->id;
@@ -81,22 +78,6 @@ class Entrepot
         return $this;
     }
 
-    public function getIdentrepot(): ?Livraison
-    {
-        return $this->identrepot;
-    }
-
-    public function setIdentrepot(Livraison $identrepot): static
-    {
-        // set the owning side of the relation if necessary
-        if ($identrepot->getIdentrepot() !== $this) {
-            $identrepot->setIdentrepot($this);
-        }
-
-        $this->identrepot = $identrepot;
-
-        return $this;
-    }
 
     
 }

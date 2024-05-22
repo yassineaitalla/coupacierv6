@@ -5,10 +5,12 @@ namespace App\Controller;
 
 use App\Entity\Panier;
 use App\Entity\Client;
+use App\Entity\Produit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 use Doctrine\ORM\EntityManagerInterface; // On importe l'interface EntityManagerInterface fournie par Doctrine
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;  // Importe la classe Route de l'attribut Route.
@@ -31,6 +33,8 @@ class AffichagePanier extends AbstractController{
         $panier = null;
         $prixLivraisonAjoute = false; // Initialisez la variable ici
         $poidsTotal = 0; // Initialisez la variable pour éviter les avertissements
+        $prixdecoupetotal=0;
+        $prixtotalproduits=0;
     
         // Récupérer l'ID de l'utilisateur connecté depuis la session
         $clientId = $request->getSession()->get('client_id');
@@ -48,6 +52,8 @@ class AffichagePanier extends AbstractController{
             // Récupérer tous les éléments du panier pour cet utilisateur
             $panierRepository = $this->entityManager->getRepository(Panier::class);
             $panier = $panierRepository->findBy(['client' => $client]);
+
+           
     
             // Calculer la somme totale des éléments du panier
             $sommeTotal = 0;
@@ -66,6 +72,15 @@ class AffichagePanier extends AbstractController{
             foreach ($panier as $produitPanier) {
                 $poidsTotal += $produitPanier->getPoids();
             }
+
+            foreach ($panier as $produitPanier) {
+                $prixdecoupetotal+= $produitPanier->getPrixdecoupe();
+            }
+
+            foreach ($panier as $produitPanier) {
+                $prixtotalproduits += $produitPanier->getIdProduit()->getPrix() * $produitPanier->getQuantite();
+            }
+            
             
             // Vérifier si le client est un professionnel pour afficher le bouton de demande de devis
             $afficherDevis = $client && $client->gettypeclient() === 'ClientProfessionnel';
@@ -87,7 +102,9 @@ class AffichagePanier extends AbstractController{
             'message' => $message,
             'afficherPasserCommande' => $afficherPasserCommande,
             'prixLivraisonAjoute' => $prixLivraisonAjoute,
-            'poidsTotal' => $poidsTotal
+            'poidsTotal' => $poidsTotal,
+            'prixdecoupetotal' => $prixdecoupetotal,
+            'prixtotalproduits' => $prixtotalproduits,
         ]);
     }
     

@@ -47,6 +47,8 @@ class BlogController extends AbstractController
         ]);
     }
 
+    
+
     #[Route('/informations', name: 'informations')]
     public function pageinformations(): Response
     {
