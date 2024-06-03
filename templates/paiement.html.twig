@@ -9,6 +9,10 @@
         .payment-container {
             margin-top: 50px;
         }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
@@ -16,32 +20,107 @@
         {% include 'navbar.html.twig' %}
     </header>
 
-    <div class="container payment-container">
+    {% block body %}
+    <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <h1 class="text-center mb-4">Paiement</h1>
-                <form>
-                    <div class="form-group">
-                        <label for="cardNumber">Numéro de carte</label>
-                        <input type="text" class="form-control" id="cardNumber" placeholder="Entrez votre numéro de carte">
+                <div class="card">
+                    <div class="card-header">Ajouter une adresse de livraison</div>
+                    <div class="card-body">
+                        <ul class="nav nav-pills mb-4" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="infos-personnelles-tab" data-toggle="pill" data-target="#infos-personnelles" type="button" role="tab" aria-controls="infos-personnelles" aria-selected="true">1. Informations personnelles</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="adresse-livraison-tab" data-toggle="pill" data-target="#adresse-livraison" type="button" role="tab" aria-controls="adresse-livraison" aria-selected="false" disabled>2. Adresse de facturation</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="paiement-tab" data-toggle="pill" data-target="#paiement" type="button" role="tab" aria-controls="paiement" aria-selected="false" disabled>3. Paiement</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="infos-personnelles" role="tabpanel" aria-labelledby="infos-personnelles-tab">
+                                <!-- Formulaire pour les informations personnelles -->
+                                <form id="form-infos-personnelles">
+                                    <div class="mb-3">
+                                        <label for="nom" class="form-label">Nom</label>
+                                        <input type="text" class="form-control" id="nom" name="nom" readonly required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="prenom" class="form-label">Prénom</label>
+                                        <input type="text" class="form-control" id="prenom" name="prenom" readonly required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" readonly required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="telephone" class="form-label">Téléphone</label>
+                                        <input type="text" class="form-control" id="telephone" name="telephone" readonly required>
+                                    </div>
+                                    <button class="btn btn-primary" type="button" onclick="nextStep('adresse-livraison-tab')">Continuer</button>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="adresse-livraison" role="tabpanel" aria-labelledby="adresse-livraison-tab">
+                                <!-- Formulaire pour l'adresse de livraison -->
+                                <form id="form-adresse-livraison">
+                                    <div class="mb-3">
+                                        <label for="adresse" class="form-label">Adresse</label>
+                                        <input type="text" class="form-control" id="adresse" name="adresse" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="ville" class="form-label">Ville</label>
+                                        <input type="text" class="form-control" id="ville" name="ville" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="code_postal" class="form-label">Code postal</label>
+                                        <input type="text" class="form-control" id="code_postal" name="code_postal" required>
+                                    </div>
+
+                                    
+                                    <button class="btn btn-primary" type="button" onclick="nextStep('paiement-tab')">Continuer</button>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="paiement" role="tabpanel" aria-labelledby="paiement-tab">
+                                <!-- Formulaire pour le paiement -->
+                                <div class="container payment-container">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-8">
+                                            <h1 class="text-center mb-4">Paiement</h1>
+                                            <form id="paymentForm" method="post" action="{{ path('ajouter_commande') }}">
+                                                <div class="form-group">
+                                                    <label for="cardNumber">Numéro de carte</label>
+                                                    <input type="text" class="form-control" id="cardNumber" name="cardNumber" placeholder="Entrez votre numéro de carte" required>
+                                                    <div class="error" id="cardNumberError"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="cardName">Nom sur la carte</label>
+                                                    <input type="text" class="form-control" id="cardName" name="cardName" placeholder="Entrez le nom tel qu'il apparaît sur la carte" required>
+                                                    <div class="error" id="cardNameError"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="expiryDate">Date d'expiration</label>
+                                                    <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/AA" required>
+                                                    <div class="error" id="expiryDateError"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="cvv">CVV</label>
+                                                    <input type="text" class="form-control" id="cvv" name="cvv" placeholder="Entrez le CVV" required>
+                                                    <div class="error" id="cvvError"></div>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary btn-block">Payer</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="cardName">Nom sur la carte</label>
-                        <input type="text" class="form-control" id="cardName" placeholder="Entrez le nom tel qu'il apparaît sur la carte">
-                    </div>
-                    <div class="form-group">
-                        <label for="expiryDate">Date d'expiration</label>
-                        <input type="text" class="form-control" id="expiryDate" placeholder="MM/AA">
-                    </div>
-                    <div class="form-group">
-                        <label for="cvv">CVV</label>
-                        <input type="text" class="form-control" id="cvv" placeholder="Entrez le CVV">
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Payer</button>
-                </form>
+                </div>
             </div>
         </div>
     </div>
+    {% endblock %}
 
     <footer>
         {% include 'footer.html.twig' %}
@@ -50,5 +129,76 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function nextStep(tabId) {
+            const tabs = document.querySelectorAll('.nav-link');
+            tabs.forEach(tab => {
+                if (tab.id === tabId) {
+                    tab.classList.add('active');
+                    tab.removeAttribute('disabled');
+                } else {
+                    tab.classList.remove('active');
+                    tab.setAttribute('disabled', true);
+                }
+            });
+
+            const tabContent = document.querySelectorAll('.tab-pane');
+            tabContent.forEach(tab => {
+                if (tab.id === tabId.replace('-tab', '')) {
+                    tab.classList.add('show', 'active');
+                } else {
+                    tab.classList.remove('show', 'active');
+                }
+            });
+        }
+
+        document.getElementById('paymentForm').addEventListener('submit', function(event) {
+            let isValid = true;
+
+            // Numéro de carte validation
+            const cardNumber = document.getElementById('cardNumber').value;
+            const cardNumberError = document.getElementById('cardNumberError');
+            if (!cardNumber) {
+                cardNumberError.textContent = 'Le numéro de carte est requis.';
+                isValid = false;
+            } else {
+                cardNumberError.textContent = '';
+            }
+
+            // Nom sur la carte validation
+            const cardName = document.getElementById('cardName').value;
+            const cardNameError = document.getElementById('cardNameError');
+            if (!cardName) {
+                cardNameError.textContent = 'Le nom sur la carte est requis.';
+                isValid = false;
+            } else {
+                cardNameError.textContent = '';
+            }
+
+            // Date d'expiration validation
+            const expiryDate = document.getElementById('expiryDate').value;
+            const expiryDateError = document.getElementById('expiryDateError');
+            if (!expiryDate) {
+                expiryDateError.textContent = 'La date d\'expiration est requise.';
+                isValid = false;
+            } else {
+                expiryDateError.textContent = '';
+            }
+
+            // CVV validation
+            const cvv = document.getElementById('cvv').value;
+            const cvvError = document.getElementById('cvvError');
+            if (!cvv) {
+                cvvError.textContent = 'Le CVV est requis.';
+                isValid = false;
+            } else {
+                cvvError.textContent = '';
+            }
+
+            if (!isValid) {
+                event.preventDefault(); // Empêcher la soumission du formulaire si invalide
+            }
+        });
+    </script>
 </body>
 </html>

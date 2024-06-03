@@ -18,6 +18,7 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
     // Vérifier si la requête est de type POST
     if ($request->isMethod('POST')) {
         $email = $request->request->get('email');
+
         $motdepasse = $request->request->get('motdepasse');
 
         // Rechercher l'utilisateur dans la base de données par son email
@@ -34,10 +35,11 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
         $session->set('client_id', $client->getId());
 
         // Rediriger l'utilisateur vers la page de récupération des informations avec l'ID du client
-        return $this->redirectToRoute('recup_informations', ['id' => $client->getId()]);
+        $this->addFlash('success', 'Vous êtes connecté.');
+        return $this->redirectToRoute('produits');
     }
 
-    // Si la méthode n'est pas POST, afficher la page de connexionn
+    // Si la méthode n'est pas POST, afficher la page de connexionn 
     
     return $this->render('connexion.html.twig');
 }
@@ -57,11 +59,26 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
         // Si l'utilisateur n'est pas connecté, redirigeons vers la page de connexion
         return $this->redirectToRoute('pageconnexion');
     }
+
+    
+}
+
+#[Route('/test5', name: 'verification5')]
+public function verificationConnexion5(SessionInterface $session): Response
+{
+// Vérifions si l'utilisateur est connecté en vérifiant la présence de son ID dans la session
+$clientId = $session->get('client_id');
+
+if ($clientId) {
+    // Si l'utilisateur est connecté, redirigeons vers la page de récupération des informations
+    return $this->redirectToRoute('recup_informationscommande', ['id' => $clientId]);
+} else {
+    // Si l'utilisateur n'est pas connecté, redirigeons vers la page de connexion
+    return $this->redirectToRoute('pageconnexion');
 }
 
 
-
-
+}
 
 
 
@@ -72,15 +89,8 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
         $session->remove('client_id');
 
         // Rediriger l'utilisateur vers une page de confirmation de déconnexion ou toute autre page appropriéeee
+        $this->addFlash('danger', 'Vous êtes deconnecté.');
         return $this->redirectToRoute('pageconnexion');
     }
-
-
-
-
-
-
-
-
 
 }

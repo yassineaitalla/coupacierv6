@@ -1,5 +1,8 @@
 <?php
 
+
+
+
 namespace App\Entity;
 
 use App\Repository\CommandeRepository;
@@ -15,16 +18,40 @@ class Commande
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'idclient')]
+    #[ORM\ManyToOne(inversedBy: 'commandes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?client $idclient = null;
+    private ?Client $client = null;
 
-    #[ORM\OneToMany(targetEntity: BordereauLivraison::class, mappedBy: 'idcommande', orphanRemoval: true)]
-    private Collection $idcommande;
+    #[ORM\OneToMany(targetEntity: BordereauLivraison::class, mappedBy: 'commande', orphanRemoval: true)]
+    private Collection $bordereauxLivraison;
+
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    private ?float $totalTtc = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $adresseFacturation = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $villeFacturation = null;
+
+    #[ORM\Column(length: 10)]
+    private ?string $codePostalFacturation = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $paysFacturation = null;
+
+    #[ORM\Column]
+    private ?int $quantite = null;
+
+    #[ORM\Column]
+    private ?int $idproduit = null;
+
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    private ?float $montantHorsTaxe = null;
 
     public function __construct()
     {
-        $this->idcommande = new ArrayCollection();
+        $this->bordereauxLivraison = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -32,14 +59,14 @@ class Commande
         return $this->id;
     }
 
-    public function getIdclient(): ?client
+    public function getClient(): ?Client
     {
-        return $this->idclient;
+        return $this->client;
     }
 
-    public function setIdclient(?client $idclient): static
+    public function setClient(?Client $client): static
     {
-        $this->idclient = $idclient;
+        $this->client = $client;
 
         return $this;
     }
@@ -47,29 +74,100 @@ class Commande
     /**
      * @return Collection<int, BordereauLivraison>
      */
-    public function getIdcommande(): Collection
+    
+
+    public function getTotalTtc(): ?float
     {
-        return $this->idcommande;
+        return $this->totalTtc;
     }
 
-    public function addIdcommande(BordereauLivraison $idcommande): static
+    public function setTotalTtc(?float $totalTtc): static
     {
-        if (!$this->idcommande->contains($idcommande)) {
-            $this->idcommande->add($idcommande);
-            $idcommande->setIdcommande($this);
-        }
+        $this->totalTtc = $totalTtc;
 
         return $this;
     }
 
-    public function removeIdcommande(BordereauLivraison $idcommande): static
+    public function getAdresseFacturation(): ?string
     {
-        if ($this->idcommande->removeElement($idcommande)) {
-            // set the owning side to null (unless already changed)
-            if ($idcommande->getIdcommande() === $this) {
-                $idcommande->setIdcommande(null);
-            }
-        }
+        return $this->adresseFacturation;
+    }
+
+    public function setAdresseFacturation(?string $adresseFacturation): static
+    {
+        $this->adresseFacturation = $adresseFacturation;
+
+        return $this;
+    }
+
+    public function getVilleFacturation(): ?string
+    {
+        return $this->villeFacturation;
+    }
+
+    public function setVilleFacturation(?string $villeFacturation): static
+    {
+        $this->villeFacturation = $villeFacturation;
+
+        return $this;
+    }
+
+    public function getCodePostalFacturation(): ?string
+    {
+        return $this->codePostalFacturation;
+    }
+
+    public function setCodePostalFacturation(?string $codePostalFacturation): static
+    {
+        $this->codePostalFacturation = $codePostalFacturation;
+
+        return $this;
+    }
+
+    public function getPaysFacturation(): ?string
+    {
+        return $this->paysFacturation;
+    }
+
+    public function setPaysFacturation(?string $paysFacturation): static
+    {
+        $this->paysFacturation = $paysFacturation;
+
+        return $this;
+    }
+
+    public function getQuantite(): ?int
+    {
+        return $this->quantite;
+    }
+
+    public function setQuantite(?int $quantite): static
+    {
+        $this->quantite = $quantite;
+
+        return $this;
+    }
+
+    public function getIdproduit(): ?int
+    {
+        return $this->idproduit;
+    }
+
+    public function setIdproduit(?int $idproduit): static
+    {
+        $this->idproduit = $idproduit;
+
+        return $this;
+    }
+
+    public function getMontantHorsTaxe(): ?float
+    {
+        return $this->montantHorsTaxe;
+    }
+
+    public function setMontantHorsTaxe(?float $montantHorsTaxe): static
+    {
+        $this->montantHorsTaxe = $montantHorsTaxe;
 
         return $this;
     }

@@ -78,7 +78,7 @@ class AffichagePanier extends AbstractController{
             }
 
             foreach ($panier as $produitPanier) {
-                $prixtotalproduits += $produitPanier->getIdProduit()->getPrix() * $produitPanier->getQuantite();
+                $prixtotalproduits += $produitPanier->getIdProduit()->getPrix() * $produitPanier->getQuantite() * $produitPanier->getLongueurMetre();
             }
             
             

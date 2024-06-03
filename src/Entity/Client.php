@@ -175,7 +175,7 @@ class Client implements UserInterface
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'idClient', orphanRemoval: true)]
     private Collection $messages;
 
-   
+
 
     #[ORM\OneToMany(targetEntity: Commande::class, mappedBy: 'idclient', orphanRemoval: true)]
     private Collection $idclient;
@@ -298,35 +298,6 @@ class Client implements UserInterface
         return $this;
     }
 
- 
 
-    /**
-     * @return Collection<int, Commande>
-     */
-    public function getIdclient(): Collection
-    {
-        return $this->idclient;
-    }
-
-    public function addIdclient(Commande $idclient): static
-    {
-        if (!$this->idclient->contains($idclient)) {
-            $this->idclient->add($idclient);
-            $idclient->setIdclient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIdclient(Commande $idclient): static
-    {
-        if ($this->idclient->removeElement($idclient)) {
-            // set the owning side to null (unless already changed)
-            if ($idclient->getIdclient() === $this) {
-                $idclient->setIdclient(null);
-            }
-        }
-
-        return $this;
-    }
+   
 }

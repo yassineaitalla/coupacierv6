@@ -9,6 +9,11 @@
     <title>Connexion</title>
    
 </head>
+{% for message in app.flashes('danger') %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
 
 <body class="bg-dark">
 

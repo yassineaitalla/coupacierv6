@@ -51,7 +51,7 @@
                             <th scope="col">Devis Numéro</th>
                             <th scope="col">Client</th>
                             <th scope="col">Statut</th>
-                            
+                            <th scope="col">Votre devis est bien traité accepteriez vous ?</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -61,7 +61,14 @@
                                 <td>{{ devis.idclient.nom }}</td> {# Assurez-vous que "nom" est une propriété de l'entité Client #}
                                 <td>{{ devis.statut }}</td>
                                 <td>
-                                    
+                                    {% if devis.statut == 'Traité' %}
+                                        <form action="" method="post" style="display:inline;">
+                                            <button type="submit" class="btn btn-success">Oui</button>
+                                        </form>
+                                        <form action="" method="post" style="display:inline;">
+                                            <button type="submit" class="btn btn-danger">Non</button>
+                                        </form>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% else %}

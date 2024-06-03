@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affichage du Panier</title>
+    <style>
+        /* Ajoutez votre CSS pour le design ici */
+        /* Par exemple, des styles pour la disposition, les couleurs, les polices, etc. */
+    </style>
+</head>
+<body>
+    <div id="panier-container">
+        <h1>Panier</h1>
+        <div id="panier-items">
+            <!-- Les éléments du panier seront insérés ici dynamiquement -->
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour récupérer les données du panier depuis l'API
+        function getPanierData() {
+            fetch('http://localhost:8000/affichagepanier')
+                .then(response => response.json())
+                .then(data => {
+                    // Appeler la fonction pour afficher les données du panier
+                    displayPanierData(data);
+                })
+                .catch(error => console.error('Erreur lors de la récupération des données du panier:', error));
+        }
+
+        // Fonction pour afficher les données du panier dans le DOM
+        function displayPanierData(data) {
+            const panierItemsDiv = document.getElementById('panier-items');
+            panierItemsDiv.innerHTML = ''; // Clear le contenu précédent du panier
+
+            if (data.panier.length === 0) {
+                panierItemsDiv.innerHTML = '<p>Votre panier est vide.</p>';
+            } else {
+                data.panier.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.innerHTML = `
+                        <p>Nom du produit: ${item.nomProduit}</p>
+                        <p>Prix: ${item.prix}</p>
+                        <!-- Ajoutez d'autres détails du produit ici si nécessaire -->
+                    `;
+                    panierItemsDiv.appendChild(itemDiv);
+                });
+            }
+        }
+
+        // Appel de la fonction pour récupérer et afficher les données du panier lors du chargement de la page
+        getPanierData();
+    </script>
+</body>
+</html>

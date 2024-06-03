@@ -13,4 +13,6 @@ class PaiementController extends AbstractController
     {
         return $this->render('paiement.html.twig');
     }
+
+    
 }

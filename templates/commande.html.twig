@@ -13,7 +13,7 @@
                                 <button class="nav-link active" id="infos-personnelles-tab" data-bs-toggle="pill" data-bs-target="#infos-personnelles" type="button" role="tab" aria-controls="infos-personnelles" aria-selected="true">1. Informations personnelles</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="adresse-livraison-tab" data-bs-toggle="pill" data-bs-target="#adresse-livraison" type="button" role="tab" aria-controls="adresse-livraison" aria-selected="false" disabled>2. Adresse de livraison</button>
+                                <button class="nav-link" id="adresse-livraison-tab" data-bs-toggle="pill" data-bs-target="#adresse-livraison" type="button" role="tab" aria-controls="adresse-livraison" aria-selected="false" disabled>2. Adresse de facturation</button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="paiement-tab" data-bs-toggle="pill" data-bs-target="#paiement" type="button" role="tab" aria-controls="paiement" aria-selected="false" disabled>3. Paiement</button>
@@ -25,15 +25,19 @@
                                 <form method="post" action="">
                                     <div class="mb-3">
                                         <label for="nom" class="form-label">Nom</label>
-                                        <input type="text" class="form-control" id="nom" name="nom">
+                                        <input type="text" class="form-control" id="nom" name="nom"  readonly>
                                     </div>
                                     <div class="mb-3">
                                         <label for="prenom" class="form-label">Prénom</label>
-                                        <input type="text" class="form-control" id="prenom" name="prenom">
+                                        <input type="text" class="form-control" id="prenom" name="prenom" readonly>
                                     </div>
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email">
+                                        <input type="email" class="form-control" id="email" name="email" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="telephone" class="form-label">Téléphone</label>
+                                        <input type="text" class="form-control" id="telephone" name="telephone"  readonly>
                                     </div>
                                     <button class="btn btn-primary" type="button" onclick="nextStep('adresse-livraison')">Continuer</button>
                                 </form>
@@ -58,8 +62,8 @@
                             </div>
                             <div class="tab-pane fade" id="paiement" role="tabpanel" aria-labelledby="paiement-tab">
                                 <!-- Formulaire pour le paiement -->
-                                <p>Formulaire de paiement...</p>
-                                <button class="btn btn-success">Payer</button>
+                               
+                                <a href="{{ path('app_paiement') }}" class="btn btn-primary">Commander</a>
                             </div>
                         </div>
                     </div>

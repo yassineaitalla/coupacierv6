@@ -81,6 +81,7 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
     $metre = 1;
   
     $prixDecoupe = $masseLineaire * $coef * $metre * $quantite;
+    
     $total = $inp * $prixInitial * $quantite + $prixDecoupe;
     $poidsKg= $masseLineaire * $inp * $quantite;
 

@@ -91,6 +91,14 @@ class BlogController extends AbstractController
         ]);
     }
 
+    #[Route('/commande', name: 'vacommandes')]
+    public function Commande(): Response
+    {
+        return $this->render('commande.html.twig', [
+            'message' => 'Bienvenue sur la page d\'accueil !',
+        ]);
+    }
+
 #[Route('/listedenvies', name: 'listedenvies')]
 public function listedEnvies(SessionInterface $session, EntityManagerInterface $entityManager): Response
 {
@@ -112,6 +120,9 @@ public function listedEnvies(SessionInterface $session, EntityManagerInterface $
         'sommeTotal' => $sommeTotal,
     ]);
 }
+
+
+
 
 
     

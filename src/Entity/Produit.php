@@ -24,6 +24,8 @@ class Produit
     #[ORM\Column]
     private ?float $prix = null;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $Image = null;
     #[ORM\Column]
     private ?float $coef = null;
 
@@ -40,8 +42,7 @@ class Produit
     #[ORM\Column]
     private ?int $remise = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $image = null;
+    
 
     #[ORM\OneToMany(targetEntity: Panier::class, mappedBy: 'id_produit', orphanRemoval: true)]
     private Collection $paniers;
@@ -92,17 +93,7 @@ class Produit
 
 
 
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): static
-    {
-        $this->image = $image;
-
-        return $this;
-    }
+   
 
     public function getPrix(): ?float
     {
@@ -168,6 +159,18 @@ class Produit
     public function setRemise(int $remise): static
     {
         $this->remise = $remise;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->Image;
+    }
+
+    public function setImage(?string $Image): self
+    {
+        $this->Image = $Image;
 
         return $this;
     }

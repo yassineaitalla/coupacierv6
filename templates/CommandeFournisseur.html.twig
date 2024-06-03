@@ -9,6 +9,12 @@
         .order-container {
             margin-top: 50px;
         }
+        .form-container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -18,26 +24,29 @@
 
     <div class="container order-container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <h1 class="text-center mb-4">Commande Fournisseur</h1>
-                <form action="" method="post">
-                    <div class="form-group">
-                        <label for="quantite_commander">Quantité commandée</label>
-                        <input type="number" class="form-control" id="quantite_commander" name="quantite_commander" placeholder="Entrez la quantité commandée" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="quantite_commander"></label>
-                        <input type="number" class="form-control" id="quantite_commander" name="quantite_commander" placeholder="Entrez le nom du produit commandée" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="statut">Statut</label>
-                        <select class="form-control" id="statut" name="statut" required>
-                            <option value="en_cours_de_livraison">En cours de livraison</option>
-                            <option value="livree">Livrée</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Enregistrer</button>
-                </form>
+            <div class="col-md-6">
+                <div class="form-container">
+                    <h1 class="text-center mb-4">Commande Fournisseur</h1>
+                    <form action="" method="post">
+                        <div class="form-group">
+                            <label for="quantite_commandee">Quantité commandée</label>
+                            <input type="number" class="form-control" id="quantite_commandee" name="quantite_commandee" placeholder="Entrez la quantité commandée" required min="1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="produit_commande">Produit commandé</label>
+                            <input type="text" class="form-control" id="produit_commande" name="produit_commande" placeholder="Entrez le nom du produit commandé" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="statut">Statut</label>
+                            <select class="form-control" id="statut" name="statut" required>
+                                <option value="en_cours_de_livraison">En cours de livraison</option>
+                               
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Enregistrer</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
