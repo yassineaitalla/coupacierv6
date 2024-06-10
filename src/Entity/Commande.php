@@ -34,6 +34,9 @@ class Commande
     #[ORM\Column(length: 100)]
     private ?string $villeFacturation = null;
 
+    #[ORM\Column(length: 100)]
+    private ?string $Etat = null;
+
     #[ORM\Column(length: 10)]
     private ?string $codePostalFacturation = null;
 
@@ -168,6 +171,18 @@ class Commande
     public function setMontantHorsTaxe(?float $montantHorsTaxe): static
     {
         $this->montantHorsTaxe = $montantHorsTaxe;
+
+        return $this;
+    }
+
+    public function getEtat(): ?string
+    {
+        return $this->Etat;
+    }
+
+    public function seEtat(?string $Etat): static
+    {
+        $this->Etat = $Etat;
 
         return $this;
     }

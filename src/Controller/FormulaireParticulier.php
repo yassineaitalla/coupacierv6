@@ -1,21 +1,26 @@
 <?php
 
-
 namespace App\Controller;
 use App\Entity\Client;
 
+
+
+
+
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface; // Importez UserPasswordEncoderInterface
+
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;  
+use Symfony\Component\Routing\Attribute\Route;  // Importe la classe Route de l'attribut Route.
 
 class FormulaireParticulier extends AbstractController
 {
-    #[Route('/formpart', name: 'formpart' )]
-    public function clientpart(Request $request, EntityManagerInterface $entityManager, ): Response
+
+
+#[Route('/formparticulier', name: 'formpartt' )]
+    public function clientpart(Request $request, EntityManagerInterface $entityManager): Response
     {
         if ($request->isMethod('POST')) {
             $civilite = $request->request->get('civilite');
@@ -48,17 +53,18 @@ class FormulaireParticulier extends AbstractController
             $client->setCodePostal($CodePostal);
             $client->setVille($Ville);
             $client->setMotdepasse($motdepasse);
-         
             $client->settypeclient($typeclient);
 
+            // Créer une instance de l'entité Societe
             
 
             // Persister les entités et enregistrer dans la base de données
             $entityManager->persist($client);
+        
             $entityManager->flush();
 
             // Ajouter un message flash
-            $this->addFlash('success', 'Votre compte a été crée avec succés!');
+            $this->addFlash('success', 'Les données ont été créées avec succès !');
 
             // Rediriger l'utilisateur vers une autre page après l'ajout
             return $this->redirectToRoute('formpart');
@@ -67,4 +73,5 @@ class FormulaireParticulier extends AbstractController
         // Si la méthode est GET, renvoyer simplement le template
         return $this->render('formpart.html.twig');
     }
+
 }

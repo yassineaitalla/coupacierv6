@@ -25,7 +25,78 @@
                                 <img src="https://www.coremarkmetals.com/files/image/large/STAINLESS_BAR_FLAT_088_3000.jpg" class="card-img-top" alt="{{ produit.nom }}">
                             {% elseif loop.index == 4 %}
                                 <img src="https://www.agrialpro.fr/media/catalog/product/i/m/image_1_88358f1c9fbaf6976108216.jpg?quality=80&fit=bounds&height=700&width=700&canvas=700:700" class="card-img-top" alt="{{ produit.nom }}">
-                            {% endif %}
+                            {% elseif loop.index == 2 %}
+                                <img src="https://www.ateliergaillard.fr/32-large_default/corniere-a-ailes-egales.jpg" class="card-img-top" alt="{{ produit.nom }}">
+                            {% elseif loop.index == 3 %}
+                                <img src="https://www.ateliergaillard.fr/33-large_default/corniere-a-ailes-inegales.jpg" class="card-img-top" alt="{{ produit.nom }}"  >
+                            
+                            {% elseif loop.index == 5 %}
+                            <img src="imagesprojet/fer-en-t-40x40x5-mm-a-la-coupe.jpg" class="card-img-top" alt="{{ produit.nom }}" >
+                      
+
+                            {% elseif loop.index == 6 %}
+                            <img src="imagesprojet/poutre-ipe-100.jpg" class="card-img-top" alt="{{ produit.nom }}" >
+
+
+
+                            
+
+                            {% elseif loop.index == 7 %}
+                            <img src="imagesprojet/poutrelle-upe.png" class="card-img-top" alt="{{ produit.nom }}" >
+                            
+                            {% elseif loop.index == 8 %}
+
+                            <img src="imagesprojet/PoutrelleHeb.jpg" class="card-img-top" alt="{{ produit.nom }}" >
+                            
+                            {% elseif loop.index == 9 %}
+
+                            <img src="imagesprojet/TubesRonds.jpg" class="card-img-top" alt="{{ produit.nom }}" >
+                            
+                            {% elseif loop.index == 10 %}
+
+                            <img src="imagesprojet/TubesCarrer.jpg" class="card-img-top" alt="{{ produit.nom }}" >
+                            
+                            {% elseif loop.index == 11 %}
+
+                            <img src="imagesprojet/TubesCarrer.jpg" class="card-img-top" alt="{{ produit.nom }}" >
+                            
+                            {% elseif loop.index == 12 %}
+
+                            <img src="imagesprojet/Tubesrectangulaire.jpg" class="card-img-top" alt="{{ produit.nom }}" >
+                            
+                            {% elseif loop.index == 13 %}
+
+                            <img src="imagesprojet/barrerondepleines.jpg" class="card-img-top" alt="{{ produit.nom }}" >
+                            
+                            
+                            {% elseif loop.index == 14 %}
+
+                            <img src="imagesprojet/barrecarrerpleines.jpg" class="card-img-top" alt="{{ produit.nom }}" >
+                            
+                            
+                             
+                             
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            {% endif %} 
+
+                           
+
+                           
+
 
                             <div class="card-body">
                                 <h5 class="card-title">Nom du produit : {{ produit.nom }} 6 M</h5>
@@ -74,7 +145,7 @@
                                     </form>
                                 {% else %}
                                     <p style="font-family: Arial, sans-serif; font-weight: bold;">Pour ajouter des produits à votre panier et à la liste d'envies, veuillez vous connecter.</p>
-                                    <a href="{{ path('verification') }}" class="btn btn-primary">Connexion</a>
+                                    <a href="{{ path('connexion') }}" class="btn btn-primary">Connexion</a>
                                 {% endif %}
                             </div>
                         </div>

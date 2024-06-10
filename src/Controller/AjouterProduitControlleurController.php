@@ -7,6 +7,8 @@
 
 namespace App\Controller;
 
+namespace App\Controller;
+
 use App\Entity\Produit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,12 +16,20 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class AjouterProduitControlleurController extends AbstractController
 {
     #[Route('/ajouter-produit', name: 'ajouter_produit')]
-    public function ajouterProduit(Request $request, EntityManagerInterface $entityManager): Response
+    public function ajouterProduit(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
+       
+        $clientId = $session->get('client_id');
+        if ($clientId !== 2) {
+            
+            return $this->render('ajoutproduitbd.html.twig'); 
+        }
+
         if ($request->isMethod('POST')) {
             // Récupérer les données du formulaire
             $nom = $request->request->get('nom');

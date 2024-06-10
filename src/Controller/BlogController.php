@@ -47,6 +47,19 @@ class BlogController extends AbstractController
         ]);
     }
 
+    #[Route('/vider-session', name: 'vider_session')]
+public function viderSession(SessionInterface $session): Response
+{
+    // Effacer toutes les données de la session
+    $session->clear();
+
+    // Ajouter un message flash pour indiquer que la session a été vidée
+    $this->addFlash('success', 'La session a été vidée.');
+
+    // Rediriger l'utilisateur vers une page appropriée
+    return $this->redirectToRoute('pageconnexion');
+}
+
     
 
     #[Route('/informations', name: 'informations')]
@@ -90,6 +103,8 @@ class BlogController extends AbstractController
             'message' => 'Bienvenue sur la page d\'accueil !',
         ]);
     }
+
+    
 
     #[Route('/commande', name: 'vacommandes')]
     public function Commande(): Response
@@ -222,9 +237,12 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
     {
         $produits = $this->entityManager->getRepository(Produit::class)->findAll();
         
+        
 
         return $this->render('produits.html.twig', [
             'produits' => $produits,
+
+        
         ]);
     }
 

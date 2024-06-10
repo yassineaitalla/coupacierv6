@@ -46,7 +46,7 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
 
 
 
-    #[Route('/test5', name: 'verification')]
+    #[Route('/test5', name: 'verificationn')]
     public function verificationConnexion(SessionInterface $session): Response
 {
     // Vérifions si l'utilisateur est connecté en vérifiant la présence de son ID dans la session
@@ -63,22 +63,6 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
     
 }
 
-#[Route('/test5', name: 'verification5')]
-public function verificationConnexion5(SessionInterface $session): Response
-{
-// Vérifions si l'utilisateur est connecté en vérifiant la présence de son ID dans la session
-$clientId = $session->get('client_id');
-
-if ($clientId) {
-    // Si l'utilisateur est connecté, redirigeons vers la page de récupération des informations
-    return $this->redirectToRoute('recup_informationscommande', ['id' => $clientId]);
-} else {
-    // Si l'utilisateur n'est pas connecté, redirigeons vers la page de connexion
-    return $this->redirectToRoute('pageconnexion');
-}
-
-
-}
 
 
 
