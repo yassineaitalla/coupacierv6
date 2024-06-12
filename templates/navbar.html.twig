@@ -21,6 +21,12 @@
          Coup'Acier
     </a>
     
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!--navbar-toggler c'est pour le burger pour afficher le menu apres avoir dezoomer-->
+
     <div class="collapse navbar-collapse" id="navbarColor01">
       <ul class="navbar-nav mx-auto">
         <li class="nav-item">
@@ -43,22 +49,16 @@
         </li>
     </ul>
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ path('vider_session') }}">
-            <i class="bi bi-trash"></i> Vider Session
-        </a>
-    </li>
     
-
     {% if app.session.get('client_id') %}
         <a href="{{ path('listedenvies') }}" class="btn btn-link">
-            <i class="bi bi-heart-fill fs-4 text-danger me-1"></i> 
+            <i class="bi bi-heart-fill fs-4 text-danger me-1">Liste d'envies</i> 
         </a>
     {% endif %}
 
     <div class="d-flex">
         <a href="{{ path('affichagepanier') }}" style="margin-right: 20px; text-decoration: none; cursor: pointer;">
-            <label class="bi bi-cart4" style="font-size: 24px; color: white;">Panier()</label>
+            <label class="bi bi-cart4" style="font-size: 24px; color: white;"> Panier</label>
         </a>
     </div>
   </div>

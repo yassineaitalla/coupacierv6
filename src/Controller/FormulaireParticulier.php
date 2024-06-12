@@ -19,7 +19,7 @@ class FormulaireParticulier extends AbstractController
 {
 
 
-#[Route('/formparticulier', name: 'formpartt' )]
+#[Route('/formparticulier', name: 'page_formpart' )]
     public function clientpart(Request $request, EntityManagerInterface $entityManager): Response
     {
         if ($request->isMethod('POST')) {
@@ -41,6 +41,7 @@ class FormulaireParticulier extends AbstractController
                 $this->addFlash('error', 'Le champ téléphone ne peut pas être vide.');
                 return $this->redirectToRoute('page_formpro');
             }
+            $hashedPassword = password_hash($motdepasse, PASSWORD_DEFAULT);
 
             // Créer une instance de l'entité Client
             $client = new Client();
@@ -52,7 +53,7 @@ class FormulaireParticulier extends AbstractController
             $client->setAdresse($Adresse);
             $client->setCodePostal($CodePostal);
             $client->setVille($Ville);
-            $client->setMotdepasse($motdepasse);
+            $client->setMotdepasse($hashedPassword);
             $client->settypeclient($typeclient);
 
             // Créer une instance de l'entité Societe
@@ -64,7 +65,7 @@ class FormulaireParticulier extends AbstractController
             $entityManager->flush();
 
             // Ajouter un message flash
-            $this->addFlash('success', 'Les données ont été créées avec succès !');
+            $this->addFlash('success', 'Votre compte à bien etait creez !');
 
             // Rediriger l'utilisateur vers une autre page après l'ajout
             return $this->redirectToRoute('formpart');

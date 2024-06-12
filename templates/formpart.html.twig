@@ -11,16 +11,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Particulier</title>
-   
+  <link rel="stylesheet" href="{{ asset('templates/style.css') }}">
 </head>
 
 <body class="bg-dark">
+  {# Affichage du message flash s'il existe #}
+  {% for message in app.session.flashbag.get('success') %}
+      <div class="alert alert-success" role="alert">
+          {{ message }}
+      </div>
+  {% endfor %}
 
   <div class="container my-5">
       <div class="container bg-primary p-5 rounded">
           <h1 class="text-center text-light">Client Particulier</h1>
 
-          <form method="post">
+          <form method="post" action="{{ path('page_formpart') }}">
             <div class="mb-3">
                 <label for="civilite" class="form-label text-light">Civilité</label>
                 

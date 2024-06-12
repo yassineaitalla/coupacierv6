@@ -1,213 +1,158 @@
 {% block body %}
-    {% include 'navbar.html.twig' %} 
+    {% include 'navbar.html.twig' %}
     {% for message in app.flashes('success') %}
         <div class="alert alert-success" role="alert">
             {{ message }}
         </div>
     {% endfor %}
+    <body style="background-color: rgb(33, 34, 61)">
+    <div class="container mt-5">
+        <div class="row">
+            {% for produit in produits %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="{% if loop.index == 1 %}
+                                    https://www.coremarkmetals.com/files/image/large/STAINLESS_BAR_FLAT_088_3000.jpg
+                                {% elseif loop.index == 4 %}
+                                    https://www.agrialpro.fr/media/catalog/product/i/m/image_1_88358f1c9fbaf6976108216.jpg?quality=80&fit=bounds&height=700&width=700&canvas=700:700
+                                {% elseif loop.index == 2 %}
+                                    https://www.ateliergaillard.fr/32-large_default/corniere-a-ailes-egales.jpg
+                                {% elseif loop.index == 3 %}
+                                    https://www.ateliergaillard.fr/33-large_default/corniere-a-ailes-inegales.jpg
+                                {% elseif loop.index == 5 %}
+                                    imagesprojet/fer-en-t-40x40x5-mm-a-la-coupe.jpg
+                                {% elseif loop.index == 6 %}
+                                    imagesprojet/poutre-ipe-100.jpg
+                                {% elseif loop.index == 7 %}
+                                    imagesprojet/poutrelle-upe.png
+                                {% elseif loop.index == 8 %}
+                                    imagesprojet/PoutrelleHeb.jpg
+                                {% elseif loop.index == 9 %}
+                                    imagesprojet/TubesRonds.jpg
+                                {% elseif loop.index == 10 %}
+                                    imagesprojet/TubesCarrer.jpg
+                                {% elseif loop.index == 11 %}
+                                    imagesprojet/TubesCarrer.jpg
+                                {% elseif loop.index == 12 %}
+                                    imagesprojet/Tubesrectangulaire.jpg
+                                {% elseif loop.index == 13 %}
+                                    imagesprojet/barrerondepleines.jpg
+                                {% elseif loop.index == 14 %}
+                                    imagesprojet/barrecarrerpleines.jpg
+                                {% endif %}" 
+                            class="card-img-top" alt="{{ produit.nom }}" style="height: 200px; object-fit: cover;">
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Produits</title>
-    </head>
-
-    <body class="bg-dark">
-        <div class="container">
-            <div class="row">
-                {% for produit in produits %}
-                    <div class="col-md-4">
-                        <div class="card">
-                            {% if loop.index == 1 %}
-                                <img src="https://www.coremarkmetals.com/files/image/large/STAINLESS_BAR_FLAT_088_3000.jpg" class="card-img-top" alt="{{ produit.nom }}">
-                            {% elseif loop.index == 4 %}
-                                <img src="https://www.agrialpro.fr/media/catalog/product/i/m/image_1_88358f1c9fbaf6976108216.jpg?quality=80&fit=bounds&height=700&width=700&canvas=700:700" class="card-img-top" alt="{{ produit.nom }}">
-                            {% elseif loop.index == 2 %}
-                                <img src="https://www.ateliergaillard.fr/32-large_default/corniere-a-ailes-egales.jpg" class="card-img-top" alt="{{ produit.nom }}">
-                            {% elseif loop.index == 3 %}
-                                <img src="https://www.ateliergaillard.fr/33-large_default/corniere-a-ailes-inegales.jpg" class="card-img-top" alt="{{ produit.nom }}"  >
-                            
-                            {% elseif loop.index == 5 %}
-                            <img src="imagesprojet/fer-en-t-40x40x5-mm-a-la-coupe.jpg" class="card-img-top" alt="{{ produit.nom }}" >
-                      
-
-                            {% elseif loop.index == 6 %}
-                            <img src="imagesprojet/poutre-ipe-100.jpg" class="card-img-top" alt="{{ produit.nom }}" >
-
-
-
-                            
-
-                            {% elseif loop.index == 7 %}
-                            <img src="imagesprojet/poutrelle-upe.png" class="card-img-top" alt="{{ produit.nom }}" >
-                            
-                            {% elseif loop.index == 8 %}
-
-                            <img src="imagesprojet/PoutrelleHeb.jpg" class="card-img-top" alt="{{ produit.nom }}" >
-                            
-                            {% elseif loop.index == 9 %}
-
-                            <img src="imagesprojet/TubesRonds.jpg" class="card-img-top" alt="{{ produit.nom }}" >
-                            
-                            {% elseif loop.index == 10 %}
-
-                            <img src="imagesprojet/TubesCarrer.jpg" class="card-img-top" alt="{{ produit.nom }}" >
-                            
-                            {% elseif loop.index == 11 %}
-
-                            <img src="imagesprojet/TubesCarrer.jpg" class="card-img-top" alt="{{ produit.nom }}" >
-                            
-                            {% elseif loop.index == 12 %}
-
-                            <img src="imagesprojet/Tubesrectangulaire.jpg" class="card-img-top" alt="{{ produit.nom }}" >
-                            
-                            {% elseif loop.index == 13 %}
-
-                            <img src="imagesprojet/barrerondepleines.jpg" class="card-img-top" alt="{{ produit.nom }}" >
-                            
-                            
-                            {% elseif loop.index == 14 %}
-
-                            <img src="imagesprojet/barrecarrerpleines.jpg" class="card-img-top" alt="{{ produit.nom }}" >
-                            
-                            
-                             
-                             
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            {% endif %} 
-
-                           
-
-                           
-
-
-                            <div class="card-body">
-                                <h5 class="card-title">Nom du produit : {{ produit.nom }} 6 M</h5>
-                                <h5 class="card-title">Masse linéaire : {{ produit.masseLineaireKgMetre }}</h5>
-                                <h5 class="card-title">Remise de {{ produit.remise }} %</h5>
-                                <p id="prixProduit{{ produit.id }}" class="card-text">Prix du produit <span id="prixInitial{{ produit.id }}">{{ produit.prix }} €</span> € ttc</p>
-
-                                {% if app.session.get('client_id') %}
-                                    <form action="{{ path('ajouter_au_panier', {'id': produit.id}) }}" method="post">
-                                        <input type="number" name="quantite" id="quantite{{ produit.id }}" value="1" min="1" class="form-control">
-                                        <h6>Quantité
-                                            <div class="container mt-5">
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <label for="longueur">Choisissez votre longueur:</label>
-                                                        <select name="inp" id="surMesureSelect" class="form-control" onchange="toggleCustomMeasurementInput()">
-                                                            <option value="1">1 mètre</option>
-                                                            <option value="2">2 mètres</option>
-                                                            <option value="3">3 mètres</option>
-                                                            <option value="4">4 mètres</option>
-                                                            <option value="5">5 mètres</option>
-                                                            <option value="6">6 mètres</option>
-                                                            <option value="surMesure">Mesure</option> <!-- Ajoutez cette option -->
-                                                        </select>
-
-                                                        <!-- Champ de saisie pour les centimètres (initialement caché) -->
-                                                        <input type="number" name="customMeasurement" id="customMeasurementInput" style="display: none;" placeholder="Entrez la mesure en cm">
-                                                    </div>
-                                                </div>
-
-                                                <div class="row" id="customLengthInput" style="display: none;">
-                                                    <div class="col">
-                                                        <label for="longueur">Longueur (en cm) :</label>
-                                                        <input type="number" id="longueur" name="longueur" class="form-control" min="50" max="600" step="1">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </h6>
-                                        <button type="submit" class="btn btn-primary">Ajouter au panier</button>
-                                    </form>
-                                    <br><br>
-                                    <label>Selectionner la quantite de produit a ajouter dans la liste d'envies</label>
-                                    <form action="{{ path('ajouter_a_la_listedenvie', {'id': produit.id}) }}" method="post">
-                                        <input type="number" name="quantite" id="quantite{{ produit.id }}" class="form-control" value="1" min="1">
-                                        <button type="submit" class="btn btn-primary">Ajouter à la liste d'envies</button>
-                                    </form>
-                                {% else %}
-                                    <p style="font-family: Arial, sans-serif; font-weight: bold;">Pour ajouter des produits à votre panier et à la liste d'envies, veuillez vous connecter.</p>
-                                    <a href="{{ path('connexion') }}" class="btn btn-primary">Connexion</a>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title"><strong>{{ produit.nom }}</strong></h5>
+                            <!--<h5 class="card-title">{{ produit.masseLineaireKgMetre }}</h5>-->
+                            <h5 class="card-title">
+                                {% if remise %}
+                                <span class="badge badge-success" style="background-color: #28a745; font-size: 1.2em; padding: 0.5em;">
+                                    Remise de {{ produit.remise }}%
+                                </span>
                                 {% endif %}
-                            </div>
+                            </h5>
+                            <p id="prixProduit{{ produit.id }}" class="card-text" style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #333;">Prix par mètre <span id="prixInitial{{ produit.id }}">{{ produit.prix }} €</span> </p>
+
+                            {% if app.session.get('client_id') %}
+                                <form action="{{ path('ajouter_au_panier', {'id': produit.id}) }}" method="post" class="mt-auto" onsubmit="return validateCustomMeasurement({{ produit.id }})">
+                                    <div class="mb-3">
+                                        <label for="quantite{{ produit.id }}" class="form-label" style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #333;">Quantité</label>
+
+                                        <input type="number" name="quantite" id="quantite{{ produit.id }}" value="1" min="1" class="form-control">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="surMesureSelect{{ produit.id }}" class="form-label"  style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #333;">Choisissez votre longueur jusqu'a 6 mètres :</label>
+                                        <select name="inp" id="surMesureSelect{{ produit.id }}" class="form-control" onchange="toggleCustomMeasurementInput({{ produit.id }})">
+                                            <option value="1">1 mètre</option>
+                                            <option value="2">2 mètres</option>
+                                            <option value="3">3 mètres</option>
+                                            <option value="4">4 mètres</option>
+                                            <option value="5">5 mètres</option>
+                                            <option value="6">6 mètres</option>
+                                            <option value="surMesure">Mesure</option>
+                                        </select>
+
+                                        <input type="number" name="customMeasurement" id="customMeasurementInput{{ produit.id }}" class="form-control mt-2" style="display: none;" placeholder="Entrez la mesure en cm" min="1">
+                                    </div>
+
+                                    <input type="hidden" name="finalMeasurement" id="finalMeasurement{{ produit.id }}">
+
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-cart"></i> Ajouter au panier
+                                    </button>
+                                    {% for message in app.flashes('success') %}
+                                    <div class="alert alert-success" role="alert">
+                                        {{ message }}
+                                    </div>
+                                    {% endfor %}
+                                      
+                                </form>
+
+                                <form action="{{ path('ajouter_a_la_listedenvie', {'id': produit.id}) }}" method="post" class="mt-3">
+                                    <div class="mb-3">
+                                        <label for="quantite{{ produit.id }}Envie" class="form-label"  style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #333;">Sélectionner la quantité pour votre liste d'envie:</label>
+                                        <input type="number" name="quantite" id="quantite{{ produit.id }}Envie" class="form-control" value="1" min="1">
+                                    </div>
+                                    <button type="submit" class="bi bi-heart-fill fs-4 text-primary me-1" style="color: blue;"></button>
+
+                                </form>
+                                {% for message in app.flashes('success') %}
+                                <div class="alert alert-success" role="alert">
+                                    {{ message }}
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="mt-3"  style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #333;">Pour ajouter des produits à votre panier et à la liste d'envies, veuillez vous connecter.</p>
+                                <a href="{{ path('connexion') }}" class="btn btn-primary w-100">Connexion</a>
+                            {% endif %}
                         </div>
                     </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        {% for message in app.flashes('error') %}
-            <div class="alert alert-danger" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
-
-        <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-            {% for flashMessage in app.flashes('error') %}
-                <div>{{ flashMessage }}</div>
+                </div>
             {% endfor %}
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-eEZUnKUVEMrZqDfFZzSQxlJvK1E21PJoQx9CK2qxBn3x4I5QVbFqCr7GJ3DdP3Z" crossorigin="anonymous"></script>
-        <script>
-            var prixInitials = {};
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger mt-3" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
 
-            function updateMeasurementType(produitId, measurementType) {
-                if (measurementType === 'surMesure') {
-                    document.getElementById('inpPredefini' + produitId).style.display = 'none';
-                    document.getElementById('inpSurMesure' + produitId).style.display = 'block';
-                } else {
-                    document.getElementById('inpSurMesure' + produitId).style.display = 'none';
-                    document.getElementById('inpPredefini' + produitId).style.display = 'block';
-                }
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-eEZUnKUVEMrZqDfFZzSQxlJvK1E21PJoQx9CK2qxBn3x4I5QVbFqCr7GJ3DdP3Z" crossorigin="anonymous"></script>
+    <script>
+        function toggleCustomMeasurementInput(productId) {
+            var surMesureSelect = document.getElementById('surMesureSelect' + productId);
+            var customMeasurementInput = document.getElementById('customMeasurementInput' + productId);
+
+            if (surMesureSelect.value === 'surMesure') {
+                customMeasurementInput.style.display = 'block';
+            } else {
+                customMeasurementInput.style.display = 'none';
             }
+        }
 
-            function updatePrice(longueur, produitId) {
-                var quantite = parseInt(document.getElementById('quantite' + produitId).value);
-                var prixTotal;
-                if (longueur === 'surMesure') {
-                    var mesureSurMesure = parseFloat(document.getElementById('inpSurMesure' + produitId).value);
-                    prixTotal = prixInitials[produitId] * mesureSurMesure * quantite;
+        function validateCustomMeasurement(productId) {
+            var surMesureSelect = document.getElementById('surMesureSelect' + productId);
+            var customMeasurementInput = document.getElementById('customMeasurementInput' + productId);
+            var finalMeasurementInput = document.getElementById('finalMeasurement' + productId);
+
+            if (surMesureSelect.value === 'surMesure') {
+                if (customMeasurementInput.value < 1) {
+                    alert('La mesure personnalisée doit être d\'au moins 1 cm.');
+                    return false;
                 } else {
-                    var longueurPredefinie = parseFloat(longueur);
-                    prixTotal = prixInitials[produitId] * longueurPredefinie * quantite;
+                    finalMeasurementInput.value = customMeasurementInput.value / 100; // Conversion de cm en mètres
                 }
-                document.getElementById('prixProduit' + produitId).innerHTML = "Prix du produit <span id='prixInitial" + produitId + "'>" + prixTotal + "</span> € ttc";
+            } else {
+                finalMeasurementInput.value = surMesureSelect.value; // Valeur sélectionnée en mètres
             }
-
-            function toggleCustomMeasurementInput() {
-                var surMesureSelect = document.getElementById('surMesureSelect');
-                var customMeasurementInput = document.getElementById('customMeasurementInput');
-
-                if (surMesureSelect.value === 'surMesure') {
-                    customMeasurementInput.style.display = 'block';
-                } else {
-                    customMeasurementInput.style.display = 'none';
-                }
-            }
-        </script>
+            return true;
+        }
+    </script>
     </body>
-
     <footer>
         {% include 'footer.html.twig' %}
     </footer>
-    </html>
 {% endblock %}

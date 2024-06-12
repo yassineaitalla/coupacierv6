@@ -68,6 +68,8 @@ public function Supprimerproduitdupanier(Request $request, $id, SessionInterface
         $this->entityManager->flush();
     }
 
+    $this->addFlash('danger', 'Votre produit à etait supprimer du panier');
+
     // Rediriger l'utilisateur vers une page de confirmation ou à la page précédente
     return $this->redirectToRoute('affichagepanier');
 }

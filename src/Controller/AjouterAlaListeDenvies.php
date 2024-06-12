@@ -101,6 +101,7 @@ if ($quantite !== null && $quantite !== '') {
 
     // Enregistrer les modifications dans la base de données
     $this->entityManager->flush();
+    $this->addFlash('success', "Votre produit à bien été ajouter à votre liste d'envies !");
 
     // Rediriger l'utilisateur vers une page de confirmation ou à la page précédente
     return $this->redirectToRoute('produits');

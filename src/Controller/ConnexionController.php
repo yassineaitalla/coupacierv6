@@ -18,16 +18,22 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
     // Vérifier si la requête est de type POST
     if ($request->isMethod('POST')) {
         $email = $request->request->get('email');
-
         $motdepasse = $request->request->get('motdepasse');
 
         // Rechercher l'utilisateur dans la base de données par son email
         $client = $entityManager->getRepository(Client::class)->findOneBy(['email' => $email]);
 
-        // Vérifier si l'utilisateur existe et si le mot de passe est correct
-        if (!$client || $motdepasse !== $client->getMotdepasse()) {
+        // Vérifier si l'utilisateur existe
+        if (!$client) {
             // Rediriger l'utilisateur vers une page d'erreur ou de connexion échouée
-            $this->addFlash('error', 'Adresse e-mail ou mot de passe incorrect.');
+            $this->addFlash('error', 'Adresse e-mail incorrecte.');
+            return $this->redirectToRoute('pageconnexion');
+        }
+
+        // Vérifier si le mot de passe correspond au hash stocké en base de données
+        if (!password_verify($motdepasse, $client->getMotdepasse())) {
+            // Rediriger l'utilisateur vers une page d'erreur ou de connexion échouée
+            $this->addFlash('error', 'Mot de passe incorrect.');
             return $this->redirectToRoute('pageconnexion');
         }
 
@@ -39,10 +45,11 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
         return $this->redirectToRoute('produits');
     }
 
-    // Si la méthode n'est pas POST, afficher la page de connexionn 
+    // Si la méthode n'est pas POST, afficher la page de connexion
     
     return $this->render('connexion.html.twig');
 }
+
 
 
 

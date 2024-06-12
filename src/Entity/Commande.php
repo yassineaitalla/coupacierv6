@@ -34,11 +34,17 @@ class Commande
     #[ORM\Column(length: 100)]
     private ?string $villeFacturation = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $adresseLivraison = null;
+
     #[ORM\Column(length: 100)]
     private ?string $Etat = null;
 
     #[ORM\Column(length: 10)]
     private ?string $codePostalFacturation = null;
+
+    #[ORM\Column(length: 10)]
+    private ?string $codePostalLivraison = null;
 
     #[ORM\Column(length: 100)]
     private ?string $paysFacturation = null;
@@ -103,6 +109,19 @@ class Commande
         return $this;
     }
 
+    public function getadresseLivraison(): ?string
+    {
+        return $this->adresseLivraison;
+    }
+
+    public function setadresseLivraison(?string $adresseLivraison): static
+    {
+        $this->adresseLivraison = $adresseLivraison;
+
+        return $this;
+    }
+
+
     public function getVilleFacturation(): ?string
     {
         return $this->villeFacturation;
@@ -127,6 +146,20 @@ class Commande
         return $this;
     }
 
+    public function getcodePostalLivraison(): ?string
+    {
+        return $this-> codePostalLivraison;
+    }
+
+    public function setcodePostalLivraison(?string $codePostalLivraison): static
+    {
+        $this-> codePostalLivraison = $codePostalLivraison;
+
+        return $this;
+    }
+
+
+   
     public function getPaysFacturation(): ?string
     {
         return $this->paysFacturation;

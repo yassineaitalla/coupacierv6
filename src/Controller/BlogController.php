@@ -114,27 +114,34 @@ public function viderSession(SessionInterface $session): Response
         ]);
     }
 
-#[Route('/listedenvies', name: 'listedenvies')]
-public function listedEnvies(SessionInterface $session, EntityManagerInterface $entityManager): Response
-{
-    // Récupérer l'ID du client connecté depuis la session
-    $clientId = $session->get('client_id');
- 
-
-    // Récupérer les produits de la liste d'envies du client connecté depuis la base de données
-    $listedEnvies = $entityManager->getRepository(Listedenvies::class)->findBy(['client' => $clientId]);
-
-    $sommeTotal = 0;
-    foreach ($listedEnvies as $produit) {
-        $sommeTotal += $produit->getTotal();
+    #[Route('/listedenvies', name: 'listedenvies')]
+    public function listedEnvies(SessionInterface $session, EntityManagerInterface $entityManager): Response
+    {
+        // Récupérer l'ID du client connecté depuis la session
+        $clientId = $session->get('client_id');
+    
+        // Vérifier si un client est connecté
+        if (!$clientId) {
+            // Rediriger l'utilisateur vers une page de connexion ou afficher un message d'erreur
+            $this->addFlash('error', 'Veuillez vous connecter pour accéder à votre liste d\'envies.');
+            return $this->redirectToRoute('connexion'); // Redirection vers la page de connexion
+        }
+    
+        // Récupérer les produits de la liste d'envies du client connecté depuis la base de données
+        $listedEnvies = $entityManager->getRepository(Listedenvies::class)->findBy(['client' => $clientId]);
+    
+        $sommeTotal = 0;
+        foreach ($listedEnvies as $produit) {
+            $sommeTotal += $produit->getTotal();
+        }
+    
+        return $this->render('listedenvies.html.twig', [
+            'listedEnvies' => $listedEnvies,
+            'isEmpty' => empty($listedEnvies), // Ajout de cette variable pour vérifier si la liste est vide
+            'sommeTotal' => $sommeTotal,
+        ]);
     }
-
-    return $this->render('listedenvies.html.twig', [
-        'listedEnvies' => $listedEnvies,
-        'isEmpty' => empty($listedEnvies), // Ajout de cette variable pour vérifier si la liste est vide
-        'sommeTotal' => $sommeTotal,
-    ]);
-}
+    
 
 
 
@@ -245,6 +252,34 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
         
         ]);
     }
+
+
+#[Route('/produits', name: 'produits')]
+public function Produits(Request $request, EntityManagerInterface $entityManager): Response
+{
+    // Récupérer l'identifiant du client depuis la session
+    $clientId = $request->getSession()->get('client_id');
+
+    // Vérifier si un client est trouvé avec cet identifiant
+    if ($clientId) {
+        // Récupérer le client depuis la base de données en utilisant l'identifiant
+        $client = $entityManager->getRepository(Client::class)->find($clientId);
+
+        // Vérifier si le client est un ClientProfessionnel
+        $remise = $client && $client->getTypeClient() === 'ClientProfessionnel';
+    } else {
+        // Si aucun client n'est trouvé dans la session, ne pas appliquer de remise
+        $remise = false;
+    }
+
+    // Récupérer tous les produits
+    $produits = $entityManager->getRepository(Produit::class)->findAll();
+
+    return $this->render('produits.html.twig', [
+        'produits' => $produits,
+        'remise' => $remise,
+    ]);
+}
 
 
 

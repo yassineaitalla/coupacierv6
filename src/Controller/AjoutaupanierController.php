@@ -72,6 +72,7 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
     }
 
     $prixInitial = $produit->getPrix();
+    $inp = floatval($inp);
     $total = $inp * $prixInitial * $quantite ;
 
     // Calculer le total en fonction de la longueur sélectionnée et du prix initial
@@ -158,6 +159,7 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
 
     // Enregistrer les modifications dans la base de données
     $entityManager->flush();
+    $this->addFlash('success', 'Votre produit à bien été ajouter au panier !');
 
     // Redirection vers la page des produits
     return $this->redirectToRoute('produits');
