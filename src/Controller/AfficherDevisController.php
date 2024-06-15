@@ -18,6 +18,12 @@ class AfficherDevisController extends AbstractController
     {
         // Récupérer l'ID du client depuis la session
         $clientId = $session->get('client_id');
+        // Vérifier si un client est connecté
+        if (!$clientId) {
+            // Rediriger l'utilisateur vers une page de connexion ou afficher un message d'erreur
+            $this->addFlash('error', 'Veuillez vous connecter pour accéder à votre liste d\'envies.');
+            return $this->redirectToRoute('connexion'); // Redirection vers la page de connexion
+        }
 
         if ($clientId) {
             // Récupérer les devis du client connecté

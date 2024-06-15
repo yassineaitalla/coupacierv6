@@ -213,7 +213,7 @@ class Commande
         return $this->Etat;
     }
 
-    public function seEtat(?string $Etat): static
+    public function setEtat(?string $Etat): static
     {
         $this->Etat = $Etat;
 

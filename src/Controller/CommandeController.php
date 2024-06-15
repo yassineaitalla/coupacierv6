@@ -2,93 +2,78 @@
 
 namespace App\Controller;
 
-use App\Entity\Panier;
+use App\Entity\Commande;
+use App\Repository\ClientRepository;
+use App\Repository\PanierRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\ORM\EntityManagerInterface;
-
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use App\Entity\Commande;
-use App\Entity\Client;
-
 
 class CommandeController extends AbstractController
 {
-    #[Route('/commande', name: 'commande')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/commande8', name: 'app_commande')]
+    public function index(Request $request, ClientRepository $clientRepository, PanierRepository $panierRepository, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
-        // Supposons que l'ID du client soit stocké dans la session avec la clé 'client_id'
-        $clientId = $request->getSession()->get('client_id');
-
-       
-
-        // Récupérer les paniers pour ce client
-        $paniers = $entityManager->getRepository(Panier::class)->findBy(['client' => $clientId]);
-
-        $totalGeneral = 0;
-        $prixLivraison = 0;
-        $prixTtc= 0;
-
-
-        foreach ($paniers as $panier) {
-            $totalGeneral += $panier->getTotal();  // Assuming getTotal() returns the total for the panier
-            $prixLivraison = $panier->getPrixLivraison(); 
-            $prixTtc = $panier->getTotal() + $panier->getPrixLivraison(); // Assuming all rows have the same delivery price
-        }
-
-        return $this->render('commande.html.twig', [
-            'paniers' => $paniers,
-            'totalGeneral' => $totalGeneral,
-            'prixLivraison' => $prixLivraison,
-            'prixTtc' => $prixTtc
-        ]);
-    }
-
-    // src/Controller/CommandeController.php
-
-
-
-
-
-    #[Route('/commande/ajouter', name: 'ajouter_commande', methods: ['POST'])]
-    public function ajouterCommande(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
-    {
-        // Récupérer les données du formulaire de paiement
-        $adresse = $request->request->get('adresse');
-        $ville = $request->request->get('ville');
-        $codePostal = $request->request->get('code_postal');
-        $pays = 'France'; // Par défaut, vous pouvez ajuster cela
-
         // Récupérer l'ID du client depuis la session
         $clientId = $session->get('client_id');
 
-        // Récupérer le client depuis la base de données
-        $client = $entityManager->getRepository(Client::class)->find($clientId);
-
-        if (!$client) {
-            throw $this->createNotFoundException('Client non trouvé');
+        // Vérifier si l'utilisateur est connecté
+        if (!$clientId) {
+            return $this->redirectToRoute('connexion');
         }
 
-        // Créer une nouvelle commande
-        $commande = new Commande();
-        $commande->setClient($client);
-        $commande->setAdresseFacturation($adresse);
-        $commande->setVilleFacturation($ville);
-        $commande->setCodePostalFacturation($codePostal);
-        $commande->setPaysFacturation($pays);
-        $commande->setIdproduit(2);
-        $commande->setQuantite(20);
-        $commande->setMontantHorsTaxe(200);
-        $commande->setTotalTtc(100);
+        // Récupérer l'entité Client à partir de l'ID
+        $client = $clientRepository->find($clientId);
 
-        // Persister la commande dans la base de données
-        $entityManager->persist($commande);
-        $entityManager->flush();
+        // Récupérer les paniers du client
+        $paniers = $panierRepository->findBy(['client' => $client]);
 
-        // Rediriger ou renvoyer une réponse appropriée
-        return $this->redirectToRoute('some_route'); // Remplacez 'some_route' par la route souhaitée après paiement
+        // Si le formulaire est soumis en méthode POST
+        if ($request->isMethod('POST')) {
+            // Récupérer les données du formulaire
+            $adresse = $request->request->get('adresse');
+            $codePostal = $request->request->get('code_postal');
+            $adresseFacturation = $request->request->get('adresse_facturation');
+            $villeFacturation = $request->request->get('ville_facturation');
+            $codePostalFacturation = $request->request->get('code_postal_facturation');
+            $paysFacturation = $request->request->get('pays_facturation');
+
+            // Traiter chaque panier pour créer une commande
+            foreach ($paniers as $panier) {
+                $commande = new Commande();
+                $commande->setClient($client);
+                $commande->setAdresseLivraison($adresse);
+                $commande->setCodePostalLivraison($codePostal);
+                $commande->setAdresseFacturation($adresseFacturation);
+                $commande->setVilleFacturation($villeFacturation);
+                $commande->setCodePostalFacturation($codePostalFacturation);
+                $commande->setPaysFacturation($paysFacturation);
+                $commande->setIdProduit($panier->getIdProduit()->getId());
+                $commande->setQuantite($panier->getQuantite());
+                $commande->setTotalTtc($panier->getTotal());
+                $commande->setMontantHorsTaxe(10); // Exemple de montant hors taxe fixé
+                $commande->setEtat('en livraison');
+
+                $entityManager->persist($commande);
+                $entityManager->remove($panier); // Supprimer le panier après création de la commande
+            }
+
+            // Enregistrer les commandes en base de données
+            $entityManager->flush();
+
+            // Rediriger vers la page de confirmation de commande
+            
+        }
+
+        // Rendre le template 'commande.html.twig' avec les données nécessaires
+        return $this->render('commande8.html.twig', [
+            'client' => $client,
+            'paniers' => $paniers,
+        ]);
     }
-}
 
+   
+}

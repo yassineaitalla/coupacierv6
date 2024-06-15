@@ -23,6 +23,8 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
         // Rechercher l'utilisateur dans la base de données par son email
         $client = $entityManager->getRepository(Client::class)->findOneBy(['email' => $email]);
 
+        
+
         // Vérifier si l'utilisateur existe
         if (!$client) {
             // Rediriger l'utilisateur vers une page d'erreur ou de connexion échouée
@@ -40,9 +42,11 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
         // Enregistrer l'ID du client dans la session
         $session->set('client_id', $client->getId());
 
+
         // Rediriger l'utilisateur vers la page de récupération des informations avec l'ID du client
         $this->addFlash('success', 'Vous êtes connecté.');
         return $this->redirectToRoute('produits');
+        
     }
 
     // Si la méthode n'est pas POST, afficher la page de connexion
@@ -58,6 +62,7 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
 {
     // Vérifions si l'utilisateur est connecté en vérifiant la présence de son ID dans la session
     $clientId = $session->get('client_id');
+
 
     if ($clientId) {
         // Si l'utilisateur est connecté, redirigeons vers la page de récupération des informations

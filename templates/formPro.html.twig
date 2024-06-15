@@ -13,7 +13,12 @@
     <title>Client Professionnel</title>
    
 </head>
-
+{# Affichage du message flash s'il existe #}
+{% for message in app.session.flashbag.get('success') %}
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
+{% endfor %}
 <body class="bg-dark">
 
   <div class="container my-5">

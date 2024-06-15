@@ -106,10 +106,10 @@ public function viderSession(SessionInterface $session): Response
 
     
 
-    #[Route('/commande', name: 'vacommandes')]
+    #[Route('/commandE8', name: 'vacommandes')]
     public function Commande(): Response
     {
-        return $this->render('commande.html.twig', [
+        return $this->render('commande8.html.twig', [
             'message' => 'Bienvenue sur la page d\'accueil !',
         ]);
     }
@@ -310,6 +310,7 @@ public function Produits(Request $request, EntityManagerInterface $entityManager
             $this->entityManager->remove($listedEnvie);
             $this->entityManager->flush();
         }
+        $this->addFlash('success', 'Votre produit à bien été supprimer de la liste denvies!');
     
         // Rediriger l'utilisateur vers une page de confirmation ou à la page précédente
         return $this->redirectToRoute('listedenvies'); // Vous pouvez remplacer 'produits' par la route de votre choix

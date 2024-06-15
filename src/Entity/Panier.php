@@ -22,8 +22,9 @@ class Panier
 
     private ?float $Poids = null;
 
-
-    
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $Surmesure = null;
+        
     #[ORM\ManyToOne(inversedBy: 'paniers')]
     #[ORM\JoinColumn(nullable: false)]
     private ?produit $id_produit = null;
@@ -95,6 +96,19 @@ class Panier
         return $this;
     }
 
+    public function getSurmesure(): ?float
+    {
+        return $this->Surmesure;
+    }
+
+    public function setSurmesure(float $Surmesure): static
+    {
+        $this->Surmesure = $Surmesure;
+
+        return $this;
+    }
+
+
 
     // Relation vers la table clientt 
 
@@ -117,7 +131,7 @@ class Panier
 
     // colonne longueurMetre
 
-    #[ORM\Column(nullable: true)] // Définit la colonne comme nullable
+#[ORM\Column(nullable: true)] // Définit la colonne comme nullable
 private ?string $LongueurMetre = null;
 
 public function getLongueurMetre(): ?string

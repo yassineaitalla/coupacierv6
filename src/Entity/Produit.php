@@ -24,6 +24,10 @@ class Produit
     #[ORM\Column]
     private ?float $prix = null;
 
+
+
+    
+
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $Image = null;
     #[ORM\Column]
@@ -74,7 +78,7 @@ class Produit
     }
 
 
-    // Description 
+   
 
     
     public function getcoef(): ?float
@@ -88,6 +92,8 @@ class Produit
 
         return $this;
     }
+
+    
 
 
 

@@ -37,6 +37,8 @@ class FormulaireProfessionnel extends AbstractController
                 $this->addFlash('error', 'Le champ téléphone ne peut pas être vide.');
                 return $this->redirectToRoute('page_formpro');
             }
+            #hasher le mot de passe
+            $hashedPassword = password_hash($motdepasse, PASSWORD_DEFAULT);
 
             // Créer une instance de l'entité Client
             $client = new Client();
@@ -49,7 +51,7 @@ class FormulaireProfessionnel extends AbstractController
             $client->setVille($Ville);
             $client->setTelephone($telephone);
             $client->setEmail($email);
-            $client->setMotdepasse($motdepasse);
+            $client->setMotdepasse($hashedPassword);
 
             // Créer une instance de l'entité Societe
             $societe = new Societe();

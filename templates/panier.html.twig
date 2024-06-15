@@ -13,11 +13,20 @@
         .btn-primary {
             margin-top: 20px;
         }
+
+        .empty-cart {
+            background-color: #2e5074;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 50px;
+        }
     </style>
 </head>
 <body>
     <header>
-        {% include 'navbar.html.twig' %} 
+        {% include 'navbar.html.twig' %}
     </header>
     {% for message in app.flashes('danger') %}
     <div class="alert alert-danger" role="alert">
@@ -28,6 +37,11 @@
     <div class="container">
         <div class="row justify-content-center align-items-center">
             <div class="col-md-10">
+                {% if panier|length == 0 %}
+                    <div class="empty-cart">
+                        <p>Votre panier est vide.</p>
+                    </div>
+                {% else %}
                 <div class="table-container">
                     <h1 class="text-center mb-4">Panier</h1>
                     <div class="table-responsive">
@@ -54,18 +68,16 @@
                                         {% if panier.quantite == 1 %}
                                             {{ panier.getIdProduit().getprix() }} €
                                         {% else %}
-                                            {{ panier.getIdProduit().getprix()* panier.quantite }} €
+                                            {{ panier.getIdProduit().getprix() * panier.quantite }} €
                                         {% endif %}
                                     </td>
                                     <td>{{ panier.LongueurMetre }} Mètre</td>
                                     <td>{{ panier.prixDecoupe }} €</td>
                                     <td>{{ panier.Poids }} Kg</td>
                                     <td>
-                                        <form action="{{ path('supprimerproduitpanier', {'id': panier.getIdProduit().getId()}) }}" method="post"> 
+                                        <form action="{{ path('supprimerproduitpanier', {'id': panier.getIdProduit().getId()}) }}" method="post">
                                             <button type="submit" class="btn btn-danger">Supprimer</button>
                                         </form>
-                                      
-
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -80,7 +92,7 @@
                                     <td colspan="5" class="text-right">{{ prixtotalproduits }} €</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" class="text-right"><strong>Prix decoupe total:</strong></td>
+                                    <td colspan="3" class="text-right"><strong>Prix découpe total:</strong></td>
                                     <td colspan="5" class="text-right">{{ prixdecoupetotal }} €</td>
                                 </tr>
                                 {% for panier in panier %}
@@ -108,12 +120,27 @@
                         </div>
                     {% endif %}
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
-
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <footer>
-        {% include 'footer.html.twig' %} 
+        {% include 'footer.html.twig' %}
     </footer>
 
 </body>
