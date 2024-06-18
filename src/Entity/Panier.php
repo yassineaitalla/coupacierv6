@@ -24,7 +24,7 @@ class Panier
 
     #[ORM\Column(type: 'float', nullable: true)]
     private ?float $Surmesure = null;
-        
+
     #[ORM\ManyToOne(inversedBy: 'paniers')]
     #[ORM\JoinColumn(nullable: false)]
     private ?produit $id_produit = null;
@@ -101,7 +101,7 @@ class Panier
         return $this->Surmesure;
     }
 
-    public function setSurmesure(float $Surmesure): static
+    public function setSurmesure(?float $Surmesure): static   // ---> ? le champ peut etre null
     {
         $this->Surmesure = $Surmesure;
 

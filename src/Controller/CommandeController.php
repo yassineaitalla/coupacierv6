@@ -55,7 +55,7 @@ class CommandeController extends AbstractController
                 $commande->setQuantite($panier->getQuantite());
                 $commande->setTotalTtc($panier->getTotal());
                 $commande->setMontantHorsTaxe(10); // Exemple de montant hors taxe fixé
-                $commande->setEtat('en livraison');
+                $commande->setEtat('en  livraison');
 
                 $entityManager->persist($commande);
                 $entityManager->remove($panier); // Supprimer le panier après création de la commande

@@ -52,8 +52,9 @@
                                 </span>
                                 {% endif %}
                             </h5>
-                            <p id="prixProduit{{ produit.id }}" class="card-text" style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #333;">Prix par mètre <span id="prixInitial{{ produit.id }}">{{ produit.prix }} €</span> </p>
-
+                            <p id="prixProduit{{ produit.id }}" class="card-text" style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #333;">
+                                Prix par mètre <span id="prixInitial{{ produit.id }}">{{ produit.prix | number_format(2, ',', ' ') }} €</span>
+                            </p>
                             {% if app.session.get('client_id') %}
                                 <form action="{{ path('ajouter_au_panier', {'id': produit.id}) }}" method="post" class="mt-auto" onsubmit="return validateCustomMeasurement({{ produit.id }})">
                                     <div class="mb-3">
@@ -73,10 +74,10 @@
                                             <option value="4">4 mètres</option>
                                             <option value="5">5 mètres</option>
                                             <option value="6">6 mètres</option>
-                                            <option value="surMesure">Sur Mesure</option>
+                                            <option value="surMesure" >Sur Mesure</option>
                                         </select>
                                         
-                                        <input type="number" name="customMeasurement" id="customMeasurementInput{{ produit.id }}" class="form-control mt-2" style="display: none;" placeholder="Entrez la mesure en cm" min="1">
+                                        <input type="number" name="customMeasurement" id="customMeasurementInput{{ produit.id }}" class="form-control mt-2" style="display: none;" placeholder="Entrez la mesure en cm" min="1" max="600">
                                         
                                     </div>
 
@@ -98,7 +99,18 @@
                                         <label for="quantite{{ produit.id }}Envie" class="form-label"  style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #333;">Sélectionner la quantité pour votre liste d'envie:</label>
                                         <input type="number" name="quantite" id="quantite{{ produit.id }}Envie" class="form-control" value="1" min="1">
                                     </div>
-                                    <button type="submit" class="bi bi-heart-fill fs-4 text-primary me-1" style="color: blue;"></button>
+                                    <button type="submit" id="heartButton" class="bi bi-heart-fill fs-4 text-primary me-1" style="color: blue; border-radius: 12px;"></button>
+                                    <style>
+                                        /* Vous pouvez ajouter ceci dans un fichier CSS externe ou dans une balise <style> dans le <head> de votre document */
+#heartButton {
+    transition: background-color 0.3s ease; /* Pour une transition fluide de la couleur de fond */
+}
+
+#heartButton.clicked {
+    background-color: rgb(89, 89, 150); /* Couleur de fond lorsque le bouton est cliqué */
+}
+
+                                    </style>
 
                                 </form>
                                 {% for message in app.flashes('success') %}
@@ -142,7 +154,14 @@
     var finalMeasurementInput = document.getElementById('finalMeasurement' + productId);
 
     if (surMesureSelect.value === 'surMesure') {
-        var customMeasurement = parseFloat(customMeasurementInput.value); // Convertir en nombre flottant
+        var customMeasurement = customMeasurementInput.value.trim(); // Récupérer la valeur et supprimer les espaces vides
+
+        if (customMeasurement === '' || isNaN(customMeasurement)) {
+            alert('Veuillez entrer une mesure personnalisée valide.');
+            return false;
+        }
+
+        customMeasurement = parseFloat(customMeasurement); // Convertir en nombre flottant
 
         if (customMeasurement < 1) {
             alert('La mesure personnalisée doit être d\'au moins 1 cm.');
@@ -156,8 +175,14 @@
     } else {
         finalMeasurementInput.value = surMesureSelect.value; // Valeur sélectionnée en mètres
     }
+
     return true;
 }
+
+    document.getElementById('heartButton').addEventListener('click', function() {
+        this.classList.toggle('clicked');
+    });
+
 
     </script>
     </body>

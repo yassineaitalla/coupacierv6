@@ -53,6 +53,8 @@ class AffichagePanier extends AbstractController{
             $panierRepository = $this->entityManager->getRepository(Panier::class);
             $panier = $panierRepository->findBy(['client' => $client]);
 
+
+    
            
     
             // Calculer la somme totale des éléments du panier

@@ -21,7 +21,7 @@ class SoumettreDevisController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('/soumettre/devis', name: 'app_soumettre_devis', methods: ['POST'])]
+    #[Route('/soumettre/devis', name: 'app_soumettre_devis', methods: ['GET','POST'])]
     public function soumettreDevis(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         // Récupérer l'identifiant du client depuis la session
@@ -70,8 +70,13 @@ class SoumettreDevisController extends AbstractController
 
         // Enregistrer les changements dans la base de données
         $entityManager->flush();
+        $this->addFlash('success', 'Votre Mesage à bien était envoyé, Veuillez attendre la réponse du service commercial !');
 
         // Redirection vers une page de confirmation
-        return $this->redirectToRoute('produits');
+        return $this->redirectToRoute('app_soumettre_devis');
     }
+
+    
 }
+
+

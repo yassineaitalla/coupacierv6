@@ -62,7 +62,16 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
     // Récupérer la quantité saisie par l'utilisateur
     $quantite = $request->request->get('quantite');
     $inp = $request->request->get('inp');
+    $customMeasurement = $request->request->get('customMeasurement');
 
+    // Vérifier si customMeasurement est défini et non vide avant de l'utiliser
+    $mesure = null;
+    if ($customMeasurement !== null && $customMeasurement !== '') {
+        $mesure = (float) $customMeasurement;
+    }
+
+
+    
     // Vérifier si la quantité est définie et non vide
     if ($quantite !== null && $quantite !== '') {
         $quantite = intval($quantite); // Convertir en entier
@@ -82,8 +91,17 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
     $metre = 1;
   
     $prixDecoupe = $masseLineaire * $coef * $metre * $quantite;
+
+    // Vérifiez si le client est un ClientProfessionnel
+if ($client && $client->getTypeClient() === 'ClientProfessionnel') {
+
+    // Appliquer une remise de 10% au prix
+    $prixInitial = $prixInitial * 0.90;
+}
     
     $total = $inp * $prixInitial * $quantite + $prixDecoupe;
+
+
     $poidsKg= $masseLineaire * $inp * $quantite;
 
     // Calculer le poids total du panier en fonction de la masse linéaire
@@ -143,12 +161,13 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
     // Définir la quantité dans le panier
     $panier->setQuantite($quantite);
     // Définir la longueur dans le panier
-    $panier->setLongueurMetre($inp);
+    $panier->setLongueurMetre($inp);  // aaa revoir
     // Définir le client dans le panier
     $panier->setClient($client);
     // Définir le poids dans le panier
     $panier->setPoids($poidsKg);
     $panier->setPrixdecoupe(round($prixDecoupe, 2));
+    $panier->setSurmesure($mesure);
     
     // Définir la distance dans le panier
     $panier->setDistance($minDistance . ' ' . $distanceUnit);
@@ -165,7 +184,7 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
     return $this->redirectToRoute('produits');
 }
 
-private function calculerPrixLivraison($distance, $poids)
+private function calculerPrixLivraison($distance, $poids) // on retourne le prix de la livraison + une tva de 20%
 {
     $base = 40;
     $prix = $base + (0.3 * $distance);

@@ -254,33 +254,41 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
     }
 
 
-#[Route('/produits', name: 'produits')]
-public function Produits(Request $request, EntityManagerInterface $entityManager): Response
-{
-    // Récupérer l'identifiant du client depuis la session
-    $clientId = $request->getSession()->get('client_id');
+    #[Route('/produits', name: 'produits')]
+    public function Produits(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Récupérer l'identifiant du client depuis la session
+        $clientId = $request->getSession()->get('client_id');
 
-    // Vérifier si un client est trouvé avec cet identifiant
-    if ($clientId) {
-        // Récupérer le client depuis la base de données en utilisant l'identifiant
-        $client = $entityManager->getRepository(Client::class)->find($clientId);
+        // Vérifier si un client est trouvé avec cet identifiant
+        if ($clientId) {
+            // Récupérer le client depuis la base de données en utilisant l'identifiant
+            $client = $entityManager->getRepository(Client::class)->find($clientId);
 
-        // Vérifier si le client est un ClientProfessionnel
-        $remise = $client && $client->getTypeClient() === 'ClientProfessionnel';
-    } else {
-        // Si aucun client n'est trouvé dans la session, ne pas appliquer de remise
-        $remise = false;
+            // Vérifier si le client est un ClientProfessionnel
+            $remise = $client && $client->getTypeClient() === 'ClientProfessionnel';
+        } else {
+            // Si aucun client n'est trouvé dans la session, ne pas appliquer de remise
+            $remise = false;
+        }
+
+        // Récupérer tous les produits
+        $produits = $entityManager->getRepository(Produit::class)->findAll();
+
+        // Appliquer la remise de 10% aux prix des produits si le client est professionnel
+        if ($remise) {
+            foreach ($produits as $produit) {
+                $nouveauPrix = $produit->getPrix() * 0.90; // Appliquer la réduction de 10%
+                $produit->setPrix($nouveauPrix);
+            }
+        }
+
+        // Retourner la vue avec les produits et la variable remise
+        return $this->render('produits.html.twig', [
+            'produits' => $produits,
+            'remise' => $remise,
+        ]);
     }
-
-    // Récupérer tous les produits
-    $produits = $entityManager->getRepository(Produit::class)->findAll();
-
-    return $this->render('produits.html.twig', [
-        'produits' => $produits,
-        'remise' => $remise,
-    ]);
-}
-
 
 
     #[Route('/supprimer-produit-liste-envies/{id}', name: 'supprimer_produit_liste_envies')]
