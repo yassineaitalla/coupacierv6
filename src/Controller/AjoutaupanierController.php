@@ -82,7 +82,7 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
 
     $prixInitial = $produit->getPrix();
     $inp = floatval($inp);
-    $total = $inp * $prixInitial * $quantite ;
+    $total = $customMeasurement  * $prixInitial * $quantite ;
 
     // Calculer le total en fonction de la longueur sélectionnée et du prix initial
     $masseLineaire = $produit->getMasseLineaireKgMetre();
@@ -99,14 +99,14 @@ if ($client && $client->getTypeClient() === 'ClientProfessionnel') {
     $prixInitial = $prixInitial * 0.90;
 }
     
-    $total = $inp * $prixInitial * $quantite + $prixDecoupe;
+    $total = $customMeasurement  * $prixInitial * $quantite + $prixDecoupe;
 
 
-    $poidsKg= $masseLineaire * $inp * $quantite;
+    $poidsKg= $masseLineaire * $customMeasurement  * $quantite;
 
     // Calculer le poids total du panier en fonction de la masse linéaire
     $masseLineaire = $produit->getMasseLineaireKgMetre();
-    $poidsKg = $masseLineaire * $inp * $quantite;
+    $poidsKg = $masseLineaire * $customMeasurement  * $quantite;
 
    // Récupérer l'adresse du client
    $addressClient = $client->getAdresse() . ', ' . $client->getVille() . ', ' . $client->getCodePostal();
@@ -161,7 +161,7 @@ if ($client && $client->getTypeClient() === 'ClientProfessionnel') {
     // Définir la quantité dans le panier
     $panier->setQuantite($quantite);
     // Définir la longueur dans le panier
-    $panier->setLongueurMetre($inp);  // aaa revoir
+    $panier->setLongueurMetre($customMeasurement );  // aaa revoir
     // Définir le client dans le panier
     $panier->setClient($client);
     // Définir le poids dans le panier
