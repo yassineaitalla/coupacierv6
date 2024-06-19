@@ -2,15 +2,17 @@
 
 namespace App\Controller;
 
-use App\Entity\Commande;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
+use App\Entity\Commande;
+
 use Doctrine\ORM\EntityManagerInterface;
 
-class AfficherPageCommandeController extends AbstractController
+class CommandeClientHistoriqueController extends AbstractController
 {
-    #[Route('/commanderclient', name: 'vacommandes')]
+    #[Route('/commande/client/historique', name: 'app_commande_client_historique')]
+  
     public function listeCommandes(EntityManagerInterface $entityManager): Response
     {
         // Utilisation de l'EntityManager pour récupérer toutes les commandes

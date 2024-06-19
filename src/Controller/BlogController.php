@@ -94,6 +94,14 @@ public function viderSession(SessionInterface $session): Response
         ]);
     }
 
+    #[Route('/commandepage', name: 'commandepage')]
+    public function afficherpagecommande(): Response
+    {
+        return $this->render('pagecommande.html.twig', [
+            'message' => 'Bienvenue sur la page d\'accueil !',
+        ]);
+    }
+
 
 
     #[Route('/pageconnexion', name: 'pageconnexion')]

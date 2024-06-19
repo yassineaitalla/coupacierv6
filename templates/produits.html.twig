@@ -65,19 +65,16 @@
 
                                     <div class="mb-3">
                                         <label for="surMesureSelect{{ produit.id }}" class="form-label"  style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #333;">Choisissez votre longueur jusqu'a 6 mètres :</label>
-                                    <label style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #333;">  <br>0.01 mettre = 1 cm et 1 c'est 1 metre </label><br>
+                                        <div  class="alert alert-info rounded mt-3" role="alert" style="background-color: #d1ecf1; border-color: #bee5eb;">
+                                        <label style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: bold; color: #333;">* Remarque: <br>0.01 mètre = 1 cm <br>0.10 mètre = 10 cm <br>1 = 1 mètre</label><br>
+                                        </div>
                                         <br>
                                         <select name="inp" id="surMesureSelect{{ produit.id }}" class="form-control" onchange="toggleCustomMeasurementInput({{ produit.id }})">
-                                            <option value="1">1 mètre</option>
-                                            <option value="2">2 mètres</option>
-                                            <option value="3">3 mètres</option>
-                                            <option value="4">4 mètres</option>
-                                            <option value="5">5 mètres</option>
-                                            <option value="6">6 mètres</option>
-                                            <option value="surMesure" >Sur Mesure</option>
+                                        
+                                        <option value="surMesure" >Sur Mesure</option>
                                         </select>
                                         
-                                        <input type="number" name="customMeasurement" id="customMeasurementInput{{ produit.id }}" class="form-control mt-2" placeholder="Entrez la mesure en mettre" min="0.01" max="600" step="0.01">
+                                        <input type="number" name="customMeasurement" id="customMeasurementInput{{ produit.id }}" class="form-control mt-2" placeholder="Entrez la mesure en mètre" min="0.01" max="600" step="0.01">
 
 
                                         
@@ -165,7 +162,7 @@
 
         customMeasurement = parseFloat(customMeasurement); // Convertir en nombre flottant
 
-        if (customMeasurement < 0.1) {
+        if (customMeasurement < 0.01) {
             alert('La mesure personnalisée doit être d\'au moins 1 cm.');
             return false;
         } else if (customMeasurement > 600) {
@@ -175,7 +172,7 @@
             finalMeasurementInput.value = customMeasurement / 100; // Conversion de cm en mètres
         }
     } else {
-        finalMeasurementInput.value = surMesureSelect.value; // Valeur sélectionnée en mètres
+        finalMeasurementInput.value =  parseFloat(surMesureSelect.value); // Valeur sélectionnée en mètres
     }
 
     return true;

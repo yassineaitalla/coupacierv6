@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Commande;
 use App\Repository\ClientRepository;
 use App\Repository\PanierRepository;
+use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,8 +16,14 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class CommandeController extends AbstractController
 {
     #[Route('/commande8', name: 'app_commande')]
-    public function index(Request $request, ClientRepository $clientRepository, PanierRepository $panierRepository, EntityManagerInterface $entityManager, SessionInterface $session): Response
-    {
+    public function index(
+        Request $request, 
+        ClientRepository $clientRepository, 
+        PanierRepository $panierRepository, 
+        ProduitRepository $produitRepository, 
+        EntityManagerInterface $entityManager, 
+        SessionInterface $session
+    ): Response {
         // Récupérer l'ID du client depuis la session
         $clientId = $session->get('client_id');
 
@@ -51,11 +58,14 @@ class CommandeController extends AbstractController
                 $commande->setVilleFacturation($villeFacturation);
                 $commande->setCodePostalFacturation($codePostalFacturation);
                 $commande->setPaysFacturation($paysFacturation);
-                $commande->setIdProduit($panier->getIdProduit()->getId());
                 $commande->setQuantite($panier->getQuantite());
                 $commande->setTotalTtc($panier->getTotal());
                 $commande->setMontantHorsTaxe(10); // Exemple de montant hors taxe fixé
-                $commande->setEtat('en  livraison');
+                $commande->setEtat('en livraison');
+
+                // Ajouter les produits associés au panier à la commande
+                $produit = $panier->getIdProduit();
+                $commande->addProduit($produit);
 
                 $entityManager->persist($commande);
                 $entityManager->remove($panier); // Supprimer le panier après création de la commande
@@ -65,7 +75,7 @@ class CommandeController extends AbstractController
             $entityManager->flush();
 
             // Rediriger vers la page de confirmation de commande
-            
+            return $this->redirectToRoute('commande_confirmation');
         }
 
         // Rendre le template 'commande.html.twig' avec les données nécessaires
@@ -74,6 +84,4 @@ class CommandeController extends AbstractController
             'paniers' => $paniers,
         ]);
     }
-
-   
 }

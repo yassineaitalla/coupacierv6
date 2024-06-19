@@ -43,6 +43,9 @@ class Produit
     #[ORM\Column]
     private ?float $nombredecoupe = null;
 
+    #[ORM\ManyToMany(targetEntity: Commande::class, mappedBy: 'produits')]
+    private Collection $commandes;
+
     #[ORM\Column]
     private ?int $remise = null;
 
@@ -249,6 +252,33 @@ class Produit
     public function setdescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commande>
+     */
+    public function getCommandes(): Collection
+    {
+        return $this->commandes;
+    }
+
+    public function addCommande(Commande $commande): static
+    {
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes->add($commande);
+            $commande->addProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(Commande $commande): static
+    {
+        if ($this->commandes->removeElement($commande)) {
+            $commande->removeProduit($this);
+        }
 
         return $this;
     }

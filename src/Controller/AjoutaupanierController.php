@@ -82,6 +82,7 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
 
     $prixInitial = $produit->getPrix();
     $inp = floatval($inp);
+    $customMeasurement= floatval($customMeasurement); // convertir en flottant
     $total = $customMeasurement  * $prixInitial * $quantite ;
 
     // Calculer le total en fonction de la longueur sélectionnée et du prix initial
@@ -90,7 +91,7 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
 
     $metre = 1;
   
-    $prixDecoupe = $masseLineaire * $coef * $metre * $quantite;
+    $prixDecoupe = $masseLineaire * $coef *  $quantite;
 
     // Vérifiez si le client est un ClientProfessionnel
 if ($client && $client->getTypeClient() === 'ClientProfessionnel') {

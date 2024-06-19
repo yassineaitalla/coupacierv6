@@ -10,6 +10,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+
+
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 class Commande
 {
@@ -52,16 +54,12 @@ class Commande
     #[ORM\Column]
     private ?int $quantite = null;
 
-    #[ORM\Column]
-    private ?int $idproduit = null;
+  
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private ?float $montantHorsTaxe = null;
 
-    public function __construct()
-    {
-        $this->bordereauxLivraison = new ArrayCollection();
-    }
+   
 
     public function getId(): ?int
     {
@@ -184,17 +182,17 @@ class Commande
         return $this;
     }
 
-    public function getIdproduit(): ?int
+    #[ORM\ManyToMany(targetEntity: Produit::class, inversedBy: 'commandes')]
+    #[ORM\JoinTable(name: 'commande_produit')]
+    private Collection $produits;
+
+    public function __construct() // on initialise ses proprietes pour dire quelles sont pretes a etre uiliser
     {
-        return $this->idproduit;
+        $this->bordereauxLivraison = new ArrayCollection();
+        $this->produits = new ArrayCollection();
     }
 
-    public function setIdproduit(?int $idproduit): static
-    {
-        $this->idproduit = $idproduit;
-
-        return $this;
-    }
+    
 
     public function getMontantHorsTaxe(): ?float
     {
@@ -219,4 +217,30 @@ class Commande
 
         return $this;
     }
+
+    
+    /**
+     * @return Collection<int, Produit>
+     */
+    public function getProduits(): Collection
+    {
+        return $this->produits;
+    }
+
+    public function addProduit(Produit $produit): static
+    {
+        if (!$this->produits->contains($produit)) {
+            $this->produits->add($produit);
+        }
+
+        return $this;
+    }
+
+    public function removeProduit(Produit $produit): static
+    {
+        $this->produits->removeElement($produit);
+
+        return $this;
+    }
 }
+
