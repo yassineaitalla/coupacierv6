@@ -1,6 +1,6 @@
-{% include 'navbar.html.twig' %}
+{% include 'navbarback.html.twig' %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,11 +14,9 @@
       <div class="container bg-secondary p-5 rounded">
           <h1 class="text-center text-light">Connexion Back Office</h1>
 
-          {% for message in app.flashes('danger') %}
-            <div class="alert alert-danger" role="alert">
-                {{ message }}
-            </div>
-          {% endfor %}
+
+      
+
 
           <form method="post" action="{{ path('connexion_employe') }}">
               <div class="mb-3">
@@ -32,18 +30,27 @@
               </div>
               
               <div class="mb-3 text-center">
-                <a href="{{path('motdepasseoublie')}}" class="text-light">Mot de passe oublié ?</a>
+                <a href="{{ path('motdepasseoublie') }}" class="text-light">Mot de passe oublié ?</a>
               </div>
+
+              {% for message in app.flashes('success') %}
+              <div class="alert alert-success" role="alert">
+                  {{ message }}
+              </div>
+            {% endfor %}
 
               <div class="mb-3 text-center">
                 <button type="submit" class="btn btn-light">Connexion</button>
               </div>
-
-              
-             
           </form>
       </div>
   </div>
+
+  {% for message in app.flashes('error') %}
+  <div class="alert alert-danger" role="alert">
+      {{ message }}
+  </div>
+{% endfor %}
 
   <footer class="text-center text-light mt-5">
     {% include 'footer.html.twig' %} 

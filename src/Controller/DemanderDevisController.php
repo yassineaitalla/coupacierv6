@@ -27,7 +27,8 @@ class DemanderDevisController extends AbstractController
 
         // Si l'identifiant du client n'est pas défini dans la session, rediriger vers la page de connexion
         if (!$clientId) {
-            // Redirection vers la page de connexion ou affichage d'un message d'erreur
+            
+            return $this->redirectToRoute('connexion');
         }
 
         $prixLivraisonAjoute = false; // Initialisez la variable ici

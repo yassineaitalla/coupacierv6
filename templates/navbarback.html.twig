@@ -1,7 +1,7 @@
 {% include 'lienbootstrap.html.twig' %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,56 +10,50 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha384-Q8i/Xq2AD6XxIep9tiCxS/Z9fNfEX0JKT1AZ4dU1uky1G8nVp5VWgU68V6sJs3p" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.17.0/dist/css/bootstrap-icons.css">
-    <title>CoupAcier</title>
+    <title>CoupAcier Service Commercial</title>
+    <style>
+        .btn-deconnexion {
+            margin-left: auto;
+            background-color: rgb(180, 54, 54);
+        }
+    </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+<nav class="navbar navbar-expand-lg bg-primary navbar-dark">
   <div class="container-fluid">
+    
     <a class="navbar-brand" href="{{ path('page_accueil') }}">
         <img src="{{ asset('imagesprojet/coupacier.png') }}" width="40" height="30" class="d-inline-block align-top rounded" alt="Logo Coup'Acier">
-        Coup'Acier
+        Coup'Acier Service Commercial
     </a>
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!--navbar-toggler c'est pour le burger pour afficher le menu apres avoir dezoomer-->
-
     <div class="collapse navbar-collapse" id="navbarColor01">
-      <ul class="navbar-nav mx-auto">
+      <ul class="navbar-nav me-auto">
+        {% if app.session.get('EmployeEntreprise_id') is not null %}
+        
         <li class="nav-item">
-            <a class="nav-link active" href="#">
-                <i class="bi bi-info-circle"></i> Qui sommes nous
-                <span class="visually-hidden">(current)</span>
+            <a class="nav-link" href="{{ path('app_affichage_deviscommercial') }}">
+                <i class="bi bi-newspaper"></i> Demande de devis Clients
             </a>
         </li>
-    
+        
         <li class="nav-item">
-            <a class="nav-link" href="{{ path('produits') }}">
-                <i class="bi bi-box"></i> Nos produits
+            <a class="nav-link" href="{{ path('app_commande_client_historique') }}">
+                <i class="bi bi-person"></i> Commandes Clients
             </a>
         </li>
-    
-        <li class="nav-item">
-            <a class="nav-link" href="{{ path('verificationn') }}">
-                <i class="bi bi-person"></i> Compte
-            </a>
-        </li>
+
+        {% endif %}
       </ul>
 
-      {% if app.session.get('client_id') %}
-          <a href="{{ path('listedenvies') }}" class="btn btn-link">
-              <i class="bi bi-heart-fill fs-4 text-danger me-1">Liste d'envies</i>
-          </a>
+      {% if app.session.get('EmployeEntreprise_id') is not null %}
+      <a href="{{ path('deconnexionback') }}" class="btn btn-danger btn-deconnexion">Déconnexion</a>
       {% endif %}
-
-      <div class="d-flex">
-          <a href="{{ path('affichagepanier') }}" style="margin-right: 20px; text-decoration: none; cursor: pointer;">
-              <label class="bi bi-cart4" style="font-size: 24px; color: white;"> Panier</label>
-          </a>
-      </div>
     </div>
   </div>
 </nav>

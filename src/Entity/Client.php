@@ -26,6 +26,9 @@ class Client implements UserInterface
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
+    private ?string $Token = null;
+
+    #[ORM\Column(length: 255)]
     private string $telephone;
 
     #[ORM\Column(length: 255)]
@@ -141,6 +144,18 @@ class Client implements UserInterface
     public function setPrenom(string $prenom): self
     {
         $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->Token;
+    }
+
+    public function setToken(string $Token): self
+    {
+        $this->Token= $Token;
 
         return $this;
     }

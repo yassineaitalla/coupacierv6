@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 use App\Entity\Client;
+use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Listedenvies;
 use App\Entity\Societe;
 use App\Entity\Produit;
+use App\Entity\Visiteur;
 use App\Entity\Test;
 use App\Entity\Panier;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -17,7 +19,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 
 
-use Symfony\Component\HttpFoundation\Request;
+
 
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,8 +34,20 @@ class BlogController extends AbstractController
 
 
     #[Route('/accueil', name: 'page_accueil')]
-    public function accueil(): Response
+    public function accueil(Request $request): Response
     {
+        // Récupérer le chemin de la page visitée
+        $pageVisitee = $request->getPathInfo();
+
+        // Créer une nouvelle instance de Visiteur
+        $visiteur = new Visiteur();
+        $visiteur->setPageVisiter($pageVisitee);
+
+        // Utiliser l'EntityManager pour persist et flush
+        $this->entityManager->persist($visiteur);
+        $this->entityManager->flush();
+
+        // Rendu de la page accueil.html.twig avec un message
         return $this->render('accueil.html.twig', [
             'message' => 'Bienvenue sur la page d\'accueil !',
         ]);
@@ -85,6 +99,23 @@ public function viderSession(SessionInterface $session): Response
             'message' => 'Bienvenue sur la page d\'accueil !',
         ]);
     }
+
+    
+    #[Route('/backoff', name: 'backoff')]
+public function backoff(SessionInterface $session): Response
+{
+    // Vérifier si l'ID de l'employé est dans la session
+    if ($session->get('EmployeEntreprise_id') !== null) {
+        // Rediriger vers la route app_devis
+        return $this->redirectToRoute('app_affichage_deviscommercial');
+    }
+
+    // Sinon, afficher la page backoff
+    return $this->render('backoff.html.twig', [
+        'message' => 'Bienvenue sur la page d\'accueil !',
+    ]);
+}
+
 
     #[Route('/compte', name: 'compte')]
     public function pagecompte(): Response
@@ -248,10 +279,16 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
     }
 
     #[Route('/produits', name: 'produits')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $produits = $this->entityManager->getRepository(Produit::class)->findAll();
+        $produits = $this->entityManager->getRepository(  Produit::class)->findAll();
+
+        $clientId = $request->getSession()->get('client_id');
         
+        if (!$clientId) {
+            // Rediriger vers la page de connexion si le client n'est pas connecté
+            return $this->redirectToRoute('connexion'); // Assurez-vous que cette route existe
+        }
         
 
         return $this->render('produits.html.twig', [

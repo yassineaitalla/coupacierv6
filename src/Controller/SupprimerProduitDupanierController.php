@@ -1,19 +1,11 @@
 <?php
 
 namespace App\Controller;
+
 use App\Entity\Client;
-
 use App\Entity\Produit;
-
 use App\Entity\Panier;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-
-
-
-
-
-
-
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,12 +15,6 @@ use Symfony\Component\Routing\Attribute\Route;  // Importe la classe Route de l'
 
 class SupprimerProduitDupanierController extends AbstractController
 {
-
-
-
-    
-
-
 #[Route('/ajouter-au-panierrrrrrr/{id}', name: 'supprimerproduitpanier')]
 public function Supprimerproduitdupanier(Request $request, $id, SessionInterface $session): Response
 {
@@ -58,8 +44,6 @@ public function Supprimerproduitdupanier(Request $request, $id, SessionInterface
 
     // Vérifier si le produit existe déjà dans le panier pour cet utilisateur
     $panierExistant = $this->entityManager->getRepository(Panier::class)->findOneBy(['client' => $client, 'id_produit' => $produit]);
-
-    
     $this->entityManager->flush();
 
     // Supprimer l'entrée correspondante de la liste d'envies
@@ -75,15 +59,6 @@ public function Supprimerproduitdupanier(Request $request, $id, SessionInterface
 }
 
 
-    
-
-    
-    
-
-    
-
-
-
     private $entityManager;
     private $panierService;
 
@@ -92,14 +67,6 @@ public function Supprimerproduitdupanier(Request $request, $id, SessionInterface
         $this->entityManager = $entityManager;
         
     }
-
-   
-
-
-
-
-
-
 
 }
 

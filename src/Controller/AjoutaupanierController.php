@@ -174,7 +174,7 @@ if ($client && $client->getTypeClient() === 'ClientProfessionnel') {
     $panier->setDistance($minDistance . ' ' . $distanceUnit);
     $panier->setPrixLivraison(round($prixLivraison, 2)); // iruxlivraison * 20 % de TVA
 
-    // Persister le panier
+    // Persister le panier 
     $entityManager->persist($panier);
 
     // Enregistrer les modifications dans la base de données

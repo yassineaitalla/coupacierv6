@@ -1,12 +1,5 @@
 <?php
 
-
-
-
-
-
-namespace App\Controller;
-
 namespace App\Controller;
 
 use App\Entity\Produit;
@@ -23,11 +16,15 @@ class AjouterProduitControlleurController extends AbstractController
     #[Route('/ajouter-produit', name: 'ajouter_produit')]
     public function ajouterProduit(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
-       
-        $clientId = $session->get('client_id');
-        if ($clientId !== 2) {
-            
-            return $this->render('ajoutproduitbd.html.twig'); 
+        // Récupérer l'ID de EmployeEntreprise depuis la session
+        $employeEntrepriseId = $session->get('EmployeEntreprise_id');
+
+        // Vérifier si l'ID de EmployeEntreprise est présent et égal à 2
+        if (!$employeEntrepriseId || $employeEntrepriseId !== 1) {
+            // Redirection ou gestion du cas où l'ID n'est pas correct
+            return $this->redirectToRoute('ajout_produit'); // Redirige vers la page d'accueil ou une autre page appropriée
+        } else {
+            return $this->redirectToRoute('backoff');
         }
 
         if ($request->isMethod('POST')) {
@@ -94,7 +91,7 @@ class AjouterProduitControlleurController extends AbstractController
             $this->addFlash('success', 'Le produit a été ajouté avec succès !');
 
             // Rediriger l'utilisateur vers une autre page
-            return $this->redirectToRoute('ajoutproduitbd.html.twig');
+            return $this->redirectToRoute('accueil'); // Redirige vers la page d'accueil ou une autre page appropriée
         }
 
         // Si la méthode est GET, renvoyer simplement le template avec le formulaire

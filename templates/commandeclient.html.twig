@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-{% include 'navbar.html.twig' %}
+{% include 'navbarback.html.twig' %}
     <div class="container mt-5">
         <h1 class="mb-4">Liste des Commandes</h1>
         <table class="table table-striped table-bordered">
@@ -11,7 +11,7 @@
                     <th scope="col">Client</th>
                     <th scope="col">Total TTC</th>
                     <th scope="col">Quantité</th>
-                    <th scope="col">Produit</th>
+                    <th scope="col">idcommande2</th>
                     <th scope="col">Montant Hors Taxe</th>
                     <th scope="col">Adresse de Facturation</th>
                     <th scope="col">Ville de Facturation</th>
@@ -29,7 +29,7 @@
                         <td>{{ commande.client.nom }} {{ commande.client.prenom }}</td>
                         <td>{{ commande.totalTtc }}</td>
                         <td>{{ commande.quantite }}</td>
-                        <td>{{ commande.getidproduit}}</td>
+                        <td>{{ commande.id}}</td>
                         <td>{{ commande.montantHorsTaxe }}</td>
                         <td>{{ commande.adresseFacturation }}</td>
                         <td>{{ commande.villeFacturation }}</td>

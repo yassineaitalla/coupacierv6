@@ -31,7 +31,8 @@ class AjouterAlaListeDenvies extends AbstractController
         
     }
 
-    #[Route("/ajouter-au-laliste/{id}", name:"ajouter_a_la_listedenvie")]
+#[Route("/ajouter-au-laliste/{id}", name: "ajouter_a_la_listedenvie", methods: ["POST"])]
+// Endpoints permet d'ajouter un produit à la liste d'envies
 public function ajouterAlalistedenvie(Request $request, $id, SessionInterface $session): Response
 {
    // Récupérer le produit à partir de son identifiant
@@ -105,6 +106,7 @@ if ($quantite !== null && $quantite !== '') {
 
     // Rediriger l'utilisateur vers une page de confirmation ou à la page précédente
     return $this->redirectToRoute('produits');
+    
 }
 
 }

@@ -75,7 +75,9 @@ class CommandeController extends AbstractController
             $entityManager->flush();
 
             // Rediriger vers la page de confirmation de commande
-            return $this->redirectToRoute('commande_confirmation');
+            $this->addFlash('success', 'Votre commande à bien était confirmer!');
+            return $this->redirectToRoute('produits');
+            
         }
 
         // Rendre le template 'commande.html.twig' avec les données nécessaires

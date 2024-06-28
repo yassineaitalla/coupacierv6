@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 use App\Entity\Client;
+use Symfony\Component\Uid\Uuid;
 
 
 
@@ -17,7 +18,6 @@ use Symfony\Component\Routing\Attribute\Route;  // Importe la classe Route de l'
 
 class FormulaireParticulier extends AbstractController
 {
-
 
 #[Route('/formparticulier', name: 'page_formpart' )]
     public function clientpart(Request $request, EntityManagerInterface $entityManager): Response
@@ -42,6 +42,9 @@ class FormulaireParticulier extends AbstractController
                 return $this->redirectToRoute('page_formpro');
             }
             $hashedPassword = password_hash($motdepasse, PASSWORD_DEFAULT);
+            
+        
+            $clientToken = Uuid::v4()->toBase58();
 
             // Créer une instance de l'entité Client
             $client = new Client();
@@ -55,6 +58,8 @@ class FormulaireParticulier extends AbstractController
             $client->setVille($Ville);
             $client->setMotdepasse($hashedPassword);
             $client->settypeclient($typeclient);
+            $client->setToken($clientToken );
+
 
             // Créer une instance de l'entité Societe
             
