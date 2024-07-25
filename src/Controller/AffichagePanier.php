@@ -7,7 +7,7 @@ use App\Entity\Panier;
 use App\Entity\Client;
 use App\Entity\Produit;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 
 use Doctrine\ORM\EntityManagerInterface; // On importe l'interface EntityManagerInterface fournie par Doctrine
 
@@ -108,7 +108,11 @@ class AffichagePanier extends AbstractController{
             'prixdecoupetotal' => $prixdecoupetotal,
             'prixtotalproduits' => $prixtotalproduits,
         ]);
+
+        
     }
+
+    
     
     
 

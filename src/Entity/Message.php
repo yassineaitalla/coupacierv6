@@ -13,24 +13,18 @@ class Message
     #[ORM\Column]
     private ?int $id = null;
 
-    
-
-    #[ORM\Column( length: 255)] // Définir le champ comme nullable
-private ?string $messageClient = null;
+    #[ORM\Column(length: 255, nullable: true)] // Définir le champ comme nullable
+    private ?string $messageClient = null;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $idClient = null;
 
-
     #[ORM\ManyToOne(inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Devis $IdDevis = null;
+    private ?Devis $idDevis = null;
 
-
-
-
-    #[ORM\Column(nullable: true, length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $messageVendeur = null;
 
     public function getId(): ?int
@@ -43,7 +37,7 @@ private ?string $messageClient = null;
         return $this->messageClient;
     }
 
-    public function setMessageClient(string $messageClient): static
+    public function setMessageClient(?string $messageClient): static
     {
         $this->messageClient = $messageClient;
 
@@ -52,16 +46,15 @@ private ?string $messageClient = null;
 
     public function getIdDevis(): ?Devis
     {
-        return $this->IdDevis;
+        return $this->idDevis;
     }
 
-    public function setIdDevis(?Devis $IdDevis): static
+    public function setIdDevis(?Devis $idDevis): static
     {
-        $this->IdDevis = $IdDevis;
+        $this->idDevis = $idDevis;
 
         return $this;
     }
-
 
     public function getIdClient(): ?Client
     {
@@ -80,7 +73,7 @@ private ?string $messageClient = null;
         return $this->messageVendeur;
     }
 
-    public function setMessageVendeur(string $messageVendeur): static
+    public function setMessageVendeur(?string $messageVendeur): static
     {
         $this->messageVendeur = $messageVendeur;
 

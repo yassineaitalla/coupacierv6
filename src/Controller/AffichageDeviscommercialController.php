@@ -1,10 +1,6 @@
 <?php
 
 namespace App\Controller;
-
-
-
-
 use App\Entity\Devis;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Message;
@@ -18,6 +14,8 @@ class AffichageDeviscommercialController extends AbstractController
     #[Route('/deviscommercial', name: 'app_affichage_deviscommercial')]
     public function index(EntityManagerInterface $em): Response
     {
+
+        
         // Récupérer tous les devis
         $devis = $em->getRepository(Devis::class)->findAll();
 

@@ -1,21 +1,21 @@
 <?php
 
 namespace App\Controller;
+
+use App\Document\Visiteursite;
 use App\Entity\Client;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Listedenvies;
 use App\Entity\Societe;
 use App\Entity\Produit;
-use App\Entity\Visiteur;
+
 use App\Entity\Test;
 use App\Entity\Panier;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-
-
-
+use Doctrine\ODM\MongoDB\DocumentManager;
 
 
 
@@ -30,28 +30,44 @@ use Symfony\Component\Routing\Attribute\Route;  // Importe la classe Route de l'
 
 class BlogController extends AbstractController
 {
+        
+    private DocumentManager $documentManager;
 
-
-
-    #[Route('/accueil', name: 'page_accueil')]
-    public function accueil(Request $request): Response
+    public function __construct(DocumentManager $documentManager, EntityManagerInterface $entityManager)
     {
-        // Récupérer le chemin de la page visitée
-        $pageVisitee = $request->getPathInfo();
-
-        // Créer une nouvelle instance de Visiteur
-        $visiteur = new Visiteur();
-        $visiteur->setPageVisiter($pageVisitee);
-
-        // Utiliser l'EntityManager pour persist et flush
-        $this->entityManager->persist($visiteur);
-        $this->entityManager->flush();
-
-        // Rendu de la page accueil.html.twig avec un message
-        return $this->render('accueil.html.twig', [
-            'message' => 'Bienvenue sur la page d\'accueil !',
-        ]);
+        $this->documentManager = $documentManager;
+     
+        $this->entityManager = $entityManager;
+        
     }
+    
+
+#[Route('/accueil', name: 'page_accueil')]
+public function accueil(Request $request): Response
+{
+    // Récupérer le chemin de la page visitée
+    $pageVisitee = $request->getPathInfo();
+
+    // Créer une nouvelle instance de Visiteursite
+    $visiteur = new Visiteursite();
+    $visiteur->setPageVisiter($pageVisitee);
+
+    // Utiliser le DocumentManager pour persist et flush
+    $this->documentManager->persist($visiteur);
+    $this->documentManager->flush();
+
+    // Récupérer les visiteurs enregistrés pour les afficher
+    $visiteurs = $this->documentManager->getRepository(Visiteursite::class)->findAll();
+
+    // Rendu de la page accueil.html.twig avec un message
+    return $this->render('accueil.html.twig', [
+        'message' => 'Bienvenue sur la page d\'accueil !',
+        'visiteurs' => $visiteurs, // Passer les données au template
+    ]);
+}
+
+
+
 
     #[Route('/formpart', name: 'formpart')]
     public function formpart(): Response
@@ -272,11 +288,7 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
     private $entityManager;
     private $panierService;
 
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-        
-    }
+    
 
     #[Route('/produits', name: 'produits')]
     public function index(Request $request): Response

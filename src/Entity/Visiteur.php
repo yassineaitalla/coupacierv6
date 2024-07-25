@@ -15,7 +15,7 @@ class Visiteur
 
     #[ORM\Column(length: 255)]
     private ?string $pageVisiter = null;
-
+    
     public function getId(): ?int
     {
         return $this->id;

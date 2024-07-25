@@ -78,6 +78,8 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
 
 
 
+
+
 #[Route('/deconnexion', name: 'deconnexion')]
     public function deconnexion(SessionInterface $session): Response
     {

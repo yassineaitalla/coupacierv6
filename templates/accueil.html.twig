@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +11,23 @@
     <style>
         body {
             background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header, footer {
+            background-color: #343a40;
+            color: white;
+        }
+
+        header {
+            padding: 10px 0;
+        }
+
+        footer {
+            padding: 20px 0;
+            text-align: center;
         }
 
         .container {
@@ -21,17 +38,22 @@
 
         .card {
             margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
 
         .card img {
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
+            object-fit: cover;
+            height: 200px;
         }
 
         .card-body {
@@ -40,11 +62,14 @@
 
         .card-title {
             margin-bottom: 10px;
+            font-size: 1.25rem;
+            font-weight: bold;
         }
 
         .btn-primary {
             background-color: #007bff;
             border-color: #007bff;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .btn-primary:hover {
@@ -55,27 +80,64 @@
         .btn-primary:focus, .btn-primary.focus {
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
         }
+
+        .hero-section {
+            position: relative;
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .hero-section img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .hero-section h1 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 2.5rem;
+            margin: 0;
+            padding: 0;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        .section-title {
+            margin-top: 30px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .d-flex-center {
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+            margin-bottom: 50px;
+        }
     </style>
 </head>
 <body>
     <header>
-        {% include 'navbar.html.twig' %} 
+        {% include 'navbar.html.twig' %}
     </header>
 
     <main class="container">
-        <div style="position: relative; text-align: center; margin-top: 20px;">
-            <img src="imagesprojet/couverture.jpg" style="width: 100%; height: auto;">
-            <h1 class="titremetal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); margin: 0; padding: 0; margin-top: 50px;">Coup'acier, votre source de métal sur mesure.</h1>
+        <div class="hero-section">
+            <img src="https://images.pexels.com/photos/1145434/pexels-photo-1145434.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Couverture">
+            <h1>Coup'acier, votre source de métal sur mesure.</h1>
         </div>
         
-        <br>
-        <br>
-        <br>
-        
+        <h1 class="section-title">Découvrez nos produits</h1>
 
-        <h1 class="decouvrir mt-5">Découvrez nos produits</h1>
-
-        <div class="row mt-3">
+        <div class="row">
             <div class="col-md-4">
                 <div class="card">
                     <img src="imagesprojet/poutrelle-upe.png" class="card-img-top" alt="Fer plat acier 90mm">
@@ -85,6 +147,14 @@
                         <a href="{{ path('produits') }}" class="btn btn-primary">Découvrir</a>
                     </div>
                 </div>
+
+                <ul>
+                    {% for visiteur in visiteurs %}
+                        <li>{{ visiteur.pageVisiter }}</li>
+                    {% else %}
+                        <li>Aucun visiteur enregistré.</li>
+                    {% endfor %}
+                </ul>
             </div>
             <div class="col-md-4">
                 <div class="card">
@@ -96,6 +166,9 @@
                     </div>
                 </div>
             </div>
+            <script>
+                
+            </script>
             <div class="col-md-4">
                 <div class="card">
                     <img src="imagesprojet/TubesRonds.jpg" class="card-img-top" alt="Cornière inégale acier 50x30">
@@ -108,13 +181,14 @@
             </div>
         </div>
 
-        <div class="d-flex justify-content-center mt-3">
-            <a class="btn btn-primary" style="margin-bottom: 350px; margin-top: 25px;" href="{{ path('produits') }}">Découvrez tous nos produits</a>
+        <div class="d-flex-center">
+            <a class="btn btn-primary" href="{{ path('produits') }}">Découvrez tous nos produits</a>
         </div>
     </main>
 
     <footer>
-        {% include 'footer.html.twig' %} 
+        {% include 'footer.html.twig' %}
     </footer>
 </body>
 </html>
+
