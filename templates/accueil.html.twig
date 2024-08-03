@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    {% include 'navbar.html.twig' %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #f0f0f0;
@@ -67,7 +67,7 @@
         }
 
         .btn-primary {
-            background-color: #007bff;
+            background-color: #1c4672;
             border-color: #007bff;
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
@@ -125,9 +125,7 @@
     </style>
 </head>
 <body>
-    <header>
-        {% include 'navbar.html.twig' %}
-    </header>
+    
 
     <main class="container">
         <div class="hero-section">
@@ -143,25 +141,17 @@
                     <img src="imagesprojet/poutrelle-upe.png" class="card-img-top" alt="Fer plat acier 90mm">
                     <div class="card-body">
                         <h5 class="card-title">Fer plat acier 90mm</h5>
-                        <p class="card-text">Description du produit ici.</p>
+                        
                         <a href="{{ path('produits') }}" class="btn btn-primary">Découvrir</a>
                     </div>
                 </div>
-
-                <ul>
-                    {% for visiteur in visiteurs %}
-                        <li>{{ visiteur.pageVisiter }}</li>
-                    {% else %}
-                        <li>Aucun visiteur enregistré.</li>
-                    {% endfor %}
-                </ul>
             </div>
             <div class="col-md-4">
                 <div class="card">
                     <img src="imagesprojet/fer-en-t-40x40x5-mm-a-la-coupe.jpg" class="card-img-top" alt="Cornière à ailes égales">
                     <div class="card-body">
                         <h5 class="card-title">Cornière à ailes égales</h5>
-                        <p class="card-text">Description du produit ici.</p>
+                        
                         <a href="{{ path('produits') }}" class="btn btn-primary">Découvrir</a>
                     </div>
                 </div>
@@ -174,7 +164,7 @@
                     <img src="imagesprojet/TubesRonds.jpg" class="card-img-top" alt="Cornière inégale acier 50x30">
                     <div class="card-body">
                         <h5 class="card-title">Cornière inégale acier 50x30</h5>
-                        <p class="card-text">Description du produit ici.</p>
+                       
                         <a href="{{ path('produits') }}" class="btn btn-primary">Découvrir</a>
                     </div>
                 </div>

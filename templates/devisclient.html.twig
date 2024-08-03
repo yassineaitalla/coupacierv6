@@ -1,0 +1,49 @@
+
+
+{% block body %}
+    {% include 'navbarback.html.twig' %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Liste des Devis</h1>
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Client</th>
+                    <th scope="col">Statut</th>
+                    <th scope="col">Quantité</th>
+                    <th scope="col">Sur Mesure</th>
+                  
+                    <th scope="col">idProduit Spécifique</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                {% for devis in devis %}
+                    <tr>
+                        <td>{{ devis.idclient.nom }}</td> <!-- Assurez-vous que Client a une propriété nom -->
+                        <td>{{ devis.statut }}</td>
+                        <td>{{ devis.quantite }}</td>
+                        <td>{{ devis.surMesure}}</td>
+                        
+
+                        <!-- Affichage des produits associés -->
+                       
+
+                        <!-- Affichage du produit spécifique -->
+                        <td>
+                            {% if devis.produitSpecifique %}
+                                {{ devis.produitSpecifique.id}}
+                            {% else %}
+                                Aucun produit spécifique
+                            {% endif %}
+                        </td>
+
+                        <!-- Affichage des messages associés -->
+                       
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button class="btn btn-success mt-3">Voir les devis complets</button>
+    </div>
+{% endblock %}

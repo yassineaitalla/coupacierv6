@@ -26,6 +26,7 @@ class Panier
     private ?float $Surmesure = null;
 
     #[ORM\ManyToOne(inversedBy: 'paniers')]
+    
     #[ORM\JoinColumn(nullable: false)]
     private ?produit $id_produit = null;
 

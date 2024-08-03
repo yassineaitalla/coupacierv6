@@ -31,40 +31,17 @@ use Symfony\Component\Routing\Attribute\Route;  // Importe la classe Route de l'
 class BlogController extends AbstractController
 {
         
-    private DocumentManager $documentManager;
+   
 
-    public function __construct(DocumentManager $documentManager, EntityManagerInterface $entityManager)
+    public function __construct( EntityManagerInterface $entityManager)
     {
-        $this->documentManager = $documentManager;
+      
      
         $this->entityManager = $entityManager;
         
     }
     
 
-#[Route('/accueil', name: 'page_accueil')]
-public function accueil(Request $request): Response
-{
-    // Récupérer le chemin de la page visitée
-    $pageVisitee = $request->getPathInfo();
-
-    // Créer une nouvelle instance de Visiteursite
-    $visiteur = new Visiteursite();
-    $visiteur->setPageVisiter($pageVisitee);
-
-    // Utiliser le DocumentManager pour persist et flush
-    $this->documentManager->persist($visiteur);
-    $this->documentManager->flush();
-
-    // Récupérer les visiteurs enregistrés pour les afficher
-    $visiteurs = $this->documentManager->getRepository(Visiteursite::class)->findAll();
-
-    // Rendu de la page accueil.html.twig avec un message
-    return $this->render('accueil.html.twig', [
-        'message' => 'Bienvenue sur la page d\'accueil !',
-        'visiteurs' => $visiteurs, // Passer les données au template
-    ]);
-}
 
 
 
@@ -77,18 +54,7 @@ public function accueil(Request $request): Response
         ]);
     }
 
-    #[Route('/vider-session', name: 'vider_session')]
-public function viderSession(SessionInterface $session): Response
-{
-    // Effacer toutes les données de la session
-    $session->clear();
-
-    // Ajouter un message flash pour indiquer que la session a été vidée
-    $this->addFlash('success', 'La session a été vidée.');
-
-    // Rediriger l'utilisateur vers une page appropriée
-    return $this->redirectToRoute('pageconnexion');
-}
+    
 
     
 
@@ -117,20 +83,6 @@ public function viderSession(SessionInterface $session): Response
     }
 
     
-    #[Route('/backoff', name: 'backoff')]
-public function backoff(SessionInterface $session): Response
-{
-    // Vérifier si l'ID de l'employé est dans la session
-    if ($session->get('EmployeEntreprise_id') !== null) {
-        // Rediriger vers la route app_devis
-        return $this->redirectToRoute('app_affichage_deviscommercial');
-    }
-
-    // Sinon, afficher la page backoff
-    return $this->render('backoff.html.twig', [
-        'message' => 'Bienvenue sur la page d\'accueil !',
-    ]);
-}
 
 
     #[Route('/compte', name: 'compte')]
@@ -168,6 +120,8 @@ public function backoff(SessionInterface $session): Response
             'message' => 'Bienvenue sur la page d\'accueil !',
         ]);
     }
+
+    
 
     #[Route('/listedenvies', name: 'listedenvies')]
     public function listedEnvies(SessionInterface $session, EntityManagerInterface $entityManager): Response

@@ -10,22 +10,31 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha384-Q8i/Xq2AD6XxIep9tiCxS/Z9fNfEX0JKT1AZ4dU1uky1G8nVp5VWgU68V6sJs3p" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.17.0/dist/css/bootstrap-icons.css">
-    <title>CoupAcier Service Commercial</title>
+    <title>Coup'Acier Service Approvisionnement</title>
     <style>
         .btn-deconnexion {
             margin-left: auto;
             background-color: rgb(180, 54, 54);
         }
+        .btn-deconnexion:hover {
+            background-color: rgb(150, 40, 40);
+        }
+        .navbar-nav .nav-link {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-nav .nav-link i {
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg bg-primary navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
-    
-    <a class="navbar-brand" href="{{ path('backoffservicecommercial') }}">
+    <a class="navbar-brand" href="{{ path('backoffapprovisionnement') }}">
         <img src="{{ asset('imagesprojet/coupacier.png') }}" width="40" height="30" class="d-inline-block align-top rounded" alt="Logo Coup'Acier">
-        Coup'Acier Service Commercial
+        Coup'Acier Service Approvisionnement
     </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,33 +42,44 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarColor01">
-      <ul class="navbar-nav me-auto">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         {% if app.session.get('EmployeEntreprise_id') is not null %}
         
         <li class="nav-item">
-            <a class="nav-link" href="{{ path('app_affichage_deviscommercial') }}">
-                <i class="bi bi-newspaper"></i> Demande de devis Clients
-            </a>
-        </li>
-        
-        <li class="nav-item">
-            <a class="nav-link" href="{{ path('app_commande_client_historique') }}">
-                <i class="bi bi-person"></i> Commandes Clients
+            <a class="nav-link" href="">
+                <i class="bi bi-box"></i> Ajouter un produit reçu
             </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="{{ path('app_afficherdevisclient') }}">
-              <i class="bi bi-newspaper"></i> Devis Clients
-          </a>
-      </li>
+            <a class="nav-link" href="">
+                <i class="bi bi-person-plus"></i> Ajouter un fournisseur
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="">
+                <i class="bi bi-archive"></i> Stock
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="">
+                <i class="bi bi-cart-plus"></i> Réaliser Commande de barres chez un Fournisseur
+            </a>
+        </li>
+        
+        <li class="nav-item">
+            <a class="nav-link" href="">
+                <i class="bi bi-box-arrow-in-down"></i> Commandes de barres reçues
+            </a>
+        </li>
 
         {% endif %}
       </ul>
 
       {% if app.session.get('EmployeEntreprise_id') is not null %}
-      <a href="{{ path('deconnexionback') }}" class="btn btn-danger btn-deconnexion" style="background-color: red;">Déconnexion</a>
-
+      <a href="{{ path('deconnexionback') }}" class="btn btn-danger btn-deconnexion">Déconnexion</a>
       {% endif %}
     </div>
   </div>

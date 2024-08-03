@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Devis;
 use App\Entity\Message;
 use App\Entity\Client;
+use App\Entity\Panier;
+use App\Entity\Produit;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,62 +23,83 @@ class SoumettreDevisController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('/soumettre/devis', name: 'app_soumettre_devis', methods: ['GET','POST'])]
-    public function soumettreDevis(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
+    #[Route('/soumettre/devis', name: 'app_soumettre_devis', methods: ['GET', 'POST'])]
+    public function soumettreDevis(Request $request, SessionInterface $session): Response
     {
         // Récupérer l'identifiant du client depuis la session
         $idClient = $session->get('client_id');
 
         // Récupérer le client à partir de son identifiant
-        $client = $entityManager->getRepository(Client::class)->find($idClient);
+        $client = $this->entityManager->getRepository(Client::class)->find($idClient);
 
         // Si le client n'existe pas, rediriger vers une page d'erreur
         if (!$client) {
-            // Gérer le cas où le client n'existe pas
-            // Redirection vers une page d'erreur ou affichage d'un message d'erreur
+            return $this->redirectToRoute('error_page'); // Remplacez par la route réelle vers la page d'erreur
         }
 
         // Créer une nouvelle instance de Devis
         $devis = new Devis();
-
-        // Définir le panier et le client dans le devis
         $devis->setIdclient($client);
-
-        // Définir le statut du devis
         $devis->setStatut('En attente');
 
+        // Récupérer les données du panier depuis la session
+        $paniers = $this->entityManager->getRepository(Panier::class)->findBy(['client' => $client]);
+
+        $totalPrix = 0; // Initialiser le total du prix
+
+        foreach ($paniers as $panier) {
+            $produit = $panier->getIdProduit();
+            $quantite = $panier->getQuantite();
+            $surMesure = $panier->getSurmesure();
+            
+            if ($produit && $quantite !== null) {
+
+                $devis->addProduit($produit); // Associe le produit au devis
+                // Ajouter le produit au devis
+                $devis->setProduitSpecifique($produit); // Associe le produit au devis
+
+                // Mettre à jour les quantités et les options sur mesure
+                $devis->setQuantite($quantite); // Remplacez cette ligne si vous avez besoin d'une gestion plus fine des quantités
+                $devis->setSurMesure($surMesure); // Remplacez cette ligne si vous avez besoin d'une gestion plus fine des options sur mesure
+                
+                // Calculer le prix total
+                $prixProduit = $produit->getPrix();
+                $totalPrix +=  $surMesure * $prixProduit * $quantite ; // Exemple d'ajustement pour sur mesure
+            }
+        }
+
+        // Définir le prix total du devis
+        $devis->setPrixtotalligne($totalPrix);
+
         // Persister le devis
-        $entityManager->persist($devis);
+        $this->entityManager->persist($devis);
 
         // Créer une nouvelle instance de Message
         $message = new Message();
-
-        // Récupérer le message client depuis les données du formulaire POST
         $messageClient = $request->request->get('messageClient');
 
-        // Vérifier si le message client n'est pas vide
         if (!empty($messageClient)) {
-            // Définir le message client et le message vendeur
             $message->setMessageClient($messageClient);
             $message->setMessageVendeur('');
         }
 
-        // Associer le message au devis et au client
         $message->setIdDevis($devis);
         $message->setIdClient($client);
 
         // Persister le message
-        $entityManager->persist($message);
+        $this->entityManager->persist($message);
 
         // Enregistrer les changements dans la base de données
-        $entityManager->flush();
-        $this->addFlash('success', 'Votre Mesage à bien était envoyé, Veuillez attendre la réponse du service commercial !');
+        $this->entityManager->flush();
+
+        // Vider le panier
+        $panierRepository = $this->entityManager->getRepository(Panier::class);
+        $panierRepository->deleteByClient($client);
+        $session->remove('panier');
+
+        $this->addFlash('success', 'Votre message a bien été envoyé. Veuillez attendre la réponse du service commercial !');
 
         // Redirection vers une page de confirmation
         return $this->redirectToRoute('app_soumettre_devis');
     }
-
-    
 }
-
-

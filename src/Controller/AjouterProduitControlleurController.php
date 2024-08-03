@@ -19,12 +19,12 @@ class AjouterProduitControlleurController extends AbstractController
         // Récupérer l'ID de EmployeEntreprise depuis la session
         $employeEntrepriseId = $session->get('EmployeEntreprise_id');
 
-        // Vérifier si l'ID de EmployeEntreprise est présent et égal à 2
+        // Vérifier si l'ID de EmployeEntreprise est présent 
         if (!$employeEntrepriseId || $employeEntrepriseId !== 1) {
             // Redirection ou gestion du cas où l'ID n'est pas correct
-            return $this->redirectToRoute('ajout_produit'); // Redirige vers la page d'accueil ou une autre page appropriée
+            return $this->redirectToRoute('ajouterproduit'); // Redirige vers la page d'accueil ou une autre page appropriée
         } else {
-            return $this->redirectToRoute('backoff');
+            return $this->redirectToRoute('backoffapprovisionnement');
         }
 
         if ($request->isMethod('POST')) {
@@ -96,5 +96,21 @@ class AjouterProduitControlleurController extends AbstractController
 
         // Si la méthode est GET, renvoyer simplement le template avec le formulaire
         return $this->render('ajoutproduitbd.html.twig');
+    }
+
+    #[Route('/ajouterproduit', name: 'ajouterproduit')]
+    public function ajouterproduitbd(SessionInterface $session): Response
+    {
+
+        if ($session->get('EmployeEntreprise_id') === null) {
+            // Rediriger vers la page backoff si l'employé n'est pas connecté
+            return $this->render('backoffapro.html.twig', [
+                'message' => 'Vous devez être connecté pour accéder à cette page.',
+            ]);
+        }
+        
+        return $this->render('ajoutproduitbd.html.twig', [
+            'message' => 'Bienvenue sur la page d\'accueil !',
+        ]);
     }
 }

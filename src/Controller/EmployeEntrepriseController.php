@@ -22,25 +22,34 @@ class EmployeEntrepriseController extends AbstractController
             $motdepasse = $request->request->get('motdepasse');
 
             // Rechercher l'utilisateur dans la base de données par son email
-            $EmployeEntreprise = $entityManager->getRepository(EmployeEntreprise::class)->findOneBy(['email' => $email]);
+            $employeEntreprise = $entityManager->getRepository(EmployeEntreprise::class)->findOneBy(['email' => $email]);
 
             // Vérifier si l'utilisateur existe
-            if (!$EmployeEntreprise) {
+            if (!$employeEntreprise) {
                 $this->addFlash('error', 'Adresse e-mail incorrecte.');
                 return $this->redirectToRoute('connexion_employe');
             }
 
             // Vérifier si le mot de passe correspond
-            if ($motdepasse !== $EmployeEntreprise->getMotdepasse()) {
+            if ($motdepasse !== $employeEntreprise->getMotdepasse()) {
                 $this->addFlash('error', 'Mot de passe incorrect.');
                 return $this->redirectToRoute('connexion_employe');
             }
 
-            // Enregistrer l'ID du client dans la session
-            $session->set('EmployeEntreprise_id', $EmployeEntreprise->getId());
+            // Enregistrer l'ID de l'employé dans la session
+            $session->set('EmployeEntreprise_id', $employeEntreprise->getId());
 
-            $this->addFlash('success', 'Vous êtes connecté.');
-            return $this->redirectToRoute('app_affichage_deviscommercial');
+            
+            if ($employeEntreprise->getRoles() === 'ServiceApprovisionnement') {
+                return $this->redirectToRoute('ajouterproduit'); 
+            } elseif ($employeEntreprise->getRoles() === 'ServiceCommercial') {
+                return $this->redirectToRoute('backoffservicecommercial'); 
+            } elseif ($employeEntreprise->getRoles() === 'Preparationdecommandes') {
+                return $this->redirectToRoute('app_servicepreparationdecommandes'); 
+            } else {
+                $this->addFlash('error', 'Rôle non reconnu.');
+                return $this->redirectToRoute('connexion_employe');
+            }
         }
 
         // Si la méthode n'est pas POST, afficher la page de connexion
@@ -56,8 +65,21 @@ class EmployeEntrepriseController extends AbstractController
 
         // Rediriger l'utilisateur vers une page de confirmation de déconnexion ou toute autre page appropriéeee
         $this->addFlash('danger', 'Vous êtes deconnecté.');
-        return $this->redirectToRoute('backoff');
+        return $this->redirectToRoute('backoffservicecommercial');
     }
+
+    #[Route('/deconnexionbackapro', name: 'deconnexionbackapro')]
+    public function deconnexionapro(SessionInterface $session): Response
+    {
+        // Supprimer l'ID du client de la session
+        $session->remove('EmployeEntreprise_id');
+
+        // Rediriger l'utilisateur vers une page de confirmation de déconnexion ou toute autre page appropriéeee
+        $this->addFlash('danger', 'Vous êtes deconnecté.');
+        return $this->redirectToRoute('backoffapprovisionnement');
+    }
+
+    
 
 
 }

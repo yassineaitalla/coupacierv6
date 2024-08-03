@@ -2,51 +2,52 @@
 
 {% block body %}
 {% include 'navbarback.html.twig' %}
-    <div class="container mt-5">
-        <h1 class="mb-4">Liste des Commandes</h1>
-        <table class="table table-striped table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Client</th>
-                    <th scope="col">Total TTC</th>
-                    <th scope="col">Quantité</th>
-                    <th scope="col">idcommande2</th>
-                    <th scope="col">Montant Hors Taxe</th>
-                    <th scope="col">Adresse de Facturation</th>
-                    <th scope="col">Ville de Facturation</th>
-                    <th scope="col">Code Postal Facturation</th>
-                    <th scope="col">Pays de Facturation</th>
-                    <th scope="col">Adresse de Livraison</th>
-                    <th scope="col">Code Postal Livraison</th>
-                    <th scope="col">Etat</th>
+<div class="container mt-5">
+    <h1 class="mb-4 text-center text-uppercase">Liste des Commandes non Livrées</h1>
+    <table class="table table-hover table-striped table-dark table-bordered">
+        <thead class="thead-light">
+            <tr class="text-center">
+                <th scope="col">#</th>
+                <th scope="col">Client</th>
+                <th scope="col">Total TTC</th>
+                <th scope="col">Quantité</th>
+                <th scope="col">ID Commande</th>
+                <th scope="col">Montant Hors Taxe</th>
+                <th scope="col">Adresse de Facturation</th>
+                <th scope="col">Ville de Facturation</th>
+                <th scope="col">Code Postal Facturation</th>
+                <th scope="col">Pays de Facturation</th>
+                <th scope="col">Adresse de Livraison</th>
+                <th scope="col">Code Postal Livraison</th>
+                <th scope="col">État</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for commande in commandes %}
+                <tr class="text-center">
+                    <th scope="row">{{ commande.id }}</th>
+                    <td>{{ commande.client.nom }} {{ commande.client.prenom }}</td>
+                    <td>{{ commande.totalTtc }}</td>
+                    <td>{{ commande.quantite }}</td>
+                    <td>{{ commande.id }}</td>
+                    <td>{{ commande.montantHorsTaxe }}</td>
+                    <td>{{ commande.adresseFacturation }}</td>
+                    <td>{{ commande.villeFacturation }}</td>
+                    <td>{{ commande.codePostalFacturation }}</td>
+                    <td>{{ commande.paysFacturation }}</td>
+                    <td>{{ commande.adresseLivraison }}</td>
+                    <td>{{ commande.codePostalLivraison }}</td>
+                    <td>
+                        <span class="badge {{ commande.Etat == 'en livraison' ? 'badge-success' : 'badge-warning' }}">
+                            {{ commande.Etat }}
+                        </span>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for commande in commandes %}
-                    <tr>
-                        <th scope="row">{{ commande.id }}</th>
-                        <td>{{ commande.client.nom }} {{ commande.client.prenom }}</td>
-                        <td>{{ commande.totalTtc }}</td>
-                        <td>{{ commande.quantite }}</td>
-                        <td>{{ commande.id}}</td>
-                        <td>{{ commande.montantHorsTaxe }}</td>
-                        <td>{{ commande.adresseFacturation }}</td>
-                        <td>{{ commande.villeFacturation }}</td>
-                        <td>{{ commande.codePostalFacturation }}</td>
-                        <td>{{ commande.paysFacturation }}</td>
-                        <td>{{ commande.adresseLivraison }}</td>
-                        <td>{{ commande.codePostalLivraison }}</td>
-                        <td>
-                            <span class="badge {{ commande.Etat == 'en livraison' ? 'badge-success' : 'badge-warning' }}">
-                                {{ commande.Etat }}
-                            </span>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <button class="btn btn-success mt-3">Voir les commandes livrées</button>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-center">
+        <button class="btn btn-primary mt-3">Voir les commandes livrées</button>
     </div>
+</div>
 {% endblock %}

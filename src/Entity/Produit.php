@@ -24,12 +24,9 @@ class Produit
     #[ORM\Column]
     private ?float $prix = null;
 
-
-
-    
-
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $Image = null;
+
     #[ORM\Column]
     private ?float $coef = null;
 
@@ -38,7 +35,6 @@ class Produit
 
     #[ORM\Column]
     private ?float $masseLineaireKgMetre = null;
-
 
     #[ORM\Column]
     private ?float $nombredecoupe = null;
@@ -49,18 +45,20 @@ class Produit
     #[ORM\Column]
     private ?int $remise = null;
 
-    
-
     #[ORM\OneToMany(targetEntity: Panier::class, mappedBy: 'id_produit', orphanRemoval: true)]
     private Collection $paniers;
 
     #[ORM\OneToMany(targetEntity: Stock::class, mappedBy: 'id_produit', orphanRemoval: true)]
     private Collection $stocks;
 
+    #[ORM\ManyToMany(targetEntity: Devis::class, mappedBy: 'produits')]
+    private Collection $devis;
+
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
         $this->stocks = new ArrayCollection();
+        $this->devis = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -80,29 +78,17 @@ class Produit
         return $this;
     }
 
-
-   
-
-    
-    public function getcoef(): ?float
+    public function getDescription(): ?string
     {
-        return $this->coef;
+        return $this->description;
     }
 
-    public function setcoef(float $coef): static
+    public function setDescription(string $description): static
     {
-        $this->coef = $coef;
+        $this->description = $description;
 
         return $this;
     }
-
-    
-
-
-
-
-
-   
 
     public function getPrix(): ?float
     {
@@ -116,18 +102,38 @@ class Produit
         return $this;
     }
 
-
-
-  
-
-    public function getnombredecoupe(): ?float
+    public function getImage(): ?string
     {
-        return $this->nombredecoupe;
+        return $this->Image;
     }
 
-    public function setnombredecoupe(float $massenombredecoupe): static
+    public function setImage(?string $Image): self
     {
-        $this->nombredecoupe = $massenombredecoupe;
+        $this->Image = $Image;
+
+        return $this;
+    }
+
+    public function getCoef(): ?float
+    {
+        return $this->coef;
+    }
+
+    public function setCoef(float $coef): static
+    {
+        $this->coef = $coef;
+
+        return $this;
+    }
+
+    public function getLongueur(): ?float
+    {
+        return $this->Longueur;
+    }
+
+    public function setLongueur(float $Longueur): static
+    {
+        $this->Longueur = $Longueur;
 
         return $this;
     }
@@ -144,21 +150,17 @@ class Produit
         return $this;
     }
 
-    ///
-    
-
-    public function getLongueur(): ?float
+    public function getNombredecoupe(): ?float
     {
-        return $this->Longueur;
+        return $this->nombredecoupe;
     }
 
-    public function setLongueur(float $Longueur): static
+    public function setNombredecoupe(float $nombredecoupe): static
     {
-        $this->Longueur = $Longueur;
+        $this->nombredecoupe = $nombredecoupe;
 
         return $this;
-    } 
-    
+    }
 
     public function getRemise(): ?int
     {
@@ -168,18 +170,6 @@ class Produit
     public function setRemise(int $remise): static
     {
         $this->remise = $remise;
-
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->Image;
-    }
-
-    public function setImage(?string $Image): self
-    {
-        $this->Image = $Image;
 
         return $this;
     }
@@ -205,7 +195,6 @@ class Produit
     public function removePanier(Panier $panier): static
     {
         if ($this->paniers->removeElement($panier)) {
-            // set the owning side to null (unless already changed)
             if ($panier->getIdProduit() === $this) {
                 $panier->setIdProduit(null);
             }
@@ -235,7 +224,6 @@ class Produit
     public function removeStock(Stock $stock): static
     {
         if ($this->stocks->removeElement($stock)) {
-            // set the owning side to null (unless already changed)
             if ($stock->getIdProduit() === $this) {
                 $stock->setIdProduit(null);
             }
@@ -244,44 +232,30 @@ class Produit
         return $this;
     }
 
-    public function getdescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setdescription(string $description): static
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
     /**
-     * @return Collection<int, Commande>
+     * @return Collection<int, Devis>
      */
-    public function getCommandes(): Collection
+    public function getDevis(): Collection
     {
-        return $this->commandes;
+        return $this->devis;
     }
 
-    public function addCommande(Commande $commande): static
+    public function addDevis(Devis $devis): static
     {
-        if (!$this->commandes->contains($commande)) {
-            $this->commandes->add($commande);
-            $commande->addProduit($this);
+        if (!$this->devis->contains($devis)) {
+            $this->devis->add($devis);
+            $devis->addProduit($this);
         }
 
         return $this;
     }
 
-    public function removeCommande(Commande $commande): static
+    public function removeDevis(Devis $devis): static
     {
-        if ($this->commandes->removeElement($commande)) {
-            $commande->removeProduit($this);
+        if ($this->devis->removeElement($devis)) {
+            $devis->removeProduit($this);
         }
 
         return $this;
     }
-
 }
-
