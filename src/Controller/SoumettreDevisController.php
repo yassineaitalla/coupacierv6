@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+namespace App\Controller;
+
 use App\Entity\Devis;
 use App\Entity\Message;
 use App\Entity\Client;
@@ -53,18 +55,13 @@ class SoumettreDevisController extends AbstractController
             $surMesure = $panier->getSurmesure();
             
             if ($produit && $quantite !== null) {
-
-                $devis->addProduit($produit); // Associe le produit au devis
                 // Ajouter le produit au devis
-                $devis->setProduitSpecifique($produit); // Associe le produit au devis
+                $devis->addProduit($produit); // Associe le produit au devis
 
-                // Mettre à jour les quantités et les options sur mesure
-                $devis->setQuantite($quantite); // Remplacez cette ligne si vous avez besoin d'une gestion plus fine des quantités
-                $devis->setSurMesure($surMesure); // Remplacez cette ligne si vous avez besoin d'une gestion plus fine des options sur mesure
-                
-                // Calculer le prix total
+                // Calculer le prix total pour cet élément
                 $prixProduit = $produit->getPrix();
-                $totalPrix +=  $surMesure * $prixProduit * $quantite ; // Exemple d'ajustement pour sur mesure
+                $prixTotalLigne = $prixProduit * $quantite * ($surMesure ?? 1);
+                $totalPrix += $prixTotalLigne;
             }
         }
 

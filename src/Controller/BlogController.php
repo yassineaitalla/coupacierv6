@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Document\Visiteursite;
 use App\Entity\Client;
+use App\Repository\ClientRepository;
+
+use App\Entity\BordereauLivraison;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Listedenvies;
 use App\Entity\Societe;
@@ -121,6 +124,31 @@ class BlogController extends AbstractController
         ]);
     }
 
+
+    
+
+
+    #[Route('/afficherdeviss', name: 'afficherdeviss')]
+    public function afficherDevisc(SessionInterface $session, ClientRepository $clientRepository): Response
+    {
+        // Récupérer l'ID du client depuis la session
+        $clientId = $session->get('client_id');
+        $client = $clientRepository->find($clientId);
+
+        // Vérifier si le client est un professionnel
+        $afficherDevisClient = $client && $client->getTypeClient() === 'ClientProfessionnel';
+
+        return $this->render('navbar.html.twig', [
+            'afficherDevisclient' => $afficherDevisClient,
+        ]);
+    }
+    
+
+
+
+    
+
+   
     
 
     #[Route('/listedenvies', name: 'listedenvies')]
@@ -300,6 +328,8 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
             'remise' => $remise,
         ]);
     }
+
+
 
 
     #[Route('/supprimer-produit-liste-envies/{id}', name: 'supprimer_produit_liste_envies')]

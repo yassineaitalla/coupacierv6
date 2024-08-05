@@ -58,6 +58,7 @@ class Client implements UserInterface
         $this->messages = new ArrayCollection();
         
         $this->idclient = new ArrayCollection();
+        $this->clienid = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -195,6 +196,9 @@ class Client implements UserInterface
     #[ORM\OneToMany(targetEntity: Commande::class, mappedBy: 'idclient', orphanRemoval: true)]
     private Collection $idclient;
 
+    #[ORM\OneToMany(targetEntity: CommandeF::class, mappedBy: 'idclientt', orphanRemoval: true)]
+    private Collection $clienid;
+
     public function gettypeclient(): ?string
     {
         return $this->typeclient;
@@ -307,6 +311,36 @@ class Client implements UserInterface
             // set the owning side to null (unless already changed)
             if ($message->getIdClient() === $this) {
                 $message->setIdClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CommandeF>
+     */
+    public function getClienid(): Collection
+    {
+        return $this->clienid;
+    }
+
+    public function addClienid(CommandeF $clienid): static
+    {
+        if (!$this->clienid->contains($clienid)) {
+            $this->clienid->add($clienid);
+            $clienid->setIdclientt($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClienid(CommandeF $clienid): static
+    {
+        if ($this->clienid->removeElement($clienid)) {
+            // set the owning side to null (unless already changed)
+            if ($clienid->getIdclientt() === $this) {
+                $clienid->setIdclientt(null);
             }
         }
 

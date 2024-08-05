@@ -55,6 +55,14 @@
           </a>
       {% endif %}
 
+      {% if app.session.get('client_id') and app.session.get('typeclient') == 'ClientProfessionnel' %}
+    <a href="{{ path('listedenvies') }}" class="btn btn-link">
+        <i class="bi bi-heart-fill fs-4 text-danger me-1">DEMANDER DEVIS</i>
+    </a>
+{% endif %}
+
+
+
       <div class="d-flex">
           <a href="{{ path('affichagepanier') }}" style="margin-right: 20px; text-decoration: none; cursor: pointer;">
               <label class="bi bi-cart4" style="font-size: 24px; color: white;"> Panier</label>

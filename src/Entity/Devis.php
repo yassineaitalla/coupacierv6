@@ -3,6 +3,9 @@
 
 namespace App\Entity;
 
+
+namespace App\Entity;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,19 +29,8 @@ class Devis
     #[ORM\ManyToMany(targetEntity: Produit::class, inversedBy: 'devis')]
     private Collection $produits;
 
-    // Ajout de la colonne id_produit spécifique (facultatif)
-    #[ORM\ManyToOne(targetEntity: Produit::class)]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Produit $produitSpecifique = null;
-
-    // Ajout de la colonne quantite
-    #[ORM\Column(type: 'integer')]
-    
-    private ?int $quantite = null;
-
-    // Ajout de la colonne surMesure
     #[ORM\Column(type: 'float', nullable: true)]
-    private ?float $Surmesure = null;
+    private ?float $Prixtotalligne = null;
 
     public function __construct()
     {
@@ -102,89 +94,17 @@ class Devis
         return $this;
     }
 
-    // Méthodes pour la relation avec produitSpecifique
-    public function getProduitSpecifique(): ?Produit
+    
+
+    public function getPrixtotalligne(): ?string
     {
-        return $this->produitSpecifique;
+        return $this->Prixtotalligne;
     }
 
-    public function setProduitSpecifique(?Produit $produitSpecifique): self
+    public function setPrixtotalligne(?string $Prixtotalligne): static
     {
-        $this->produitSpecifique = $produitSpecifique;
+        $this->Prixtotalligne = $Prixtotalligne;
 
         return $this;
     }
-
-
-
-    // Méthodes pour la colonne quantite
-    public function getQuantite(): ?int
-    {
-        return $this->quantite;
-    }
-
-    public function setQuantite(int $quantite): self
-    {
-        $this->quantite = $quantite;
-
-        return $this;
-    }
-
-    // Méthodes pour la colonne surMesure
-    public function getSurmesure(): ?float
-    {
-        return $this->Surmesure;
-    }
-
-    public function setSurmesure(?float $Surmesure): static   // ---> ? le champ peut etre null
-    {
-        $this->Surmesure = $Surmesure;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Message>
-     */
-    public function getMessages(): Collection
-    {
-        return $this->messages;
-    }
-
-    public function addMessage(Message $message): static
-    {
-        if (!$this->messages->contains($message)) {
-            $this->messages->add($message);
-            $message->setIdDevis($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMessage(Message $message): static
-    {
-        if ($this->messages->removeElement($message)) {
-            if ($message->getIdDevis() === $this) {
-                $message->setIdDevis(null);
-            }
-        }
-
-        return $this;
-    }
-
-
-    #[ORM\Column(nullable: true)] // Définit la colonne comme nullable
-private ?string $Prixtotalligne = null;
-
-public function getPrixtotalligne(): ?string
-{
-    return $this->Prixtotalligne;
-}
-
-public function setPrixtotalligne(?string $Prixtotalligne): static
-{
-    $this->Prixtotalligne = $Prixtotalligne;
-
-    return $this;
-}
 }

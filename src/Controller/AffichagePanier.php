@@ -89,8 +89,9 @@ class AffichagePanier extends AbstractController{
     
             // Si le panier de l'utilisateur est vide, afficher un message approprié
             if (empty($panier)) {
-                $message = "Votre panier est vide. Aucun élément à afficher.";
+                $message = "Votre panier est videe. Aucun élément à afficher.";
                 $afficherPasserCommande = false;
+             
             } else {
                 $message = null;
                 $afficherPasserCommande = true;

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+{% include 'navbarservicepreparationsdecommandes.html.twig' %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center text-uppercase">Liste des QR Codes</h1>
+    <table class="table table-hover table-striped table-dark table-bordered">
+        <thead class="thead-light">
+            <tr class="text-center">
+                <th scope="col">#</th>
+                <th scope="col">QR Code</th>
+                <th scope="col">ID Commande</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for qrCodeData in qrCodesData %}
+                <tr class="text-center">
+                    <th scope="row">{{ qrCodeData.bordereau.id }}</th>
+                    <td>
+                        <img src="{{ qrCodeData.qrCodeDataUri }}" alt="QR Code" style="width: 100px; height: 100px;">
+                    </td>
+                    <td>{{ qrCodeData.commandeId }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

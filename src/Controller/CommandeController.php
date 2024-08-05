@@ -1,8 +1,12 @@
 <?php
 
+
+
 namespace App\Controller;
 
 use App\Entity\Commande;
+use App\Entity\CommandeF;
+use App\Entity\BordereauLivraison;
 use App\Repository\ClientRepository;
 use App\Repository\PanierRepository;
 use App\Repository\ProduitRepository;
@@ -12,6 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
 
 class CommandeController extends AbstractController
 {
@@ -24,23 +30,15 @@ class CommandeController extends AbstractController
         EntityManagerInterface $entityManager, 
         SessionInterface $session
     ): Response {
-        // Récupérer l'ID du client depuis la session
         $clientId = $session->get('client_id');
-
-        // Vérifier si l'utilisateur est connecté
         if (!$clientId) {
             return $this->redirectToRoute('connexion');
         }
 
-        // Récupérer l'entité Client à partir de l'ID
         $client = $clientRepository->find($clientId);
-
-        // Récupérer les paniers du client
         $paniers = $panierRepository->findBy(['client' => $client]);
 
-        // Si le formulaire est soumis en méthode POST
         if ($request->isMethod('POST')) {
-            // Récupérer les données du formulaire
             $adresse = $request->request->get('adresse');
             $codePostal = $request->request->get('code_postal');
             $adresseFacturation = $request->request->get('adresse_facturation');
@@ -48,7 +46,15 @@ class CommandeController extends AbstractController
             $codePostalFacturation = $request->request->get('code_postal_facturation');
             $paysFacturation = $request->request->get('pays_facturation');
 
-            // Traiter chaque panier pour créer une commande
+            $totalPanier = 0;
+
+            // Créer une seule entrée dans CommandeF avec le total des produits
+            $commandeF = new CommandeF();
+            $commandeF->setTotal($totalPanier);
+            $commandeF->setIdclientt($client);
+            $entityManager->persist($commandeF);
+            $entityManager->flush(); // Pour obtenir l'ID de CommandeF
+
             foreach ($paniers as $panier) {
                 $commande = new Commande();
                 $commande->setClient($client);
@@ -61,26 +67,49 @@ class CommandeController extends AbstractController
                 $commande->setQuantite($panier->getQuantite());
                 $commande->setTotalTtc($panier->getTotal());
                 $commande->setMontantHorsTaxe(10); // Exemple de montant hors taxe fixé
-                $commande->setEtat('en livraison');
+                $commande->setEtat('En preparation');
 
-                // Ajouter les produits associés au panier à la commande
                 $produit = $panier->getIdProduit();
-                $commande->addProduit($produit);
+                $commande->setProduit($produit);
+
+                // Associer la commande à CommandeF
+                $commande->setCommandeF($commandeF);
 
                 $entityManager->persist($commande);
-                $entityManager->remove($panier); // Supprimer le panier après création de la commande
+
+                // Accumuler le total du panier
+                $totalPanier += $panier->getTotal();
+
+                // Créer le bordereau de livraison
+                $bordereau = new BordereauLivraison();
+                $reference = uniqid('ref_'); // Génération d'une référence unique
+                $bordereau->setReference($reference);
+                $bordereau->setIdcommande($commande);
+
+                // Génération du QR code
+                $qrCode = new QrCode($reference);
+                $writer = new PngWriter();
+                $result = $writer->write($qrCode);
+                $qrCodeData = $result->getDataUri();
+                $bordereau->setQrcode($qrCodeData);
+
+                $bordereau->setDateCreation(new \DateTime());
+
+                $entityManager->persist($bordereau);
+
+                $entityManager->remove($panier);
             }
 
-            // Enregistrer les commandes en base de données
+            // Mettre à jour le total dans CommandeF
+            $commandeF->setTotal($totalPanier);
+            $entityManager->persist($commandeF);
+
             $entityManager->flush();
 
-            // Rediriger vers la page de confirmation de commande
-            $this->addFlash('success', 'Votre commande à bien était confirmer!');
+            $this->addFlash('success', 'Votre commande a bien été confirmée!');
             return $this->redirectToRoute('produits');
-            
         }
 
-        // Rendre le template 'commande.html.twig' avec les données nécessaires
         return $this->render('commande8.html.twig', [
             'client' => $client,
             'paniers' => $paniers,

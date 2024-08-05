@@ -1,31 +1,32 @@
 <?php
 
-
-
-
 namespace App\Entity;
 
 use App\Repository\CommandeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-
-
+/**
+ * @ORM\Entity(repositoryClass=CommandeRepository::class)
+ */
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 class Commande
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'commandes')]
+    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'commandes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
 
-    #[ORM\OneToMany(targetEntity: BordereauLivraison::class, mappedBy: 'commande', orphanRemoval: true)]
-    private Collection $bordereauxLivraison;
+    #[ORM\ManyToOne(targetEntity: Produit::class, )]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Produit $produit = null;
+
+    #[ORM\ManyToOne(targetEntity: CommandeF::class, )]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?CommandeF $commandeF = null;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private ?float $totalTtc = null;
@@ -40,7 +41,7 @@ class Commande
     private ?string $adresseLivraison = null;
 
     #[ORM\Column(length: 100)]
-    private ?string $Etat = null;
+    private ?string $etat = null;
 
     #[ORM\Column(length: 10)]
     private ?string $codePostalFacturation = null;
@@ -51,15 +52,13 @@ class Commande
     #[ORM\Column(length: 100)]
     private ?string $paysFacturation = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $quantite = null;
-
-  
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private ?float $montantHorsTaxe = null;
 
-   
+    // Getters and setters...
 
     public function getId(): ?int
     {
@@ -71,27 +70,42 @@ class Commande
         return $this->client;
     }
 
-    public function setClient(?Client $client): static
+    public function setClient(?Client $client): self
     {
         $this->client = $client;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, BordereauLivraison>
-     */
-    
+    public function getProduit(): ?Produit
+    {
+        return $this->produit;
+    }
+
+    public function setProduit(?Produit $produit): self
+    {
+        $this->produit = $produit;
+        return $this;
+    }
+
+    public function getCommandeF(): ?CommandeF
+    {
+        return $this->commandeF;
+    }
+
+    public function setCommandeF(?CommandeF $commandeF): self
+    {
+        $this->commandeF = $commandeF;
+        return $this;
+    }
 
     public function getTotalTtc(): ?float
     {
         return $this->totalTtc;
     }
 
-    public function setTotalTtc(?float $totalTtc): static
+    public function setTotalTtc(?float $totalTtc): self
     {
         $this->totalTtc = $totalTtc;
-
         return $this;
     }
 
@@ -100,35 +114,31 @@ class Commande
         return $this->adresseFacturation;
     }
 
-    public function setAdresseFacturation(?string $adresseFacturation): static
+    public function setAdresseFacturation(?string $adresseFacturation): self
     {
         $this->adresseFacturation = $adresseFacturation;
-
         return $this;
     }
 
-    public function getadresseLivraison(): ?string
+    public function getAdresseLivraison(): ?string
     {
         return $this->adresseLivraison;
     }
 
-    public function setadresseLivraison(?string $adresseLivraison): static
+    public function setAdresseLivraison(?string $adresseLivraison): self
     {
         $this->adresseLivraison = $adresseLivraison;
-
         return $this;
     }
-
 
     public function getVilleFacturation(): ?string
     {
         return $this->villeFacturation;
     }
 
-    public function setVilleFacturation(?string $villeFacturation): static
+    public function setVilleFacturation(?string $villeFacturation): self
     {
         $this->villeFacturation = $villeFacturation;
-
         return $this;
     }
 
@@ -137,36 +147,31 @@ class Commande
         return $this->codePostalFacturation;
     }
 
-    public function setCodePostalFacturation(?string $codePostalFacturation): static
+    public function setCodePostalFacturation(?string $codePostalFacturation): self
     {
         $this->codePostalFacturation = $codePostalFacturation;
-
         return $this;
     }
 
-    public function getcodePostalLivraison(): ?string
+    public function getCodePostalLivraison(): ?string
     {
-        return $this-> codePostalLivraison;
+        return $this->codePostalLivraison;
     }
 
-    public function setcodePostalLivraison(?string $codePostalLivraison): static
+    public function setCodePostalLivraison(?string $codePostalLivraison): self
     {
-        $this-> codePostalLivraison = $codePostalLivraison;
-
+        $this->codePostalLivraison = $codePostalLivraison;
         return $this;
     }
 
-
-   
     public function getPaysFacturation(): ?string
     {
         return $this->paysFacturation;
     }
 
-    public function setPaysFacturation(?string $paysFacturation): static
+    public function setPaysFacturation(?string $paysFacturation): self
     {
         $this->paysFacturation = $paysFacturation;
-
         return $this;
     }
 
@@ -175,72 +180,31 @@ class Commande
         return $this->quantite;
     }
 
-    public function setQuantite(?int $quantite): static
+    public function setQuantite(?int $quantite): self
     {
         $this->quantite = $quantite;
-
         return $this;
     }
-
-    #[ORM\ManyToMany(targetEntity: Produit::class, inversedBy: 'commandes')]
-    #[ORM\JoinTable(name: 'commande_produit')]
-    private Collection $produits;
-
-    public function __construct() // on initialise ses proprietes pour dire quelles sont pretes a etre uiliser
-    {
-        $this->bordereauxLivraison = new ArrayCollection();
-        $this->produits = new ArrayCollection();
-    }
-
-    
 
     public function getMontantHorsTaxe(): ?float
     {
         return $this->montantHorsTaxe;
     }
 
-    public function setMontantHorsTaxe(?float $montantHorsTaxe): static
+    public function setMontantHorsTaxe(?float $montantHorsTaxe): self
     {
         $this->montantHorsTaxe = $montantHorsTaxe;
-
         return $this;
     }
 
     public function getEtat(): ?string
     {
-        return $this->Etat;
+        return $this->etat;
     }
 
-    public function setEtat(?string $Etat): static
+    public function setEtat(?string $etat): self
     {
-        $this->Etat = $Etat;
-
-        return $this;
-    }
-
-    
-    /**
-     * @return Collection<int, Produit>
-     */
-    public function getProduits(): Collection
-    {
-        return $this->produits;
-    }
-
-    public function addProduit(Produit $produit): static
-    {
-        if (!$this->produits->contains($produit)) {
-            $this->produits->add($produit);
-        }
-
-        return $this;
-    }
-
-    public function removeProduit(Produit $produit): static
-    {
-        $this->produits->removeElement($produit);
-
+        $this->etat = $etat;
         return $this;
     }
 }
-
