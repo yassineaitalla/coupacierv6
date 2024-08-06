@@ -41,6 +41,16 @@ test:
     reports:
       junit: var/logs/junit.xml
 
+sast:
+  stage: security
+  script:
+    - echo "Running SAST scan"
+  artifacts:
+    paths:
+      - gl-sast-report.json
+    reports:
+      sast: gl-sast-report.json
+
 deploy:
   stage: deploy
   script:
