@@ -1,23 +1,125 @@
-{# templates/informations.html.twig #}
+{% include 'navbar.html.twig' %} 
 
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Informations</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Informations</title>
+ 
+    <!-- Inclure les fichiers CSS Bootstrap -->
+   
+   
+    <!-- Style personnalisé -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #6264ca;
+            color: #fff;
+            border-radius: 10px 10px 0 0;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .list-group-item {
+            background-color: #f8f9fa;
+            border: none;
+        }
+        .list-group-item:hover {
+            background-color: #e9ecef;
+        }
+        .btn-deconnexion {
+            margin-top: 20px;
+            margin-left: auto;
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    <h1>Informations Client</h1>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="text-center">Mes Informations</h1>
+            </div>
+            <div class="card-body">
+                <form id="infoForm" action="formulaire_client" method="POST">
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom:</label>
+                        <input type="text" class="form-control" id="nom" name="nom" value="{{ nom }}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="prenom" class="form-label">Prénom:</label>
+                        <input type="text" class="form-control" id="prenom" name="prenom" value="{{ prenom }}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ email }}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="telephone" class="form-label">Téléphone:</label>
+                        <input type="tel" class="form-control" id="telephone" name="telephone" value="{{ telephone }}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="motdepasse" class="form-label">Mot de passe:</label>
+                        <input type="password" class="form-control" id="motdepasse" name="motdepasse" value="{{ motdepasse }}" readonly>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="editBtn">Modifier</button>
+                    <button type="submit" class="btn btn-success d-none" id="saveBtn">Enregistrer</button>
+                </form>
+            </div>
+        </div>
+        
+        <script>
+            document.getElementById('editBtn').addEventListener('click', function() {
+                var inputs = document.querySelectorAll('#infoForm input');
+                for (var i = 0; i < inputs.length; i++) {
+                    inputs[i].removeAttribute('readonly');
+                }
+                document.getElementById('editBtn').classList.add('d-none');
+                document.getElementById('saveBtn').classList.remove('d-none');
+            });
+        </script>
+        
 
-    {# Erreur de syntaxe : mauvaise utilisation des accolades #}
-    {% if user is defined
-        <p>Nom : {{ nom }}</p>
-        <p>Prénom : {{ prenom }}</p>
-        <p>Email : {{ email }}</p>
-        <p>Téléphone : {{ telephone }}</p>
-        <p>Mot de passe : {{ motdepasse }}</p>
-        {% if afficherDevis %}
-            <p>Vous pouvez demander un devis.</p>
-        {% endif %}
-    {% endif %}
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-list-ul"></i> Mes Actions
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="#" class="text-decoration-none">Mes Listes d'Envies</a></li>
+                            <li class="list-group-item"><a href="#" class="text-decoration-none">Mes Commandes</a></li>
+                            <li class="list-group-item"><a href="#" class="text-decoration-none">Mes Factures</a></li>
+                            {% if afficherDevis %}
+                            <li class="list-group-item"><a href="{{ path('app_afficher_devis') }}" class="text-decoration-none">Mes Devis</a></li>
+                            {% endif %}
+
+                           
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <!-- Contenu supplémentaire ici -->
+            </div>
+        </div>
+    </div>
+
+    <a href="{{ path('deconnexion') }}" class="btn btn-outline-secondary btn-deconnexion">Déconnexion</a>
+
+    <!-- Inclure les fichiers JS Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
