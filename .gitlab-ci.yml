@@ -1,13 +1,51 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/pipeline/#customization
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+image: php:8.1
+
+services:
+  - mysql:5.7
+
+variables:
+  MYSQL_ROOT_PASSWORD: root
+  MYSQL_DATABASE: symfony
+  MYSQL_USER: symfony
+  MYSQL_PASSWORD: symfony
+
+cache:
+  paths:
+    - vendor/
+    - .cache/
+
+before_script:
+  - apt-get update
+  - apt-get install -y unzip git libicu-dev libpq-dev libzip-dev
+  - docker-php-ext-install intl pdo pdo_mysql zip
+  - composer install
+
 stages:
-- test
+  - test
+  - security
+  - deploy
+
+# SAST (Static Application Security Testing) configurationn
 sast:
+  stage: security
+  include:
+    - template: Security/SAST.gitlab-ci.yml
+
+test:
   stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
+  script:
+    - php bin/console doctrine:database:create --if-not-exists
+    - php bin/console doctrine:schema:create
+    - ./bin/phpunit
+  artifacts:
+    paths:
+      - var/logs/
+    reports:
+      junit: var/logs/junit.xml
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploy to production server"
+  only:
+    - main
