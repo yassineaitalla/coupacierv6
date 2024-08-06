@@ -66,7 +66,9 @@ class SoumettreDevisController extends AbstractController
         }
 
         // Définir le prix total du devis
-        $devis->setPrixtotalligne($totalPrix);
+        $devis->setPrixtotalligne($panier->getTotal());
+
+      
 
         // Persister le devis
         $this->entityManager->persist($devis);

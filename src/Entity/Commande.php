@@ -29,7 +29,7 @@ class Commande
     private ?CommandeF $commandeF = null;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    private ?float $totalTtc = null;
+    private ?float $prix = null;
 
     #[ORM\Column(length: 255)]
     private ?string $adresseFacturation = null;
@@ -40,9 +40,7 @@ class Commande
     #[ORM\Column(length: 255)]
     private ?string $adresseLivraison = null;
 
-    #[ORM\Column(length: 100)]
-    private ?string $etat = null;
-
+   
     #[ORM\Column(length: 10)]
     private ?string $codePostalFacturation = null;
 
@@ -98,14 +96,14 @@ class Commande
         return $this;
     }
 
-    public function getTotalTtc(): ?float
+    public function getPrix(): ?float
     {
-        return $this->totalTtc;
+        return $this->prix;
     }
 
-    public function setTotalTtc(?float $totalTtc): self
+    public function setPrix(?float $prix): self
     {
-        $this->totalTtc = $totalTtc;
+        $this->prix = $prix;
         return $this;
     }
 
@@ -197,14 +195,5 @@ class Commande
         return $this;
     }
 
-    public function getEtat(): ?string
-    {
-        return $this->etat;
-    }
-
-    public function setEtat(?string $etat): self
-    {
-        $this->etat = $etat;
-        return $this;
-    }
+   
 }

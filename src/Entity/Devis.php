@@ -1,8 +1,6 @@
 <?php
 
 
-namespace App\Entity;
-
 
 namespace App\Entity;
 
@@ -29,8 +27,18 @@ class Devis
     #[ORM\ManyToMany(targetEntity: Produit::class, inversedBy: 'devis')]
     private Collection $produits;
 
-    #[ORM\Column(type: 'float', nullable: true)]
-    private ?float $Prixtotalligne = null;
+    // Ajout de la colonne id_produit spécifique (facultatif)
+    #[ORM\ManyToOne(targetEntity: Produit::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Produit $produitSpecifique = null;
+
+    // Ajout de la colonne quantite
+    #[ORM\Column(type: 'integer')]
+    private ?int $quantite = null;
+
+    // Ajout de la colonne surMesure
+    #[ORM\Column(type: 'boolean')]
+    private bool $surMesure = false;
 
     public function __construct()
     {
@@ -94,16 +102,70 @@ class Devis
         return $this;
     }
 
-    
-
-    public function getPrixtotalligne(): ?string
+    // Méthodes pour la relation avec produitSpecifique
+    public function getProduitSpecifique(): ?Produit
     {
-        return $this->Prixtotalligne;
+        return $this->produitSpecifique;
     }
 
-    public function setPrixtotalligne(?string $Prixtotalligne): static
+    public function setProduitSpecifique(?Produit $produitSpecifique): self
     {
-        $this->Prixtotalligne = $Prixtotalligne;
+        $this->produitSpecifique = $produitSpecifique;
+
+        return $this;
+    }
+
+    // Méthodes pour la colonne quantite
+    public function getQuantite(): ?int
+    {
+        return $this->quantite;
+    }
+
+    public function setQuantite(int $quantite): self
+    {
+        $this->quantite = $quantite;
+
+        return $this;
+    }
+
+    // Méthodes pour la colonne surMesure
+    public function isSurMesure(): bool
+    {
+        return $this->surMesure;
+    }
+
+    public function setSurMesure(bool $surMesure): self
+    {
+        $this->surMesure = $surMesure;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): static
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setIdDevis($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): static
+    {
+        if ($this->messages->removeElement($message)) {
+            if ($message->getIdDevis() === $this) {
+                $message->setIdDevis(null);
+            }
+        }
 
         return $this;
     }

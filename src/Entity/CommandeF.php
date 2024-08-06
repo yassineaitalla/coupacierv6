@@ -22,6 +22,9 @@ class CommandeF
     #[ORM\Column(length: 255)]
     private ?string $total = null;
 
+    #[ORM\Column(length: 100)]
+    private ?string $etat = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -50,6 +53,17 @@ class CommandeF
     {
         $this->total = $total;
 
+        return $this;
+    }
+
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?string $etat): self
+    {
+        $this->etat = $etat;
         return $this;
     }
 }

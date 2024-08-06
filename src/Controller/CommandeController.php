@@ -47,11 +47,14 @@ class CommandeController extends AbstractController
             $paysFacturation = $request->request->get('pays_facturation');
 
             $totalPanier = 0;
+            $totalLivraison= 0;
+            $totalDecoupe=0;
 
             // Créer une seule entrée dans CommandeF avec le total des produits
             $commandeF = new CommandeF();
             $commandeF->setTotal($totalPanier);
             $commandeF->setIdclientt($client);
+            $commandeF->setEtat('En preparation');
             $entityManager->persist($commandeF);
             $entityManager->flush(); // Pour obtenir l'ID de CommandeF
 
@@ -65,9 +68,9 @@ class CommandeController extends AbstractController
                 $commande->setCodePostalFacturation($codePostalFacturation);
                 $commande->setPaysFacturation($paysFacturation);
                 $commande->setQuantite($panier->getQuantite());
-                $commande->setTotalTtc($panier->getTotal());
+                $commande->setPrix($panier->getTotal());
                 $commande->setMontantHorsTaxe(10); // Exemple de montant hors taxe fixé
-                $commande->setEtat('En preparation');
+                
 
                 $produit = $panier->getIdProduit();
                 $commande->setProduit($produit);
@@ -98,10 +101,16 @@ class CommandeController extends AbstractController
                 $entityManager->persist($bordereau);
 
                 $entityManager->remove($panier);
+
+                
+                // Accumuler le total du panier, livraison et découpe
+                $totalPanier += $panier->getTotal();
+                $totalLivraison += $panier->getPrixLivraison();
+                $totalDecoupe += $panier->getPrixDecoupe();
             }
 
             // Mettre à jour le total dans CommandeF
-            $commandeF->setTotal($totalPanier);
+            $commandeF->setTotal($totalPanier + $totalDecoupe + $totalLivraison);
             $entityManager->persist($commandeF);
 
             $entityManager->flush();
