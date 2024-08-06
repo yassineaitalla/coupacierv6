@@ -25,13 +25,9 @@ stages:
   - security
   - deploy
 
-# SAST (Static Application Security Testing) configuration
-sast:
-  stage: security
-  script:
-    - echo "Running Static Application Security Testing"
-  include:
-    - template: Security/SAST.gitlab-ci.yml
+# Include the SAST template
+include:
+  - template: Security/SAST.gitlab-ci.yml
 
 test:
   stage: test
