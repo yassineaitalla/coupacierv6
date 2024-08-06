@@ -25,7 +25,7 @@ stages:
   - security
   - deploy
 
-# SAST (Static Application Security Testing) configuration
+# SAST (Static Application Security Testing) configurationn
 sast:
   stage: security
   include:
