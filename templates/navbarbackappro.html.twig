@@ -46,7 +46,7 @@
         {% if app.session.get('EmployeEntreprise_id') is not null %}
         
         <li class="nav-item">
-            <a class="nav-link" href="">
+            <a class="nav-link" href="{{ path ('ajouterproduit')}}">
                 <i class="bi bi-box"></i> Ajouter un produit reçu
             </a>
         </li>
@@ -64,7 +64,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="">
+            <a class="nav-link" href="{{path ('ajouter_fournisseur')}}">
                 <i class="bi bi-cart-plus"></i> Réaliser Commande de barres chez un Fournisseur
             </a>
         </li>

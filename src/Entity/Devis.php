@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,30 +22,13 @@ class Devis
     #[ORM\Column(length: 255)]
     private ?string $statut;
 
-    #[ORM\ManyToMany(targetEntity: Produit::class, inversedBy: 'devis')]
-    private Collection $produits;
-
-    // Ajout de la colonne id_produit spécifique (facultatif)
-    #[ORM\ManyToOne(targetEntity: Produit::class)]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Produit $produitSpecifique = null;
-
-    // Ajout de la colonne quantite
-    #[ORM\Column(type: 'integer')]
-    private ?int $quantite = null;
-
-    // Ajout de la colonne surMesure
-    #[ORM\Column(type: 'boolean')]
-    private bool $surMesure = false;
+    #[ORM\OneToMany(targetEntity: DevisProduits::class, mappedBy: 'devis', cascade: ['persist', 'remove'])]
+    private Collection $devisProduits;
 
     public function __construct()
     {
-        $this->produits = new ArrayCollection();
-        $this->messages = new ArrayCollection();
+        $this->devisProduits = new ArrayCollection();
     }
-
-    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'idDevis', orphanRemoval: true)]
-    private Collection $messages;
 
     public function getId(): ?int
     {
@@ -79,91 +60,29 @@ class Devis
     }
 
     /**
-     * @return Collection<int, Produit>
+     * @return Collection<int, DevisProduits>
      */
-    public function getProduits(): Collection
+    public function getDevisProduits(): Collection
     {
-        return $this->produits;
+        return $this->devisProduits;
     }
 
-    public function addProduit(Produit $produit): static
+    public function addDevisProduit(DevisProduits $devisProduit): self
     {
-        if (!$this->produits->contains($produit)) {
-            $this->produits->add($produit);
+        if (!$this->devisProduits->contains($devisProduit)) {
+            $this->devisProduits->add($devisProduit);
+            $devisProduit->setDevis($this);
         }
 
         return $this;
     }
 
-    public function removeProduit(Produit $produit): static
+    public function removeDevisProduit(DevisProduits $devisProduit): self
     {
-        $this->produits->removeElement($produit);
-
-        return $this;
-    }
-
-    // Méthodes pour la relation avec produitSpecifique
-    public function getProduitSpecifique(): ?Produit
-    {
-        return $this->produitSpecifique;
-    }
-
-    public function setProduitSpecifique(?Produit $produitSpecifique): self
-    {
-        $this->produitSpecifique = $produitSpecifique;
-
-        return $this;
-    }
-
-    // Méthodes pour la colonne quantite
-    public function getQuantite(): ?int
-    {
-        return $this->quantite;
-    }
-
-    public function setQuantite(int $quantite): self
-    {
-        $this->quantite = $quantite;
-
-        return $this;
-    }
-
-    // Méthodes pour la colonne surMesure
-    public function isSurMesure(): bool
-    {
-        return $this->surMesure;
-    }
-
-    public function setSurMesure(bool $surMesure): self
-    {
-        $this->surMesure = $surMesure;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Message>
-     */
-    public function getMessages(): Collection
-    {
-        return $this->messages;
-    }
-
-    public function addMessage(Message $message): static
-    {
-        if (!$this->messages->contains($message)) {
-            $this->messages->add($message);
-            $message->setIdDevis($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMessage(Message $message): static
-    {
-        if ($this->messages->removeElement($message)) {
-            if ($message->getIdDevis() === $this) {
-                $message->setIdDevis(null);
+        if ($this->devisProduits->removeElement($devisProduit)) {
+            // set the owning side to null (unless already changed)
+            if ($devisProduit->getDevis() === $this) {
+                $devisProduit->setDevis(null);
             }
         }
 

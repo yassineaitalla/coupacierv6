@@ -1,0 +1,37 @@
+{# templates/images.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Images et Produits</title>
+</head>
+<body>
+    <h1>Images et Produits Associés</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Produit ID</th>
+                <th>Nom du Produit</th>
+                <th>Description</th>
+                <th>Prix</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for image in images %}
+                <tr>
+                    <td>{{ image.id }}</td>
+                    <td>{{ image.nom }}</td>
+                    <td>{{ image.description }}</td>
+                    <td>{{ image.prix }}</td>
+                    <td>
+                        <img src="{{ asset(image.urlimage) }}" alt="Image du produit" width="100">
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

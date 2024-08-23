@@ -240,22 +240,4 @@ class Produit
         return $this->devis;
     }
 
-    public function addDevis(Devis $devis): static
-    {
-        if (!$this->devis->contains($devis)) {
-            $this->devis->add($devis);
-            $devis->addProduit($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDevis(Devis $devis): static
-    {
-        if ($this->devis->removeElement($devis)) {
-            $devis->removeProduit($this);
-        }
-
-        return $this;
-    }
 }

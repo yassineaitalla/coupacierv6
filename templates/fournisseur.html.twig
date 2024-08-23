@@ -4,8 +4,7 @@
     {% include 'navbarservicepreparationsdecommandes.html.twig' %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Stocks</title>
-    <br>
+    <title>Liste des Fournisseurs</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -22,13 +21,13 @@
             left: 0;
             width: 100%;
             z-index: 1000;
-            background-color: #234b75; /* Couleur de fond pour la navbar */
+            background-color: #007bff; /* Couleur de fond pour la navbar */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ajout d'une ombre pour un effet visuel */
         }
 
         h1 {
             text-align: center;
-            color: #315174;
+            color: #355f8b;
             font-size: 2.5em;
             margin-bottom: 30px;
         }
@@ -44,13 +43,13 @@
         }
 
         thead {
-            background-color: #275c96;
+            background-color: #34608f;
             color: white;
         }
 
         th, td {
             padding: 15px;
-            text-align: center;
+            text-align: left;
             border-bottom: 1px solid #e0e0e0;
         }
 
@@ -66,6 +65,21 @@
             background-color: #f1f1f1;
         }
 
+        button {
+            padding: 8px 15px;
+            background-color: #1b35a8;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
         .no-data {
             text-align: center;
             padding: 20px;
@@ -75,30 +89,43 @@
     </style>
 </head>
 <body>
-    <h1>Liste des Stocks</h1>
+    <br>
+    <h1>Liste des Commandes Reçues du Fournisseur</h1>
 
     <table>
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Nom du Fournisseur</th>
                 <th>Quantité</th>
-                <th>Produit</th>
-                <th>Entrepôt</th>
-                <th>Fournisseur</th>
+                <th>Nom du Produit</th>
+                <th>État</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            {% for stock in stocks %}
+            {% for fournisseur in fournisseurs %}
                 <tr>
-                    <td>{{ stock.id }}</td>
-                    <td>{{ stock.quantite }}</td>
-                    <td>{{ stock.idProduit.Nom }}</td> <!-- Assurez-vous que "Nom" est un champ de l'entité Produit -->
-                    <td>{{ stock.entrepot.nomEntrepot }}</td> <!-- Assurez-vous que "nomEntrepot" est un champ de l'entité Entrepot -->
-                    <td>{{ stock.fournisseur.nomFournisseur }}</td> <!-- Assurez-vous que "nomFournisseur" est un champ de l'entité Fournisseur -->
+                    <td>{{ fournisseur.id }}</td>
+                    <td>{{ fournisseur.nomFournisseur }}</td>
+                    <td>{{ fournisseur.quantite }}</td>
+                    <td>{{ fournisseur.nomProduit }}</td>
+                    <td>{{ fournisseur.etat }}</td>
+                    <td>
+                        <form method="post" action="{{ path('change_etat_fournisseur', {'id': fournisseur.id}) }}">
+                            <button type="submit">
+                                {% if fournisseur.etat == 'En attente' %}
+                                    Marquer comme reçu
+                                {% else %}
+                                    Remettre en attente
+                                {% endif %}
+                            </button>
+                        </form>
+                    </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5" class="no-data">Aucun stock trouvé.</td>
+                    <td colspan="6" class="no-data">Aucun fournisseur trouvé.</td>
                 </tr>
             {% endfor %}
         </tbody>

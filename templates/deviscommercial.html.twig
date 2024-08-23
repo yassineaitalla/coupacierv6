@@ -1,31 +1,38 @@
+
+
+
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page de Devis et Messages</title>
-    <link rel="stylesheet" href="https://bootswatch.com/5/flatly/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha384-Q8i/Xq2AD6XxIep9tiCxS/Z9fNfEX0JKT1AZ4dU1uky1G8nVp5VWgU68V6sJs3p" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.17.0/dist/css/bootstrap-icons.css">
+
+    
+ 
+   
+    {% include 'navbarback.html.twig' %}
+
+    {% for message in app.flashes('success') %}
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
+  {% endfor %}
+
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #065050, #0d410d); /* Dégradé de couleur verte */
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            color: #333;
+            background-color: #f4f4f4;
         }
         .container {
-            max-width: 1200px;
-            margin: 20px auto;
+            width: 80%;
+            margin: 0 auto;
             padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1, h2 {
-            color: #004d00; /* Vert foncé */
+            color: #333;
         }
         table {
             width: 100%;
@@ -40,103 +47,84 @@
             text-align: left;
         }
         th {
-            background-color: #e6f9e6; /* Vert clair */
+            background-color: #f4f4f4;
         }
         tr:nth-child(even) {
-            background-color: #f2f2f2;
+            background-color: #f9f9f9;
         }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+       
         .btn {
-            background-color: #28a745; /* Vert */
-            color: white;
+            background-color: #4CAF50; /* Green */
             border: none;
+            color: white;
             padding: 8px 16px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
             font-size: 16px;
             margin: 4px 2px;
+            transition-duration: 0.4s;
             cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            border-radius: 8px;
         }
+
         .btn:hover {
-            background-color: #218838; /* Vert foncé */
+            background-color: #45a049; /* Darker Green */
         }
-        .alert {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 5px;
-            background-color: #d4edda; /* Vert très clair pour le succès */
-            color: #155724; /* Texte vert foncé */
-            border: 1px solid #c3e6cb; /* Bordure verte clair */
-        }
+
+        /* Styles pour la fenêtre modale */
         .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
+            display: none; /* Masquer la fenêtre modale par défaut */
+            position: fixed; /* Positionnement fixe */
+            z-index: 1; /* Mettre la fenêtre modale au-dessus du reste du contenu */
             left: 0;
             top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding-top: 60px;
+            width: 100%; /* Largeur de la fenêtre modale */
+            height: 100%; /* Hauteur de la fenêtre modale */
+            overflow: auto; /* Ajouter un défilement si nécessaire */
+            background-color: rgb(0,0,0); /* Fallback couleur de fond */
+            background-color: rgba(0,0,0,0.4); /* Fond avec opacité */
+            padding-top: 60px; /* Espacement par rapport au haut */
         }
+
+        /* Contenu de la fenêtre modale */
         .modal-content {
-            background-color: #fff;
-            margin: 5% auto;
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% de marge par rapport au haut et en bas */
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 80%; /* Largeur de la fenêtre modale */
         }
+
+        /* Fermer le bouton de la fenêtre modale */
         .close {
             color: #aaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
+
         .close:hover,
         .close:focus {
-            color: #000;
+            color: black;
             text-decoration: none;
             cursor: pointer;
-        }
-        ul.messages {
-            list-style: none;
-            padding: 0;
-        }
-        ul.messages li {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            padding: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        ul.messages li strong {
-            color: #004d00; /* Vert foncé */
         }
     </style>
 </head>
 <body>
-
-    {% include 'navbarback.html.twig' %}
-
     <div class="container">
-        <!-- Affichage des messages de succès -->
-        {% for message in app.flashes('success') %}
-        <div class="alert alert-success" role="alert">
-            {{ message }}
-        </div>
-        {% endfor %}
+      
 
-        <h2>Liste des Devis des Clients</h2>
+        <h2>Liste des Devis des clients</h2>
         <table>
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Client</th>
                     <th>Statut</th>
                     <th>Action</th>
@@ -144,46 +132,50 @@
             </thead>
             <tbody>
                 {% for devis in devis %}
-                <tr>
-                    <td>{{ devis.idclient.nom }}</td> <!-- Assurez-vous que "nom" est une propriété de l'entité Client -->
-                    <td>{{ devis.statut }}</td>
-                    <td><button class="btn" onclick="openModal('{{ devis.id }}')">Modifier</button></td>
-                </tr>
+                    <tr>
+                        <td>{{ devis.id }}</td>
+                        <td>{{ devis.idclient.nom }}</td> {# Assurez-vous que "nom" est une propriété de l'entité Client #}
+                        <td>{{ devis.statut }}</td>
+                        <td><button class="btn" onclick="openModal('{{ devis.id }}')">Modifier</button></td>
+                    </tr>
                 {% else %}
-                <tr>
-                    <td colspan="3">Aucun devis trouvé.</td>
-                </tr>
+                    <tr>
+                        <td colspan="4">Aucun devis trouvé.</td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
 
+     
+
         <h2>Liste des Messages</h2>
-        <ul class="messages">
+        <ul>
             {% for message in messages %}
-            <li>
-                <strong>Client:</strong> {{ message.idClient.nom }} <!-- Assurez-vous que "nom" est une propriété de l'entité Client -->
-                <br>
-                <strong>Devis ID:</strong> {{ message.idDevis.id }}
-                <br>
-                <strong>Message Client:</strong> {{ message.messageClient }}
-                <br>
-                <strong>Message Vendeur:</strong> {{ message.messageVendeur }}
-            </li>
+                <li>
+                    <strong>Client:</strong> {{ message.idClient.nom }} {# Assurez-vous que "nom" est une propriété de l'entité Client #}
+                    <br>
+                    <strong>Devis ID:</strong> {{ message.idDevis.id }}
+                    <br>
+                    <strong>Message Client:</strong> {{ message.messageClient }}
+                    <br>
+                    <strong>Message Vendeur:</strong> {{ message.messageVendeur }}
+                </li>
             {% else %}
-            <li>Aucun message trouvé.</li>
+                <li>Aucun message trouvé.</li>
             {% endfor %}
         </ul>
     </div>
 
     <!-- Fenêtre modale pour modifier le statut -->
     <div id="myModal" class="modal">
+        <!-- Contenu de la fenêtre modale -->
         <div class="modal-content">
+            <!-- Bouton de fermeture -->
             <span class="close" onclick="closeModal()">&times;</span>
-            <h3>Modifier le statut du devis</h3>
+            <!-- Formulaire pour modifier le statut -->
             <form id="statusForm" action="/update_status" method="post">
-                <input type="hidden" name="devisId" id="devisId">
                 <p>Sélectionnez le nouveau statut :</p>
-                <select name="newStatus" id="newStatus" class="form-select">
+                <select name="newStatus" id="newStatus">
                     <option value="En cours de traitement">En cours de traitement</option>
                     <option value="Traité">Traité</option>
                 </select>
@@ -194,12 +186,19 @@
     </div>
 
     <script>
+        // Fonction pour ouvrir la fenêtre modale et afficher le formulaire de modification du statut
         function openModal(devisId) {
+            // Afficher la fenêtre modale
             document.getElementById("myModal").style.display = "block";
-            document.getElementById("devisId").value = devisId;
+            // Vous pouvez utiliser l'ID du devis pour effectuer des actions spécifiques, comme charger les détails du devis ou préparer le formulaire de modification du statut
+            // Ajoutez ici le code pour charger les détails du devis ou préparer le formulaire de modification du statut en fonction de l'ID du devis
+            // Par exemple, vous pouvez définir l'URL du formulaire de soumission du statut en fonction de l'ID du devis
+            document.getElementById("statusForm").action = "/update_status/" + devisId;
         }
 
+        // Fonction pour fermer la fenêtre modale
         function closeModal() {
+            // Masquer la fenêtre modale
             document.getElementById("myModal").style.display = "none";
         }
     </script>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Commandes</title>
+    <style>
+        /* Styles globaux */
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-title {
+            font-size: 2em;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        /* État vide */
+        .empty-state {
+            padding: 20px;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        /* Table */
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .orders-table th,
+        .orders-table td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        .orders-table thead {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .orders-table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .orders-table tbody tr:hover {
+            background-color: #ddd;
+        }
+
+        .orders-table th {
+            font-weight: bold;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .orders-table td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Réactivité */
+        @media (max-width: 768px) {
+            .orders-table thead {
+                display: none;
+            }
+
+            .orders-table, .orders-table tbody, .orders-table tr, .orders-table td {
+                display: block;
+                width: 100%;
+            }
+
+            .orders-table tr {
+                margin-bottom: 15px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                overflow: hidden;
+                background-color: #fff;
+            }
+
+            .orders-table td {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .orders-table td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                margin-right: 10px;
+                color: #555;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html.twig' %}
+
+    <div class="container">
+        <h1 class="page-title">Mes Commandes</h1>
+
+        {% if commandes is empty %}
+            <div class="empty-state">
+                <p>Vous n'avez aucune commande pour le moment.</p>
+            </div>
+        {% else %}
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>ID Commande</th>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th>Prix</th>
+                        <th>Adresse de Livraison</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for commande in commandes %}
+                        <tr>
+                            <td>{{ commande.id }}</td>
+                            <td>{{ commande.produit.nom }}</td>
+                            <td>{{ commande.quantite }}</td>
+                            <td>{{ commande.prix }} €</td>
+                            <td>{{ commande.adresseLivraison }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+</body>
+</html>

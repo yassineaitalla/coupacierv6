@@ -3,14 +3,7 @@
 namespace App\Controller;
 use App\Entity\Client;
 use Symfony\Component\Uid\Uuid;
-
-
-
-
-
 use Symfony\Component\HttpFoundation\Request;
-
-
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,8 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;  // Importe la classe Route de l'
 
 class FormulaireParticulier extends AbstractController
 {
-
-#[Route('/formparticulier', name: 'page_formpart' )]
+    #[Route('/formparticulier', name: 'page_formpart' )]
     public function clientpart(Request $request, EntityManagerInterface $entityManager): Response
     {
         if ($request->isMethod('POST')) {
@@ -61,7 +53,7 @@ class FormulaireParticulier extends AbstractController
             $client->setToken($clientToken );
 
 
-            // Créer une instance de l'entité Societe
+         
             
 
             // Persister les entités et enregistrer dans la base de données

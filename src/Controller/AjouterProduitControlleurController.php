@@ -14,11 +14,14 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class AjouterProduitControlleurController extends AbstractController
 {
     #[Route('/ajouter-produit', name: 'ajouter_produit')]
+
+    
     public function ajouterProduit(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         // Récupérer l'ID de EmployeEntreprise depuis la session
         $employeEntrepriseId = $session->get('EmployeEntreprise_id');
 
+        
         // Vérifier si l'ID de EmployeEntreprise est présent 
         if (!$employeEntrepriseId || $employeEntrepriseId !== 1) {
             // Redirection ou gestion du cas où l'ID n'est pas correct

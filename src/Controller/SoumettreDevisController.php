@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
-namespace App\Controller;
-
 use App\Entity\Devis;
 use App\Entity\Message;
 use App\Entity\Client;
 use App\Entity\Panier;
 use App\Entity\Produit;
+
+use App\Entity\DevisProduits;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,20 +55,25 @@ class SoumettreDevisController extends AbstractController
             $surMesure = $panier->getSurmesure();
             
             if ($produit && $quantite !== null) {
-                // Ajouter le produit au devis
-                $devis->addProduit($produit); // Associe le produit au devis
-
-                // Calculer le prix total pour cet élément
+                // Créer une nouvelle instance de DevisProduit
+                $devisProduit = new DevisProduits();
                 $prixProduit = $produit->getPrix();
-                $prixTotalLigne = $prixProduit * $quantite * ($surMesure ?? 1);
+                $prixTotalLigne = $prixProduit * $quantite * ($surMesure ? 2 : 1); // Calcul du prix total
+                
+                $devisProduit->setProduit($produit);
+                $devisProduit->setQuantite($quantite);
+                $devisProduit->setPrixTotal($prixTotalLigne);
+                $devisProduit->setSurMesure($surMesure);
+
+                // Ajouter l'élément au devis
+                $devis->addDevisProduit($devisProduit);
+                
                 $totalPrix += $prixTotalLigne;
             }
         }
 
         // Définir le prix total du devis
-        $devis->setPrixtotalligne($panier->getTotal());
-
-      
+        //$devisProduit->setPrixTotal($totalPrix);
 
         // Persister le devis
         $this->entityManager->persist($devis);

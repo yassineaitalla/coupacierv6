@@ -45,7 +45,7 @@ class EmployeEntrepriseController extends AbstractController
             } elseif ($employeEntreprise->getRoles() === 'ServiceCommercial') {
                 return $this->redirectToRoute('backoffservicecommercial'); 
             } elseif ($employeEntreprise->getRoles() === 'Preparationdecommandes') {
-                return $this->redirectToRoute('app_servicepreparationdecommandes'); 
+                return $this->redirectToRoute('liste_fournisseurs'); 
             } else {
                 $this->addFlash('error', 'Rôle non reconnu.');
                 return $this->redirectToRoute('connexion_employe');

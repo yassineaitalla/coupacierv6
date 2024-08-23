@@ -9,7 +9,7 @@
             <tr class="text-center">
                 <th scope="col">#</th>
                 <th scope="col">Client</th>
-                <th scope="col">Total TTC</th>
+                
                 <th scope="col">Quantité</th>
                 <th scope="col">ID Commande</th>
                 <th scope="col">Montant Hors Taxe</th>
@@ -19,7 +19,7 @@
                 <th scope="col">Pays de Facturation</th>
                 <th scope="col">Adresse de Livraison</th>
                 <th scope="col">Code Postal Livraison</th>
-                <th scope="col">État</th>
+               
             </tr>
         </thead>
         <tbody>
@@ -27,7 +27,7 @@
                 <tr class="text-center">
                     <th scope="row">{{ commande.id }}</th>
                     <td>{{ commande.client.nom }} {{ commande.client.prenom }}</td>
-                    <td>{{ commande.totalTtc }}</td>
+                
                     <td>{{ commande.quantite }}</td>
                     <td>{{ commande.id }}</td>
                     <td>{{ commande.montantHorsTaxe }}</td>
@@ -37,11 +37,7 @@
                     <td>{{ commande.paysFacturation }}</td>
                     <td>{{ commande.adresseLivraison }}</td>
                     <td>{{ commande.codePostalLivraison }}</td>
-                    <td>
-                        <span class="badge {{ commande.Etat == 'en livraison' ? 'badge-success' : 'badge-warning' }}">
-                            {{ commande.Etat }}
-                        </span>
-                    </td>
+                  
                 </tr>
             {% endfor %}
         </tbody>

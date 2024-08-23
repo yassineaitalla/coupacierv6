@@ -12,7 +12,8 @@
     <!-- Style personnalisé -->
     <style>
         body {
-            background-color: #f8f9fa;
+            background-color: #f0f2f5; /* Fond clair pour contraste */
+            color: #333; /* Texte sombre pour lisibilité */
         }
         .container {
             margin-top: 50px;
@@ -20,18 +21,51 @@
         h1 {
             text-align: center;
             margin-bottom: 30px;
+                 /* Couleur verte pour le titre */
         }
         .table-container {
-            background-color: #fff;
+            background-color: #ffffff; /* Fond blanc pour la table */
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
         .alert-info {
             text-align: center;
+            background-color: #e9f7ef; /* Fond très clair pour les alertes */
+            color: #28a745; /* Texte vert pour les alertes */
+        }
+        .table thead th {
+            background-color: #28a745; /* Vert pour l'en-tête du tableau */
+            color: #ffffff; /* Texte blanc pour le contraste */
+            font-weight: bold;
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #f8f9fa; /* Fond gris clair pour les lignes paires */
+        }
+        .table tbody tr:nth-child(odd) {
+            background-color: #ffffff; /* Fond blanc pour les lignes impaires */
+        }
+        .table tbody tr:hover {
+            background-color: #e9f7ef; /* Fond très clair pour le survol */
         }
         .table th, .table td {
             text-align: center;
+            padding: 12px;
+            color: #333;
+        }
+        .btn-success {
+            background-color: #28a745; /* Vert pour le bouton Oui */
+            border: none;
+        }
+        .btn-success:hover {
+            background-color: #218838; /* Couleur de survol pour le bouton Oui */
+        }
+        .btn-danger {
+            background-color: #dc3545; /* Rouge pour le bouton Non */
+            border: none;
+        }
+        .btn-danger:hover {
+            background-color: #c82333; /* Couleur de survol pour le bouton Non */
         }
     </style>
 </head>
@@ -46,12 +80,12 @@
                 </div>
             {% else %}
                 <table class="table table-striped">
-                    <thead class="thead-dark">
+                    <thead>
                         <tr>
                             <th scope="col">Devis Numéro</th>
                             <th scope="col">Client</th>
                             <th scope="col">Statut</th>
-                            <th scope="col">Votre devis est bien traité accepteriez vous ?</th>
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -62,10 +96,10 @@
                                 <td>{{ devis.statut }}</td>
                                 <td>
                                     {% if devis.statut == 'Traité' %}
-                                        <form action="" method="post" style="display:inline;">
+                                        <form action="{{ path('accepter_devis', { 'id': devis.id }) }}" method="post" style="display:inline;">
                                             <button type="submit" class="btn btn-success">Oui</button>
                                         </form>
-                                        <form action="" method="post" style="display:inline;">
+                                        <form action="{{ path('refuser_devis', { 'id': devis.id }) }}" method="post" style="display:inline;">
                                             <button type="submit" class="btn btn-danger">Non</button>
                                         </form>
                                     {% endif %}

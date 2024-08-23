@@ -64,4 +64,6 @@ class AffichageDeviscommercialController extends AbstractController
         // Rediriger vers la page d'affichage des devis après la mise à jour du statut
         return $this->redirectToRoute('app_affichage_deviscommercial');
     }
+
+    
 }
