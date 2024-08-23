@@ -101,9 +101,9 @@ class SoumettreDevisController extends AbstractController
         $panierRepository->deleteByClient($client);
         $session->remove('panier');
 
-        $this->addFlash('success', 'Votre message a bien été envoyé. Veuillez attendre la réponse du service commercial !');
+        $this->addFlash('success', 'Votre devis a bien été envoyé. Veuillez attendre la réponse du service commercial !');
 
         // Redirection vers une page de confirmation
-        return $this->redirectToRoute('app_soumettre_devis');
+        return $this->redirectToRoute('produits');
     }
 }

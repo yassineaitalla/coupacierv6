@@ -1,7 +1,6 @@
 <?php
 
 
-
 namespace App\Controller;
 
 use App\Entity\Devis;
@@ -10,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class AfficherDevisController extends AbstractController
 {
@@ -21,7 +21,7 @@ class AfficherDevisController extends AbstractController
         // Vérifier si un client est connecté
         if (!$clientId) {
             // Rediriger l'utilisateur vers une page de connexion ou afficher un message d'erreur
-            $this->addFlash('error', 'Veuillez vous connecter pour accéder à votre liste d\'envies.');
+            $this->addFlash('error', 'Veuillez vous connecter pour accéder à votre liste de devis.');
             return $this->redirectToRoute('connexion'); // Redirection vers la page de connexion
         }
 
@@ -49,9 +49,42 @@ class AfficherDevisController extends AbstractController
             ]);
         }
     }
+
+    #[Route('/devis/accepter/{id}', name: 'app_accepter_devis')]
+    public function accepterDevis(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $devis = $entityManager->getRepository(Devis::class)->find($id);
+
+        if (!$devis) {
+            throw $this->createNotFoundException('Le devis demandé n\'existe pas.');
+        }
+
+        // Mettre à jour le statut du devis
+        $devis->setStatut('Accepté');
+        $entityManager->persist($devis);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Le devis a été accepté veuillez vous présenter dans notre magasin pour procéder au paiement.');
+
+        return $this->redirectToRoute('app_afficher_devis');
+    }
+
+    #[Route('/devis/refuser/{id}', name: 'app_refuser_devis')]
+    public function refuserDevis(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $devis = $entityManager->getRepository(Devis::class)->find($id);
+
+        if (!$devis) {
+            throw $this->createNotFoundException('Le devis demandé n\'existe pas.');
+        }
+
+        // Mettre à jour le statut du devis
+        $devis->setStatut('Refusé');
+        $entityManager->persist($devis);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Le devis a été refusé.');
+
+        return $this->redirectToRoute('app_afficher_devis');
+    }
 }
-
-
-    
-
-   

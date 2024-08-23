@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Panier;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Client;
 
 /**
  * @extends ServiceEntityRepository<Panier>
@@ -16,9 +18,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PanierRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $entityManager;
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, Panier::class);
+        $this->entityManager = $entityManager;
     }
 
     //    /**
@@ -55,5 +59,17 @@ class PanierRepository extends ServiceEntityRepository
             ->select('COUNT(p.id)')
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+    
+    public function deleteByClient(Client $client): void
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->delete()
+            ->where('p.client = :client')
+            ->setParameter('client', $client)
+            ->getQuery();
+
+        $qb->execute();
     }
 }

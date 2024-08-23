@@ -21,7 +21,7 @@
         h1 {
             text-align: center;
             margin-bottom: 30px;
-                 /* Couleur verte pour le titre */
+            color: #28a745; /* Couleur verte pour le titre */
         }
         .table-container {
             background-color: #ffffff; /* Fond blanc pour la table */
@@ -70,6 +70,11 @@
     </style>
 </head>
 <body>
+    {% for message in app.flashes('success') %}
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
     <div class="container">
         <h1>Mes Devis</h1>
 
@@ -78,41 +83,44 @@
                 <div class="alert alert-info" role="alert">
                     {{ message }}
                 </div>
-            {% else %}
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">Devis Numéro</th>
-                            <th scope="col">Client</th>
-                            <th scope="col">Statut</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for devis in devis %}
-                            <tr>
-                                <td>{{ devis.id }}</td>
-                                <td>{{ devis.idclient.nom }}</td> {# Assurez-vous que "nom" est une propriété de l'entité Client #}
-                                <td>{{ devis.statut }}</td>
-                                <td>
-                                    {% if devis.statut == 'Traité' %}
-                                        <form action="{{ path('accepter_devis', { 'id': devis.id }) }}" method="post" style="display:inline;">
-                                            <button type="submit" class="btn btn-success">Oui</button>
-                                        </form>
-                                        <form action="{{ path('refuser_devis', { 'id': devis.id }) }}" method="post" style="display:inline;">
-                                            <button type="submit" class="btn btn-danger">Non</button>
-                                        </form>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <td colspan="4">Aucun devis trouvé.</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
             {% endif %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Devis Numéro</th>
+                        <th scope="col">Client</th>
+                        <th scope="col">Statut</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for devis in devis %}
+                        <tr>
+                            <td>{{ devis.id }}</td>
+                            <td>{{ devis.idclient.nom }}</td>
+                            <td>{{ devis.statut }}</td>
+                            <td>
+                                <a href="{{ path('app_devis_recap', { 'id': devis.id }) }}" class="btn btn-success">
+                                    Voir Récapitulatif
+                                </a>
+                                
+                                {% if devis.statut == 'Traité' %}
+                                    <a href="{{ path('app_accepter_devis', { 'id': devis.id }) }}" class="btn btn-success">
+                                        Accepter
+                                    </a>
+                                    <a href="{{ path('app_refuser_devis', { 'id': devis.id }) }}" class="btn btn-danger">
+                                        Refuser
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">Aucun devis trouvé.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 
