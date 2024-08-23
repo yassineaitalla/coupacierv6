@@ -93,7 +93,7 @@ class SoumettreDevisController extends AbstractController
         // Persister le message
         $this->entityManager->persist($message);
 
-        // Enregistrer les changements dans la base de données
+        // Enregistrer les changements dans la base de donnéess
         $this->entityManager->flush();
 
         // Vider le panier
