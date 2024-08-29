@@ -16,13 +16,9 @@ stages:
 
 before_script:
   - apt-get update
-  - apt-get install -y libzip-dev libicu-dev libpng-dev libjpeg-dev libfreetype6-dev libldap2-dev libxml2-dev libpq-dev libonig-dev
-  - docker-php-ext-configure gd --with-freetype --with-jpeg
-  - docker-php-ext-install gd intl pdo pdo_mysql pdo_pgsql opcache zip ldap soap
-  - pecl install mongodb
-  - docker-php-ext-enable mongodb
+  - apt-get install -y libzip-dev libicu-dev libpng-dev libjpeg-dev libfreetype6-dev libldap2-dev libxml2-dev libpq-dev libonig-dev unzip curl git
   - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-  - composer install --no-scripts --no-autoloader
+  - composer install --prefer-dist --no-scripts --no-autoloader
 
 build:
   stage: build
