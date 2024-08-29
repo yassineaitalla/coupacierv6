@@ -1,20 +1,13 @@
 image: php:8.2
 
 variables:
-  MYSQL_HOST: localhost
-  MYSQL_PORT: 3306
-  MYSQL_DATABASE: coupac
-  MYSQL_USER: root
-  MYSQL_PASSWORD: Ysy9?9yaai 
-  MYSQL_ROOT_PASSWORD: Ysy9?9yaai 
-  SYMFONY_ENV: coupac
-
-
-
+  APP_ENV: test
+  DATABASE_URL: mysql://root:Ysy9%3F9yaai@localhost:3306/coupac
 
 stages:
   - build
   - analyze
+  - test
   - deploy
 
 before_script:
@@ -43,6 +36,16 @@ analyze:
     - vendor/bin/phpstan analyse src --level max
   only:
     - merge_requests
+    - main
+    - develop
+
+test:
+  stage: test
+  script:
+    - php bin/console doctrine:database:create --if-not-exists --env=test
+    - php bin/console doctrine:schema:update --force --env=test
+    - vendor/bin/phpunit
+  only:
     - main
     - develop
 
