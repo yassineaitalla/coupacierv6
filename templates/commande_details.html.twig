@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {% include 'navbar.html.twig' %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la Commande</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-title {
+            font-size: 2em;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .order-details {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-details h2 {
+            margin-top: 0;
+        }
+
+        .order-details p {
+            margin: 10px 0;
+        }
+
+        .order-details .total {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="page-title">Détails des Commandes</h1>
+
+        {% for commande in commandes %}
+            <div class="order-details">
+                <h2>Produit : {{ commande.produit.nom }}</h2>
+                <p>Quantité : {{ commande.quantite }}</p>
+                <p>Prix Unitaire : {{ commande.prix }} €</p>
+                <p>Mesure : {{ commande.surmesure }} </p>
+                <p>Montant Hors Taxe : {{ commande.montantHorsTaxe }} €</p>
+                   <p class="total">Total : {{ commande.quantite * commande.prix }} €</p>
+            </div>
+        {% else %}
+            <p>Aucune commande disponible pour ce résumé.</p>
+        {% endfor %}
+
+        <a href="{{ path('mes_commandes') }}" class="btn-back">Retour aux commandes</a>
+    </div>
+</body>
+</html>
+
+</html>

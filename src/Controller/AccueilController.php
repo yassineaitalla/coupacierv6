@@ -12,34 +12,37 @@ use Symfony\Component\Routing\Annotation\Route; // Utilisation de l'annotation R
 
 class AccueilController extends AbstractController
 {
-    private DocumentManager $documentManager;
+    private DocumentManager $documentManager; //  DocumentManager $documentManager c'est gestionnaire de documents injecté pour effectuer des opérations sur la base de données MongoDB.
 
     public function __construct(DocumentManager $documentManager)
     {
         $this->documentManager = $documentManager;
     }
 
-    #[Route('/accueil', name: 'page_accueil')]
+    #[Route('/visite', name: 'visite')]
     public function accueil(Request $request): Response
     {
         // Récupérer le chemin de la page visitée
         $pageVisitee = $request->getPathInfo();
 
-        // Créer une nouvelle instance de Visiteursite
+        // créer une nouvelle instance de Visiteursite
         $visiteur = new Visiteursite();
         $visiteur->setPageVisiter($pageVisitee);
 
-        // Utiliser le DocumentManager pour persist et flush
+        // uiliser le documentManager pour persist 
         $this->documentManager->persist($visiteur);
         $this->documentManager->flush();
 
-        // Récupérer les visiteurs enregistrés pour les afficher
-        $visiteurs = $this->documentManager->getRepository(Visiteursite::class)->findAll();
+        // retourne une réponse vide (statut 204 No Content)
+        return new Response(null, Response::HTTP_NO_CONTENT);
+      
+    }
 
-        // Rendu de la page accueil.html.twig avec un message
+    #[Route('/accueil', name: 'page_accueil')]
+    public function quisommesnous(): Response
+    {
         return $this->render('accueil.html.twig', [
-            'message' => 'Bienvenue sur la page d\'accueil !',
-            'visiteurs' => $visiteurs, // Passer les données au template
+            'message' => 'Bienvenue sur la page qui sommes nous !',
         ]);
     }
 }

@@ -6,8 +6,6 @@ use App\Entity\Client;
 use App\Entity\Entrepot;
 use App\Entity\Panier;
 use App\Entity\Produit;
-
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -26,10 +24,6 @@ class AjoutaupanierController extends AbstractController
         $this->entityManager = $entityManager;
         $this->httpClient = $httpClient;
     }
-
-    
-
-    
 
 #[Route("/ajouter-au-panier/{id}", name: "ajouter_au_panier")]
 public function ajouterAuPanier(Request $request, $id, SessionInterface $session, EntityManagerInterface $entityManager, ): RedirectResponse

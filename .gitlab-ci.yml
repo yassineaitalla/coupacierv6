@@ -1,0 +1,67 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay2
+  MYSQL_HOST: mysql
+  MYSQL_PORT: 3306
+  MYSQL_DATABASE: example_db
+  MYSQL_USER: yassine
+  MYSQL_PASSWORD: yassine
+  MYSQL_ROOT_PASSWORD: my-secret-pw
+  SYMFONY_ENV: test
+
+stages:
+  - build
+  - test
+
+before_script:
+  - apk add --no-cache curl jq
+  - docker info
+  - export DOCKER_BUILDKIT=1
+
+build:
+  stage: build
+  script:
+    - docker build -t my-symfony-app .
+  only:
+    - main
+    - develop
+
+install_dependencies:
+  stage: build
+  script:
+    - docker run --rm -v $(pwd):/app -w /app my-symfony-app composer install --prefer-dist --no-scripts --no-interaction --no-progress --no-suggest --optimize-autoloader
+  only:
+    - main
+    - develop
+
+test:
+  stage: test
+  script:
+    - docker run --rm -v $(pwd):/app -w /app my-symfony-app vendor/bin/phpunit
+  only:
+    - merge_requests
+    - main
+    - develop
+
+code_quality:
+  stage: test
+  script:
+    - docker run --rm -v $(pwd):/app -w /app my-symfony-app vendor/bin/phpstan analyse src --level=max
+  only:
+    - merge_requests
+    - main
+    - develop
+  allow_failure: true
+
+after_script:
+  - docker logout
+
+cache:
+  paths:
+    - vendor/
+    - var/
+

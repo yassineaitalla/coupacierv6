@@ -1,15 +1,13 @@
 <?php
 
-
-
 namespace App\Controller;
 
 use App\Entity\Commande;
 use App\Entity\CommandeF;
+use App\Entity\Facture;
 use App\Entity\BordereauLivraison;
 use App\Repository\ClientRepository;
 use App\Repository\PanierRepository;
-use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +24,6 @@ class CommandeController extends AbstractController
         Request $request, 
         ClientRepository $clientRepository, 
         PanierRepository $panierRepository, 
-        ProduitRepository $produitRepository, 
         EntityManagerInterface $entityManager, 
         SessionInterface $session
     ): Response {
@@ -38,46 +35,40 @@ class CommandeController extends AbstractController
         $client = $clientRepository->find($clientId);
         $paniers = $panierRepository->findBy(['client' => $client]);
 
-        if ($request->isMethod('POST')) {
-            $adresse = $request->request->get('adresse');
-            $codePostal = $request->request->get('code_postal');
-            $adresseFacturation = $request->request->get('adresse_facturation');
-            $villeFacturation = $request->request->get('ville_facturation');
-            $codePostalFacturation = $request->request->get('code_postal_facturation');
-            $paysFacturation = $request->request->get('pays_facturation');
+            if ($request->isMethod('POST')) {
+                $adresselivraison = $request->request->get('adresse_livraison');
+                $codepostallivraison = $request->request->get('code_postal_livraison');
+                $villelivraison=  $request->request->get('ville_livraison');
+                $paysLivraison = $request->request->get('pays_livraison');
+
+                $adresseFacturation = $request->request->get('adresse_facturation');
+                $villeFacturation = $request->request->get('ville_facturation');
+                $codePostalFacturation = $request->request->get('code_postal_facturation');
+                $paysFacturation = $request->request->get('pays_facturation');
 
             $totalPanier = 0;
-            $totalLivraison= 0;
-            $totalDecoupe=0;
+            $totalLivraison = 0;
+            $totalDecoupe = 0;
 
             // Créer une seule entrée dans CommandeF avec le total des produits
             $commandeF = new CommandeF();
-            $commandeF->setTotal($totalPanier);
+            $commandeF->setTotal(0); // Initial total
             $commandeF->setIdclientt($client);
-            $commandeF->setEtat('En preparation');
+            $commandeF->setEtat('En préparation');
             $entityManager->persist($commandeF);
             $entityManager->flush(); // Pour obtenir l'ID de CommandeF
 
             foreach ($paniers as $panier) {
                 $commande = new Commande();
                 $commande->setClient($client);
-                $commande->setAdresseLivraison($adresse);
-                $commande->setCodePostalLivraison($codePostal);
-                $commande->setAdresseFacturation($adresseFacturation);
-                $commande->setVilleFacturation($villeFacturation);
-                $commande->setCodePostalFacturation($codePostalFacturation);
-                $commande->setPaysFacturation($paysFacturation);
                 $commande->setQuantite($panier->getQuantite());
                 $commande->setPrix($panier->getTotal());
                 $commande->setMontantHorsTaxe(10); // Exemple de montant hors taxe fixé
-                
+                $commande->setProduit($panier->getIdProduit());
+                $commande->setSurmesure($panier->getSurmesure());
 
-                $produit = $panier->getIdProduit();
-                $commande->setProduit($produit);
-
-                // Associer la commande à CommandeF
                 $commande->setCommandeF($commandeF);
-
+                
                 $entityManager->persist($commande);
 
                 // Accumuler le total du panier
@@ -102,12 +93,28 @@ class CommandeController extends AbstractController
 
                 $entityManager->remove($panier);
 
-                
                 // Accumuler le total du panier, livraison et découpe
                 $totalPanier += $panier->getTotal();
                 $totalLivraison += $panier->getPrixLivraison();
                 $totalDecoupe += $panier->getPrixDecoupe();
             }
+
+            // Créer une facture associée à la commandeF
+            $facture = new Facture();
+            $facture->setAdresseLivraison($adresselivraison);
+            $facture->setCodePostalLivraison($codepostallivraison);
+            $facture->setPaysLivraison($paysLivraison);
+            $facture->setVilleLivraison($villelivraison);
+
+            $facture->setAdresseFacturation($adresseFacturation);
+            $facture->setVilleFacturation($villeFacturation);
+            $facture->setCodePostalFacturation($codePostalFacturation);
+            $facture->setPaysFacturation($paysFacturation);
+           
+
+            $facture->setCommandeF($commandeF);
+
+            $entityManager->persist($facture);
 
             // Mettre à jour le total dans CommandeF
             $commandeF->setTotal($totalPanier + $totalDecoupe + $totalLivraison);

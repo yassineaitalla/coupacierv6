@@ -24,7 +24,6 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
         $client = $entityManager->getRepository(Client::class)->findOneBy(['email' => $email]);
 
         
-
         // Vérifier si l'utilisateur existe
         if (!$client) {
             // Rediriger l'utilisateur vers une page d'erreur ou de connexion échouée
@@ -39,11 +38,11 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
             return $this->redirectToRoute('pageconnexion');
         }
 
-        // Enregistrer l'ID du client dans la session
+        // Enregistre l'id du client dans la session
         $session->set('client_id', $client->getId());
 
 
-        // Rediriger l'utilisateur vers la page de récupération des informations avec l'ID du client
+        // Rediriger l'utilisateur vers la page de récuperation des informations avec l'Id du clien
         $this->addFlash('success', 'Vous êtes connecté.');
         return $this->redirectToRoute('produits');
         
@@ -55,12 +54,10 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
 }
 
 
-
-
     #[Route('/test5', name: 'verificationn')]
     public function verificationConnexion(SessionInterface $session): Response
 {
-    // Vérifions si l'utilisateur est connecté en vérifiant la présence de son ID dans la session
+    // Verifier si l'utilisateur est connecté en vérifiant la présence de son ID dans la session
     $clientId = $session->get('client_id');
 
 
@@ -76,14 +73,13 @@ public function seconnecter(Request $request, EntityManagerInterface $entityMana
 }
 
 
-
 #[Route('/deconnexion', name: 'deconnexion')]
     public function deconnexion(SessionInterface $session): Response
     {
         // Supprimer l'ID du client de la session
         $session->remove('client_id');
 
-        // Rediriger l'utilisateur vers une page de confirmation de déconnexion ou toute autre page appropriéeee
+        // Redirigé l'utilisateur vers une page de confirmation de déconnexion ou toute autre page approprié
         $this->addFlash('danger', 'Vous êtes deconnecté.');
         return $this->redirectToRoute('pageconnexion');
     }

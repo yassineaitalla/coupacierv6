@@ -1,5 +1,3 @@
-
-
 {% block body %}
     {% include 'navbar.html.twig' %}
     <div class="container mt-5">
@@ -11,15 +9,7 @@
                     </div>
                     <div class="card-body">
                         <form method="post" action="{{ path('app_commande') }}">
-                            <!-- Partie Adresse -->
-                            <div class="mb-3">
-                                <label for="adresse" class="form-label">Adresse de livraison</label>
-                                <input type="text" class="form-control" id="adresse" name="adresse" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="code_postal" class="form-label">Code postal de livraison</label>
-                                <input type="text" class="form-control" id="code_postal" name="code_postal" required>
-                            </div>
+                            <!-- Partie Adresse de Facturation -->
                             <div class="mb-3">
                                 <label for="adresse_facturation" class="form-label">Adresse de facturation</label>
                                 <input type="text" class="form-control" id="adresse_facturation" name="adresse_facturation" required>
@@ -35,6 +25,24 @@
                             <div class="mb-3">
                                 <label for="pays_facturation" class="form-label">Pays de facturation</label>
                                 <input type="text" class="form-control" id="pays_facturation" name="pays_facturation" required>
+                            </div>
+
+                            <!-- Partie Adresse de Livraison -->
+                            <div class="mb-3">
+                                <label for="adresse_livraison" class="form-label">Adresse de livraison</label>
+                                <input type="text" class="form-control" id="adresse_livraison" name="adresse_livraison" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="ville_livraison" class="form-label">Ville de livraison</label>
+                                <input type="text" class="form-control" id="ville_livraison" name="ville_livraison" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="code_postal_livraison" class="form-label">Code postal de livraison</label>
+                                <input type="text" class="form-control" id="code_postal_livraison" name="code_postal_livraison" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="pays_livraison" class="form-label">Pays de livraison</label>
+                                <input type="text" class="form-control" id="pays_livraison" name="pays_livraison" required>
                             </div>
 
                             <!-- Partie Paiement -->

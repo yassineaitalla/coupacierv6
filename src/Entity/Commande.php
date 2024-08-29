@@ -1,14 +1,12 @@
 <?php
 
+
+
 namespace App\Entity;
 
-use App\Repository\CommandeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=CommandeRepository::class)
- */
-#[ORM\Entity(repositoryClass: CommandeRepository::class)]
+#[ORM\Entity]
 class Commande
 {
     #[ORM\Id]
@@ -20,43 +18,25 @@ class Commande
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
 
-    #[ORM\ManyToOne(targetEntity: Produit::class, )]
+    #[ORM\ManyToOne(targetEntity: Produit::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Produit $produit = null;
 
-    #[ORM\ManyToOne(targetEntity: CommandeF::class, )]
+    #[ORM\ManyToOne(targetEntity: CommandeF::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?CommandeF $commandeF = null;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private ?float $prix = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $adresseFacturation = null;
-
-    #[ORM\Column(length: 100)]
-    private ?string $villeFacturation = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $adresseLivraison = null;
-
-   
-    #[ORM\Column(length: 10)]
-    private ?string $codePostalFacturation = null;
-
-    #[ORM\Column(length: 10)]
-    private ?string $codePostalLivraison = null;
-
-    #[ORM\Column(length: 100)]
-    private ?string $paysFacturation = null;
-
     #[ORM\Column(type: 'integer')]
     private ?int $quantite = null;
 
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $Surmesure = null;
+
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private ?float $montantHorsTaxe = null;
-
-    // Getters and setters...
 
     public function getId(): ?int
     {
@@ -77,6 +57,19 @@ class Commande
     public function getProduit(): ?Produit
     {
         return $this->produit;
+    }
+
+    
+    public function getSurmesure(): ?float
+    {
+        return $this->Surmesure;
+    }
+
+    public function setSurmesure(?float $Surmesure): static   // ---> ? le champ peut etre null
+    {
+        $this->Surmesure = $Surmesure;
+
+        return $this;
     }
 
     public function setProduit(?Produit $produit): self
@@ -107,72 +100,6 @@ class Commande
         return $this;
     }
 
-    public function getAdresseFacturation(): ?string
-    {
-        return $this->adresseFacturation;
-    }
-
-    public function setAdresseFacturation(?string $adresseFacturation): self
-    {
-        $this->adresseFacturation = $adresseFacturation;
-        return $this;
-    }
-
-    public function getAdresseLivraison(): ?string
-    {
-        return $this->adresseLivraison;
-    }
-
-    public function setAdresseLivraison(?string $adresseLivraison): self
-    {
-        $this->adresseLivraison = $adresseLivraison;
-        return $this;
-    }
-
-    public function getVilleFacturation(): ?string
-    {
-        return $this->villeFacturation;
-    }
-
-    public function setVilleFacturation(?string $villeFacturation): self
-    {
-        $this->villeFacturation = $villeFacturation;
-        return $this;
-    }
-
-    public function getCodePostalFacturation(): ?string
-    {
-        return $this->codePostalFacturation;
-    }
-
-    public function setCodePostalFacturation(?string $codePostalFacturation): self
-    {
-        $this->codePostalFacturation = $codePostalFacturation;
-        return $this;
-    }
-
-    public function getCodePostalLivraison(): ?string
-    {
-        return $this->codePostalLivraison;
-    }
-
-    public function setCodePostalLivraison(?string $codePostalLivraison): self
-    {
-        $this->codePostalLivraison = $codePostalLivraison;
-        return $this;
-    }
-
-    public function getPaysFacturation(): ?string
-    {
-        return $this->paysFacturation;
-    }
-
-    public function setPaysFacturation(?string $paysFacturation): self
-    {
-        $this->paysFacturation = $paysFacturation;
-        return $this;
-    }
-
     public function getQuantite(): ?int
     {
         return $this->quantite;
@@ -194,6 +121,4 @@ class Commande
         $this->montantHorsTaxe = $montantHorsTaxe;
         return $this;
     }
-
-   
 }

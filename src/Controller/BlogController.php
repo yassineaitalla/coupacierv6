@@ -2,29 +2,15 @@
 
 namespace App\Controller;
 
-use App\Document\Visiteursite;
 use App\Entity\Client;
 use App\Repository\ClientRepository;
-
-use App\Entity\BordereauLivraison;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Listedenvies;
-use App\Entity\Societe;
 use App\Entity\Produit;
-
 use App\Entity\Test;
 use App\Entity\Panier;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
-use Doctrine\ODM\MongoDB\DocumentManager;
-
-
-
-
-
-
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,8 +20,6 @@ use Symfony\Component\Routing\Attribute\Route;  // Importe la classe Route de l'
 class BlogController extends AbstractController
 {
         
-   
-
     public function __construct( EntityManagerInterface $entityManager)
     {
       
@@ -45,22 +29,23 @@ class BlogController extends AbstractController
     }
     
 
-
-
-
-
     #[Route('/formpart', name: 'formpart')]
     public function formpart(): Response
     {
         return $this->render('formpart.html.twig', [
-            'message' => 'Bienvenue sur la page d\'accueil !',
+            'message' => 'Bienvenue sur la page formpart !',
         ]);
     }
 
-    
+    #[Route('/quisommesnous', name: 'quisommesnous')]
+    public function quisommesnous(): Response
+    {
+        return $this->render('quisommesnous.html.twig', [
+            'message' => 'Bienvenue sur la page qui sommes nous !',
+        ]);
+    }
 
-    
-
+        
     #[Route('/informations', name: 'informations')]
     public function pageinformations(): Response
     {
@@ -86,8 +71,6 @@ class BlogController extends AbstractController
     }
 
     
-
-
     #[Route('/compte', name: 'compte')]
     public function pagecompte(): Response
     {
@@ -126,8 +109,6 @@ class BlogController extends AbstractController
 
 
     
-
-
     #[Route('/afficherdeviss', name: 'afficherdeviss')]
     public function afficherDevisc(SessionInterface $session, ClientRepository $clientRepository): Response
     {
@@ -146,10 +127,6 @@ class BlogController extends AbstractController
 
 
 
-    
-
-   
-    
 
     #[Route('/listedenvies', name: 'listedenvies')]
     public function listedEnvies(SessionInterface $session, EntityManagerInterface $entityManager): Response
@@ -183,8 +160,6 @@ class BlogController extends AbstractController
 
 
 
-
-    
 
 #[Route('/ajouter-au-panierrr/{id}', name: 'ajouter')]
 public function ajouterAuPanier(Request $request, $id, SessionInterface $session): Response
@@ -366,28 +341,7 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
     }
     
     
-    
 
-
-    
-
-
-    #[Route('/comptage', name: 'comptage')]
-    public function countProductsInPanierAction(EntityManagerInterface $entityManager)
-    {
-        // Récupérer le référentiel (repository) de l'entité Panier
-        $panierRepository = $entityManager->getRepository(Panier::class);
-
-        // Récupérer le nombre de produits dans le panier
-        $count = $panierRepository->countProducts();
-
-        // Passer la variable $count à la vue et rendre le template
-        return $this->render('navbar.html.twig', [
-            'count' => $count,
-        ]);
-    }
-
-//
      #[Route('/image', name: 'image')]
      public function ajouterImage(Request $request): Response
      {
@@ -430,35 +384,7 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
 
 
 
-     
-
-    #[Route('/panier', name: 'panier')]
-    public function panier(SessionInterface $session): Response
-    {
-        // Récupérer l'ID du client à partir de la session
-        $clientId = $session->get('client_id');
-
-        // Si l'ID du client n'est pas défini dans la session, redirigez vers une page d'erreur ou affichez un message d'erreur
-        if (!$clientId) {
-            // Redirection vers une page d'erreur ou affichage d'un message d'erreur
-        }
-
-        // Récupérer tous les éléments du panier associés à ce client en utilisant l'EntityManager
-        $panierElements = $this->entityManager->getRepository(Panier::class)->findBy(['client' => $clientId]);
-
-        // Compter le nombre total d'éléments dans le panier
-        $nombreProduitsDansPanier = count($panierElements);
-
-        // Passer le nombre total d'éléments dans le panier à la vue
-        return $this->render('panier5.html.twig', [
-            'nombreProduitsDansPanier' => $nombreProduitsDansPanier,
-        ]);
-    }
-
-
-
-
-     #[Route('/image1', name: 'image1')]
+    #[Route('/image1', name: 'image1')]
     public function afficherImage(): Response
      {
          // Récupérer l'image depuis l'entité Test
@@ -475,70 +401,6 @@ public function ajouterAuPanier(Request $request, $id, SessionInterface $session
      
      
 
-  
-    #[Route('/nombre-elements-panier', name: 'nombre_elements')]
-    public function nombreElementsPanier(): Response
-    {
-        // Obtenir le nombre d'éléments dans l'entité Panier
-        $nombreElements = $this->entityManager->createQueryBuilder()
-            ->select('COUNT(p.id)')
-            ->from('App\Entity\Panier', 'p')
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        // Retourner le template Twig en passant la variable nombre_elements
-        return $this->render('/navbar.html.twig', ['nombre_elements' => $nombreElements]);
-    }
-
-
-    //
-    
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-#[Route('/auth', name: 'votre_route')]
-    public function votreAction(TokenStorageInterface $tokenStorage): Response
-    {
-        // Récupérer le token d'authentification
-        $token = $tokenStorage->getToken();
-
-        // Vérifier si un token d'authentification existe
-        if ($token !== null) {
-            // L'utilisateur est authentifié
-            $user = $token->getUser();
-
-            // Vérifier si l'utilisateur est une instance de votre entité Client
-            if ($user instanceof Client) {
-                // Récupérer l'ID de l'utilisateur
-                $userId = $user->getId();
-
-                // Utilisez $userId comme nécessaire
-
-                // Afficher l'identifiant de l'utilisateur
-                return new Response("L'utilisateur connecté a l'ID : $userId");
-            }
-        } else {
-            // L'utilisateur n'est pas authentifié, redirigez-le vers la page de connexion par exemple
-            return $this->redirectToRoute('connexion');
-        }
-
-        // Reste de votre logique ici
-        
-        return $this->render('connexionn.html.twig', [
-            // Passer des données à votre vue Twig si nécessaire
-        ]);
-    }
 
     #[Route('/demanderdevis', name: 'demanderdevis')]
     public function demanderDevis(): Response

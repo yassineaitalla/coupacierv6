@@ -102,6 +102,15 @@
                 color: #555;
             }
         }
+
+        /* Style pour le bouton "Voir les détails" */
+        .btn-details {
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -110,7 +119,7 @@
     <div class="container">
         <h1 class="page-title">Mes Commandes</h1>
 
-        {% if commandes is empty %}
+        {% if commandeFs is empty %}
             <div class="empty-state">
                 <p>Vous n'avez aucune commande pour le moment.</p>
             </div>
@@ -118,21 +127,21 @@
             <table class="orders-table">
                 <thead>
                     <tr>
-                        <th>ID Commande</th>
-                        <th>Produit</th>
-                        <th>Quantité</th>
-                        <th>Prix</th>
-                        <th>Adresse de Livraison</th>
+                        <th>Numero Commande</th>
+                     
+                        <th>Total</th>
+                        <th>Détails</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for commande in commandes %}
+                    {% for commandeF in commandeFs %}
                         <tr>
-                            <td>{{ commande.id }}</td>
-                            <td>{{ commande.produit.nom }}</td>
-                            <td>{{ commande.quantite }}</td>
-                            <td>{{ commande.prix }} €</td>
-                            <td>{{ commande.adresseLivraison }}</td>
+                            <td>{{ commandeF.id }}</td>
+                           
+                            <td>{{ commandeF.total }} €</td>
+                            <td>
+                                <a href="{{ path('commande_details', {'id': commandeF.id}) }}" class="btn-details">Voir les détails</a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

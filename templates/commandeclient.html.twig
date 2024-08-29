@@ -1,49 +1,43 @@
-{% extends 'base.html.twig' %}
 
 {% block body %}
 {% include 'navbarback.html.twig' %}
 <div class="container mt-5">
-    <h1 class="mb-4 text-center text-uppercase">Liste des Commandes non Livrées</h1>
-    <table class="table table-hover table-striped table-dark table-bordered">
-        <thead class="thead-light">
-            <tr class="text-center">
-                <th scope="col">#</th>
-                <th scope="col">Client</th>
-                
-                <th scope="col">Quantité</th>
-                <th scope="col">ID Commande</th>
-                <th scope="col">Montant Hors Taxe</th>
-                <th scope="col">Adresse de Facturation</th>
-                <th scope="col">Ville de Facturation</th>
-                <th scope="col">Code Postal Facturation</th>
-                <th scope="col">Pays de Facturation</th>
-                <th scope="col">Adresse de Livraison</th>
-                <th scope="col">Code Postal Livraison</th>
-               
-            </tr>
-        </thead>
-        <tbody>
-            {% for commande in commandes %}
+    <h1 class="mb-4 text-center text-uppercase">Liste des Commandes</h1>
+    
+    {% if commandesF|length > 0 %}
+        <table class="table table-hover table-striped table-dark table-bordered">
+            <thead class="thead-light">
                 <tr class="text-center">
-                    <th scope="row">{{ commande.id }}</th>
-                    <td>{{ commande.client.nom }} {{ commande.client.prenom }}</td>
-                
-                    <td>{{ commande.quantite }}</td>
-                    <td>{{ commande.id }}</td>
-                    <td>{{ commande.montantHorsTaxe }}</td>
-                    <td>{{ commande.adresseFacturation }}</td>
-                    <td>{{ commande.villeFacturation }}</td>
-                    <td>{{ commande.codePostalFacturation }}</td>
-                    <td>{{ commande.paysFacturation }}</td>
-                    <td>{{ commande.adresseLivraison }}</td>
-                    <td>{{ commande.codePostalLivraison }}</td>
-                  
+                    <th scope="col">ID</th>
+                    <th scope="col">Client</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">État</th>
+                    
+                    <th scope="col">Détails</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <div class="text-center">
-        <button class="btn btn-primary mt-3">Voir les commandes livrées</button>
-    </div>
+            </thead>
+            <tbody>
+                {% for commandeF in commandesF %}
+                    <tr class="text-center">
+                        <th scope="row">{{ commandeF.id }}</th>
+                        <td>{{ commandeF.idclientt.nom }} {{ commandeF.idclientt.prenom }}</td>
+                        <td>{{ commandeF.total }} €</td>
+                        <td>{{ commandeF.etat }}</td>
+                      
+                        
+                            <td>
+                                <a href="{{ path('commande_details', { 'id': commandeF.id }) }}" class="btn btn-info">
+                                    Voir Détails
+                                </a>
+                            </td>
+                            
+                        
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucune commande disponible.</p>
+    {% endif %}
 </div>
 {% endblock %}

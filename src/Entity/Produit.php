@@ -24,11 +24,12 @@ class Produit
     #[ORM\Column]
     private ?float $prix = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $Image = null;
-
+  
     #[ORM\Column]
     private ?float $coef = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $image = null; 
 
     #[ORM\Column]
     private ?float $Longueur = null;
@@ -102,21 +103,25 @@ class Produit
         return $this;
     }
 
-    public function getImage(): ?string
-    {
-        return $this->Image;
-    }
-
-    public function setImage(?string $Image): self
-    {
-        $this->Image = $Image;
-
-        return $this;
-    }
+   
 
     public function getCoef(): ?float
     {
         return $this->coef;
+    }
+
+   
+
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
+        return $this;
     }
 
     public function setCoef(float $coef): static

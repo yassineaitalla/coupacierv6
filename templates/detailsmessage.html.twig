@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {% include 'navbarback.html.twig' %}
+    <meta charset="UTF-8">
+    <title>Détails du Message</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e0e5ec;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        .message-block {
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f9f9f9;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s, transform 0.3s;
+        }
+        .message-block:hover {
+            background: #f0f4f8;
+            transform: translateY(-5px);
+        }
+        .message-block h2 {
+            color: #34495e;
+            margin-top: 0;
+            font-size: 20px;
+        }
+        .message-block p {
+            margin: 0;
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .reply-form {
+            margin-top: 30px;
+        }
+        .reply-form textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+        .reply-form button {
+            padding: 10px 20px;
+            background-color: #27ae60;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .reply-form button:hover {
+            background-color: #1e8449;
+        }
+        .flash-message {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% for label, messages in app.flashes %}
+            {% if label == 'success' %}
+                <div class="flash-message">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+        
+        <h1>Détails du Message pour le Devis #{{ devis.id }}</h1>
+
+        <div class="message-block">
+            <h2>Message du Client:</h2>
+            <p>{{ message.messageClient }}</p>
+        </div>
+
+        <div class="message-block">
+            <h2>Message du Vendeur:</h2>
+            <p>{{ message.messageVendeur ? message.messageVendeur : 'Aucune réponse du vendeur encore.' }}</p>
+        </div>
+
+        <div class="reply-form">
+            <h2>Répondre au Message:</h2>
+            <form action="{{ path('update_message_vendeur', { id: message.id }) }}" method="post">
+                <textarea name="messageVendeur" placeholder="Votre réponse..." required></textarea>
+                <button type="submit">Envoyer la Réponse</button>
+            </form>
+        </div>
+
+        <a href="{{ path('app_affichage_deviscommercial') }}" class="btn">Retour à la liste des devis</a>
+    </div>
+</body>
+</html>

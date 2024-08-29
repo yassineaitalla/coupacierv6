@@ -80,9 +80,10 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Quantité</th>
+              
+               
                 <th>Produit</th>
+                <th>Quantité</th>
                 <th>Entrepôt</th>
                 <th>Fournisseur</th>
             </tr>
@@ -90,9 +91,9 @@
         <tbody>
             {% for stock in stocks %}
                 <tr>
-                    <td>{{ stock.id }}</td>
-                    <td>{{ stock.quantite }}</td>
                     <td>{{ stock.idProduit.Nom }}</td> <!-- Assurez-vous que "Nom" est un champ de l'entité Produit -->
+                    <td>{{ stock.quantite }}</td>
+                   
                     <td>{{ stock.entrepot.nomEntrepot }}</td> <!-- Assurez-vous que "nomEntrepot" est un champ de l'entité Entrepot -->
                     <td>{{ stock.fournisseur.nomFournisseur }}</td> <!-- Assurez-vous que "nomFournisseur" est un champ de l'entité Fournisseur -->
                 </tr>
