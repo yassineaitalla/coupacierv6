@@ -25,7 +25,7 @@ before_script:
 build:
   stage: build
   script:
-    - docker build -t my-symfony-app .
+    - docker build -t coupacier:latest .
   only:
     - main
     - develop
@@ -33,7 +33,7 @@ build:
 install_dependencies:
   stage: build
   script:
-    - docker run --rm -v $(pwd):/app -w /app my-symfony-app composer install --prefer-dist --no-scripts --no-interaction --no-progress --no-suggest --optimize-autoloader
+    - docker run --rm -v $(pwd):/app -w /app coupacier:latest composer install --prefer-dist --no-scripts --no-interaction --no-progress --no-suggest --optimize-autoloader
   only:
     - main
     - develop
@@ -41,7 +41,7 @@ install_dependencies:
 test:
   stage: test
   script:
-    - docker run --rm -v $(pwd):/app -w /app my-symfony-app vendor/bin/phpunit
+    - docker run --rm -v $(pwd):/app -w /app coupacier:latest vendor/bin/phpunit
   only:
     - merge_requests
     - main
@@ -50,7 +50,7 @@ test:
 code_quality:
   stage: test
   script:
-    - docker run --rm -v $(pwd):/app -w /app my-symfony-app vendor/bin/phpstan analyse src --level=max
+    - docker run --rm -v $(pwd):/app -w /app coupacier:latest vendor/bin/phpstan analyse src --level=max
   only:
     - merge_requests
     - main
@@ -64,4 +64,5 @@ cache:
   paths:
     - vendor/
     - var/
+
 
