@@ -1,13 +1,16 @@
 image: php:8.2
 
 variables:
-  MYSQL_HOST: mysql
+  MYSQL_HOST: localhost
   MYSQL_PORT: 3306
-  MYSQL_DATABASE: example_db
-  MYSQL_USER: yassine
-  MYSQL_PASSWORD: yassine
-  MYSQL_ROOT_PASSWORD: my-secret-pw
-  SYMFONY_ENV: test
+  MYSQL_DATABASE: coupac
+  MYSQL_USER: root
+  MYSQL_PASSWORD: Ysy9?9yaai 
+  MYSQL_ROOT_PASSWORD: Ysy9?9yaai 
+  SYMFONY_ENV: coupac
+
+
+
 
 stages:
   - build
