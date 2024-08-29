@@ -12,25 +12,17 @@ variables:
 stages:
   - build
   - test
+  - deploy
 
 before_script:
-  - apt-get update && apt-get install -y \
-      libzip-dev \
-      zlib1g-dev \
-      libicu-dev \
-      libpng-dev \
-      libjpeg-dev \
-      libfreetype6-dev \
-      libldap2-dev \
-      libxml2-dev \
-      libpq-dev \
-      libonig-dev \
-      git \
-      curl \
-      unzip \
-    && rm -rf /var/lib/apt/lists/*
+  - apt-get update
+  - apt-get install -y libzip-dev libicu-dev libpng-dev libjpeg-dev libfreetype6-dev libldap2-dev libxml2-dev libpq-dev libonig-dev
+  - docker-php-ext-configure gd --with-freetype --with-jpeg
+  - docker-php-ext-install gd intl pdo pdo_mysql pdo_pgsql opcache zip ldap soap
+  - pecl install mongodb
+  - docker-php-ext-enable mongodb
   - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-  - chmod +x /usr/local/bin/composer
+  - composer install --no-scripts --no-autoloader
 
 build:
   stage: build
@@ -49,17 +41,9 @@ test:
     - main
     - develop
 
-code_quality:
-  stage: test
+deploy:
+  stage: deploy
   script:
-    - vendor/bin/phpstan analyse src --level=max
+    - ./deploy.sh
   only:
-    - merge_requests
     - main
-    - develop
-  allow_failure: true
-
-cache:
-  paths:
-    - vendor/
-    - var/
