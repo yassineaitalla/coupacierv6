@@ -11,7 +11,7 @@ variables:
 
 stages:
   - build
-  - test
+  - analyze
   - deploy
 
 before_script:
@@ -32,10 +32,12 @@ build:
     - main
     - develop
 
-test:
-  stage: test
+analyze:
+  stage: analyze
   script:
-    - vendor/bin/phpunit
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    - composer require --dev phpstan/phpstan
+    - vendor/bin/phpstan analyse src --level max
   only:
     - merge_requests
     - main
