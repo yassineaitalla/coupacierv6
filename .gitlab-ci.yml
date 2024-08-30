@@ -2,7 +2,7 @@ image: php:8.2
 
 variables:
   APP_ENV: test
-  DATABASE_URL: mysql://root:Ysy9%3F9yaai@localhost:3306/coupac
+  DATABASE_URL: mysql://root:Ysy9%3F9yaai@127.0.0.1:3306/coupac
 
 stages:
   - build
