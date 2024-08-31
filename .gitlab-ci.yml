@@ -6,8 +6,9 @@ variables:
 
 stages:
   - build
-  - sast
+  - analyze
   - test
+  - deploy
 
 before_script:
   - apt-get update
@@ -27,12 +28,12 @@ build:
     - main
     - develop
 
-sast:
-  stage: sast
+analyze:
+  stage: analyze
   script:
     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-    - composer require --dev roave/security-advisories
-    - vendor/bin/security-checker security:check
+    - composer require --dev phpstan/phpstan
+    - vendor/bin/phpstan analyse src --level max
   only:
     - merge_requests
     - main
@@ -47,3 +48,10 @@ test:
   only:
     - main
     - develop
+
+deploy:
+  stage: deploy
+  script:
+    - ./deploy.sh
+  only:
+    - main
