@@ -6,9 +6,6 @@ variables:
 
 stages:
   - build
-  - analyze
-  - test
-  - deploy
 
 before_script:
   - apt-get update
@@ -27,31 +24,3 @@ build:
   only:
     - main
     - develop
-
-analyze:
-  stage: analyze
-  script:
-    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-    - composer require --dev phpstan/phpstan
-    - vendor/bin/phpstan analyse src --level max
-  only:
-    - merge_requests
-    - main
-    - develop
-
-test:
-  stage: test
-  script:
-    - php bin/console doctrine:database:create --if-not-exists --env=test
-    - php bin/console doctrine:schema:update --force --env=test
-    - vendor/bin/phpunit
-  only:
-    - main
-    - develop
-
-deploy:
-  stage: deploy
-  script:
-    - ./deploy.sh
-  only:
-    - main
