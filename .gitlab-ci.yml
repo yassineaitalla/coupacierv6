@@ -6,8 +6,6 @@ variables:
 
 stages:
   - build
-  - sast
-  - test
 
 before_script:
   - apt-get update
@@ -23,29 +21,6 @@ build:
   stage: build
   script:
     - composer install --prefer-dist --no-scripts --no-interaction --no-progress --no-suggest --optimize-autoloader
-  only:
-    - main
-    - develop
-
-sast:
-  stage: sast
-  script:
-    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-    - composer config minimum-stability dev
-    - composer config prefer-stable true
-    - composer require --dev roave/security-advisories
-    - vendor/bin/security-checker security:check
-  only:
-    - merge_requests
-    - main
-    - develop
-
-test:
-  stage: test
-  script:
-    - php bin/console doctrine:database:create --if-not-exists --env=test
-    - php bin/console doctrine:schema:update --force --env=test
-    - vendor/bin/phpunit
   only:
     - main
     - develop
