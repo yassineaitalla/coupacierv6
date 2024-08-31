@@ -26,7 +26,11 @@ accueil:
     path: /accueil
     controller: App\Controller\AccueilController::accueil
 
-
+rediriger:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+    defaults:
+        route: accueil
 
 
 

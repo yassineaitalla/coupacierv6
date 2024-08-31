@@ -62,7 +62,7 @@ class FormulaireParticulier extends AbstractController
             $entityManager->flush();
 
             // Ajouter un message flash
-            $this->addFlash('success', 'Votre compte à bien etait creez !');
+            $this->addFlash('success', 'Votre compte à bien était créer !');
 
             // Rediriger l'utilisateur vers une autre page après l'ajout
             return $this->redirectToRoute('formpart');

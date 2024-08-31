@@ -18,7 +18,7 @@ class Visiteursite
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime(); // Initialise la date de création à l'heure actuelle
+        $this->createdAt = new \DateTime(); // Initialise la date de création a l'heure actuelle
     }
 
     // Getters and setters
