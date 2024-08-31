@@ -52,14 +52,7 @@ class PanierRepository extends ServiceEntityRepository
 
     
 
-    // Méthode pour compter le nombre de produits dans le panier
-    public function countProductsInPanier(): int
-    {
-        return $this->createQueryBuilder('p')
-            ->select('COUNT(p.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
+    
 
     
     public function deleteByClient(Client $client): void
