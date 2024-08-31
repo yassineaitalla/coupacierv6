@@ -31,6 +31,8 @@ sast:
   stage: sast
   script:
     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    - composer config minimum-stability dev
+    - composer config prefer-stable true
     - composer require --dev roave/security-advisories
     - vendor/bin/security-checker security:check
   only:
