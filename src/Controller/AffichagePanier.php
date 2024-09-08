@@ -26,11 +26,11 @@ class AffichagePanier extends AbstractController{
         
     }
 
-    #[Route('/affichagepanier', name: 'affichagepanier')]
-    public function affichagePanier(Request $request): Response
-    {
-        // Initialiser la variable $panier à null
-        $panier = null;
+        #[Route('/affichagepanier', name: 'affichagepanier')]
+        public function affichagePanier(Request $request): Response
+        {
+            // Initialiser la variable $panier à null
+            $panier = null;
         $prixLivraisonAjoute = false; // Initialisez la variable ici
         $poidsTotal = 0; // Initialisez la variable pour éviter les avertissements
         $prixdecoupetotal=0;
